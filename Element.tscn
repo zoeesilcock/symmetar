@@ -3,14 +3,11 @@
 [ext_resource type="Script" path="res://Element.gd" id="1_0qwk2"]
 [ext_resource type="PackedScene" uid="uid://cwks7l8024dh0" path="res://Shape.tscn" id="1_lee8m"]
 
-[node name="Element" type="Node2D" node_paths=PackedStringArray("origin_shape", "slices_node")]
+[node name="Element" type="Node2D" node_paths=PackedStringArray("slices_node")]
 script = ExtResource("1_0qwk2")
-origin_shape = NodePath("OriginShape")
+shape_scene = ExtResource("1_lee8m")
 slices_node = NodePath("Slices")
 slice_count = 8
-click_radius = 100
-
-[node name="OriginShape" parent="." instance=ExtResource("1_lee8m")]
-position = Vector2(0, -100)
+initial_radius = 200.0
 
 [node name="Slices" type="Node2D" parent="."]

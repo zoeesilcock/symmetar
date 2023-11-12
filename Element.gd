@@ -1,51 +1,47 @@
 extends Node2D
 
 # References
-@export var origin_shape: Shape
+@export var shape_scene : PackedScene
 @export var slices_node : Node2D
 
 # Settings
 @export var slice_count : int
-@export var click_radius : int
+@export var initial_radius : float
+@export var shape_rotation : float
 
 # Internal
 var slices
 
 func _ready():
-	origin_shape.allow_drag = true
-	origin_shape.position_changed.connect(_on_position_changed)
-
 	_instantiate_slices()
 	_update_slices()
 
-func _on_position_changed():
-	_update_slices()
+func _on_position_changed(slice_index : int):
+	_update_slices(slice_index)
 
 func _instantiate_slices():
 	slices = []
 	slices.resize(slice_count)
 
-	for i in range(1, slice_count):
-		slices[i] = origin_shape.duplicate()
-		slices[i].allow_drag = false
+	for i in slice_count:
+		slices[i] = shape_scene.instantiate()
+		slices[i].slice_index = i
+		slices[i].name = "Slice" + str(i)
+		slices[i].allow_drag = true
+		slices[i].position = Vector2(initial_radius, 0)
+		slices[i].position_changed.connect(_on_position_changed)
 		slices_node.add_child(slices[i])
 
-func _update_slices():
-	var origin_radius = sqrt(pow(origin_shape.position.x, 2) + pow(origin_shape.position.y, 2))
-	var origin_theta = atan2(origin_shape.position.y, origin_shape.position.x)
-	var origin_rotation = rad_to_deg(origin_shape.rotation)
+func _update_slices(slice_index : int = 0):
+	var slice = slices[slice_index]
+	var origin_radius = sqrt(pow(slice.position.x, 2) + pow(slice.position.y, 2))
+	var origin_theta = atan2(slice.position.y, slice.position.x)
 	var theta_increment = deg_to_rad(360 / slice_count)
 
-#	print(
-#		"Origin -" +
-#		" radius: " + str(origin_radius) +
-#		" theta: " + str(origin_radius) +
-#		" rotation: " + str(origin_rotation)
-#	)
-
-	for i in range(1, slice_count):
-		var theta = i * theta_increment
+	for i in slice_count:
+		var theta = (slice_index - i) * theta_increment
 		var slice_position = (origin_radius * Vector2.from_angle(theta + origin_theta))
 
-		slices[i].position = slice_position - position
-		slices[i].rotation = origin_rotation + theta
+		if (i != slice_index):
+			slices[i].position = slice_position - position
+		slices[i].rotation = origin_theta + deg_to_rad(shape_rotation) + theta
