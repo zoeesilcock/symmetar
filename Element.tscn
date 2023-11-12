@@ -8,6 +8,7 @@ script = ExtResource("1_0qwk2")
 origin_shape = NodePath("OriginShape")
 slices_node = NodePath("Slices")
 slice_count = 8
+click_radius = 100
 
 [node name="OriginShape" parent="." instance=ExtResource("1_lee8m")]
 position = Vector2(0, -100)
