@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://b0xsay7lqoc07"]
+[gd_scene load_steps=2 format=3 uid="uid://b0xsay7lqoc07"]
+
+[ext_resource type="PackedScene" uid="uid://b7fwwj6jtev" path="res://Element.tscn" id="1_bnlyl"]
 
 [node name="Node2D" type="Node2D"]
 
@@ -7,3 +9,5 @@
 [node name="Center" type="Polygon2D" parent="."]
 color = Color(1, 1, 0, 1)
 polygon = PackedVector2Array(-2, -8, 2, -8, 2, -2, 8, -2, 8, 2, 2, 2, 2, 8, -2, 8, -2, 2, -8, 2, -8, -2, -2, -2)
+
+[node name="Element" parent="." instance=ExtResource("1_bnlyl")]
