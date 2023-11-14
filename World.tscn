@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0xsay7lqoc07"]
+
+[ext_resource type="PackedScene" uid="uid://b7fwwj6jtev" path="res://Element.tscn" id="1_bnlyl"]
+[ext_resource type="Script" path="res://World.gd" id="1_idh0m"]
+
+[node name="World" type="Node2D" node_paths=PackedStringArray("elements_node")]
+script = ExtResource("1_idh0m")
+element_scene = ExtResource("1_bnlyl")
+elements_node = NodePath("Elements")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2(-128, 0)
+
+[node name="Center" type="Polygon2D" parent="."]
+color = Color(1, 1, 0, 1)
+polygon = PackedVector2Array(-2, -8, 2, -8, 2, -2, 8, -2, 8, 2, 2, 2, 2, 8, -2, 8, -2, 2, -8, 2, -8, -2, -2, -2)
+
+[node name="Elements" type="Node2D" parent="."]

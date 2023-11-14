@@ -1,3 +1,4 @@
+class_name Element
 extends Node2D
 
 # References
