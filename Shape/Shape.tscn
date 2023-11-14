@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cwks7l8024dh0"]
 
-[ext_resource type="Script" path="res://Shape.gd" id="1_7fo6t"]
+[ext_resource type="Script" path="res://Shape/Shape.gd" id="1_7fo6t"]
 
 [node name="Shape" type="Node2D" node_paths=PackedStringArray("polygon")]
 script = ExtResource("1_7fo6t")

@@ -37,7 +37,7 @@ func _update_slices(slice_index : int = 0):
 	var slice = slices[slice_index]
 	var origin_radius = sqrt(pow(slice.position.x, 2) + pow(slice.position.y, 2))
 	var origin_theta = atan2(slice.position.y, slice.position.x)
-	var theta_increment = deg_to_rad(360 / slice_count)
+	var theta_increment = deg_to_rad(360.0 / slice_count)
 
 	for i in slice_count:
 		var theta = (slice_index - i) * theta_increment

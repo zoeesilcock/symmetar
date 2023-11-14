@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://b0xsay7lqoc07"]
 
-[ext_resource type="PackedScene" uid="uid://b7fwwj6jtev" path="res://Element.tscn" id="1_bnlyl"]
-[ext_resource type="Script" path="res://World.gd" id="1_idh0m"]
+[ext_resource type="Script" path="res://World/World.gd" id="1_hfrd5"]
+[ext_resource type="PackedScene" uid="uid://b7fwwj6jtev" path="res://Element/Element.tscn" id="2_0ngvt"]
 
 [node name="World" type="Node2D" node_paths=PackedStringArray("elements_node")]
-script = ExtResource("1_idh0m")
-element_scene = ExtResource("1_bnlyl")
+script = ExtResource("1_hfrd5")
+element_scene = ExtResource("2_0ngvt")
 elements_node = NodePath("Elements")
 
 [node name="Camera2D" type="Camera2D" parent="."]
