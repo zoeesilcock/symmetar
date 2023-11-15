@@ -7,7 +7,6 @@ extends Node2D
 @export var selection_node : Node2D
 
 # Settings
-@export var allow_drag : bool
 @export var highlight_brighten : float
 @export var element_index : int
 @export var slice_index : int
@@ -35,22 +34,21 @@ func _ready():
 	ui_state.selection_changed.connect(_on_selection_changed)
 
 func _unhandled_input(event):
-	if allow_drag:
-		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-			var world_position = view_to_world * event.position
-			if not ui_state.any_shape_is_dragging and _is_point_in_shape(world_position - position):
-				if not is_dragging and event.pressed:
-					viewport.set_input_as_handled()
-					drag_offset = world_position - position
-					_start_dragging()
-
-			if is_dragging and not event.pressed:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		var world_position = view_to_world * event.position
+		if not ui_state.any_shape_is_dragging and _is_point_in_shape(world_position - position):
+			if not is_dragging and event.pressed:
 				viewport.set_input_as_handled()
-				_end_dragging()
+				drag_offset = world_position - position
+				_start_dragging()
 
-		if is_dragging && event is InputEventMouseMotion:
+		if is_dragging and not event.pressed:
 			viewport.set_input_as_handled()
-			_update_dragging(event)
+			_end_dragging()
+
+	if is_dragging && event is InputEventMouseMotion:
+		viewport.set_input_as_handled()
+		_update_dragging(event)
 
 func _start_dragging():
 	selected.emit(slice_index)

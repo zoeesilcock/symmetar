@@ -39,7 +39,6 @@ func _instantiate_slices():
 		slices[i].slice_index = i
 		slices[i].element_index = element_index
 		slices[i].name = "Slice" + str(i)
-		slices[i].allow_drag = true
 		slices[i].position = Vector2(initial_radius, 0)
 
 		slices[i].position_changed.connect(_on_position_changed)
