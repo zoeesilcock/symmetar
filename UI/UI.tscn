@@ -1,12 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://cn6aov1t3u3y2"]
+[gd_scene load_steps=5 format=3 uid="uid://cn6aov1t3u3y2"]
 
 [ext_resource type="Script" path="res://UI/UI.gd" id="1_nhcn2"]
 [ext_resource type="Theme" uid="uid://hgjigpeoaius" path="res://UI/UITheme.tres" id="2_dusos"]
+[ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="2_ot8s7"]
 
 [sub_resource type="Theme" id="Theme_uuqi3"]
 
 [node name="UI" type="CanvasLayer"]
 script = ExtResource("1_nhcn2")
+ui_state = ExtResource("2_ot8s7")
 
 [node name="Root" type="Control" parent="."]
 layout_mode = 3

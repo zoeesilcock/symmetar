@@ -3,6 +3,7 @@ extends CanvasLayer
 
 # References
 @export var world : World
+@export var ui_state : UIState
 
 # Signals
 signal add_button_pressed

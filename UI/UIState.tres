@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="UIState" load_steps=2 format=3 uid="uid://chkr4prm0pu47"]
+
+[ext_resource type="Script" path="res://UI/UIState.gd" id="1_tokba"]
+
+[resource]
+script = ExtResource("1_tokba")
+is_dragging = false

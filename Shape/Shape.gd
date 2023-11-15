@@ -3,6 +3,7 @@ extends Node2D
 
 # References
 @export var polygon : Polygon2D
+@export var ui_state : UIState
 
 # Settings
 @export var allow_drag : bool
@@ -29,7 +30,7 @@ func _input(event):
 	if allow_drag:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 			var world_position = view_to_world * event.position
-			if _is_point_in_shape(world_position - position):
+			if not ui_state.any_shape_is_dragging and _is_point_in_shape(world_position - position):
 				if not is_dragging and event.pressed:
 					drag_offset = world_position - position
 					_start_dragging()
@@ -41,6 +42,7 @@ func _input(event):
 			_update_dragging(event)
 
 func _start_dragging():
+	ui_state.any_shape_is_dragging = true
 	is_dragging = true
 	polygon.color = highlighted_color
 
@@ -49,6 +51,7 @@ func _update_dragging(event):
 	position_changed.emit(slice_index)
 
 func _end_dragging():
+	ui_state.any_shape_is_dragging = false
 	is_dragging = false
 	polygon.color = original_color
 
