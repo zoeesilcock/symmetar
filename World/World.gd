@@ -13,6 +13,7 @@ func _ready():
 
 func add_new_element():
 	var new_element = element_scene.instantiate()
+
 	elements_node.add_child(new_element)
 	elements.push_front(new_element)
 

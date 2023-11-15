@@ -23,28 +23,33 @@ var drag_offset
 var view_to_world
 var original_color
 var highlighted_color
+var viewport
 
 func _ready():
 	view_to_world = get_canvas_transform().affine_inverse()
 	original_color = polygon.color
 	highlighted_color = polygon.color
 	highlighted_color.v += highlight_brighten
+	viewport = get_viewport()
 
 	ui_state.selection_changed.connect(_on_selection_changed)
 
-func _input(event):
+func _unhandled_input(event):
 	if allow_drag:
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 			var world_position = view_to_world * event.position
 			if not ui_state.any_shape_is_dragging and _is_point_in_shape(world_position - position):
 				if not is_dragging and event.pressed:
+					viewport.set_input_as_handled()
 					drag_offset = world_position - position
 					_start_dragging()
 
 			if is_dragging and not event.pressed:
+				viewport.set_input_as_handled()
 				_end_dragging()
 
 		if is_dragging && event is InputEventMouseMotion:
+			viewport.set_input_as_handled()
 			_update_dragging(event)
 
 func _start_dragging():

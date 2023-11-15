@@ -26,8 +26,7 @@ func _on_position_changed(slice_index : int):
 	_update_slices(slice_index)
 
 func _on_slice_selected(slice_index : int):
-	ui_state.selected_element_index = element_index
-	ui_state.selected_slice_index = slice_index
+	ui_state.set_selection(element_index, slice_index)
 
 func _instantiate_slices():
 	slices = []
