@@ -4,4 +4,6 @@
 
 [resource]
 script = ExtResource("1_tokba")
-is_dragging = false
+any_shape_is_dragging = false
+selected_element_index = -1
+selected_slice_index = -1

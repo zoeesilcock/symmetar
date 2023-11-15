@@ -2,18 +2,22 @@ class_name Shape
 extends Node2D
 
 # References
-@export var polygon : Polygon2D
 @export var ui_state : UIState
+@export var polygon : Polygon2D
+@export var selection_node : Node2D
 
 # Settings
 @export var allow_drag : bool
 @export var highlight_brighten : float
+@export var element_index : int
 @export var slice_index : int
 
 # Signals
 signal position_changed
+signal selected
 
 # Internal
+var is_selected
 var is_dragging
 var drag_offset
 var view_to_world
@@ -25,6 +29,8 @@ func _ready():
 	original_color = polygon.color
 	highlighted_color = polygon.color
 	highlighted_color.v += highlight_brighten
+
+	ui_state.selection_changed.connect(_on_selection_changed)
 
 func _input(event):
 	if allow_drag:
@@ -42,6 +48,7 @@ func _input(event):
 			_update_dragging(event)
 
 func _start_dragging():
+	selected.emit(slice_index)
 	ui_state.any_shape_is_dragging = true
 	is_dragging = true
 	polygon.color = highlighted_color
@@ -51,9 +58,20 @@ func _update_dragging(event):
 	position_changed.emit(slice_index)
 
 func _end_dragging():
+	selected.emit(slice_index)
 	ui_state.any_shape_is_dragging = false
 	is_dragging = false
 	polygon.color = original_color
+
+func _set_selection(enabled : bool):
+	is_selected = enabled
+	selection_node.visible = enabled
+
+func _on_selection_changed():
+	_set_selection(
+		ui_state.selected_element_index == element_index and
+		ui_state.selected_slice_index == slice_index
+	)
 
 func _is_point_in_shape(point):
 	return Geometry2D.is_point_in_polygon(

@@ -16,6 +16,8 @@ func add_new_element():
 	elements_node.add_child(new_element)
 	elements.push_front(new_element)
 
+	new_element.init(len(elements))
+
 func clear_elements():
 	for element in elements:
 		elements_node.remove_child(element)

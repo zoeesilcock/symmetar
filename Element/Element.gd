@@ -2,23 +2,32 @@ class_name Element
 extends Node2D
 
 # References
+@export var ui_state : UIState
 @export var shape_scene : PackedScene
 @export var slices_node : Node2D
 
 # Settings
+@export var element_index : int
 @export var slice_count : int
 @export var initial_radius : float
 @export var shape_rotation : float
 
 # Internal
 var slices
+var is_selected
 
-func _ready():
+func init(element_index : int):
+	self.element_index = element_index
+
 	_instantiate_slices()
 	_update_slices()
 
 func _on_position_changed(slice_index : int):
 	_update_slices(slice_index)
+
+func _on_slice_selected(slice_index : int):
+	ui_state.selected_element_index = element_index
+	ui_state.selected_slice_index = slice_index
 
 func _instantiate_slices():
 	slices = []
@@ -26,12 +35,16 @@ func _instantiate_slices():
 
 	for i in slice_count:
 		slices[i] = shape_scene.instantiate()
+		slices_node.add_child(slices[i])
+
 		slices[i].slice_index = i
+		slices[i].element_index = element_index
 		slices[i].name = "Slice" + str(i)
 		slices[i].allow_drag = true
 		slices[i].position = Vector2(initial_radius, 0)
+
 		slices[i].position_changed.connect(_on_position_changed)
-		slices_node.add_child(slices[i])
+		slices[i].selected.connect(_on_slice_selected)
 
 func _update_slices(slice_index : int = 0):
 	var slice = slices[slice_index]
