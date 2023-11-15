@@ -14,6 +14,7 @@ signal position_changed
 
 # Internal
 var is_dragging
+var drag_offset
 var view_to_world
 var original_color
 var highlighted_color
@@ -30,6 +31,7 @@ func _input(event):
 			var world_position = view_to_world * event.position
 			if _is_point_in_shape(world_position - position):
 				if not is_dragging and event.pressed:
+					drag_offset = world_position - position
 					_start_dragging()
 
 			if is_dragging and not event.pressed:
@@ -43,7 +45,7 @@ func _start_dragging():
 	polygon.color = highlighted_color
 
 func _update_dragging(event):
-	position = view_to_world * event.position
+	position = view_to_world * (event.position - drag_offset)
 	position_changed.emit(slice_index)
 
 func _end_dragging():
