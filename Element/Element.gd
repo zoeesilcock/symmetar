@@ -14,8 +14,9 @@ extends Node2D
 var slices
 var is_selected
 
-func init(element_index : int):
+func init(element_index : int, state : ElementState):
 	self.element_index = element_index
+	self.state = state
 
 	_instantiate_slices()
 	_update_slices()
@@ -34,10 +35,11 @@ func _instantiate_slices():
 		slices[i] = shape_scene.instantiate()
 		slices_node.add_child(slices[i])
 
+		slices[i].rotation = state.slice_rotation
+		slices[i].position = state.slice_position
 		slices[i].slice_index = i
 		slices[i].element_index = element_index
 		slices[i].name = "Slice" + str(i)
-		slices[i].position = Vector2(state.radius, 0)
 
 		slices[i].position_changed.connect(_on_position_changed)
 		slices[i].selected.connect(_on_slice_selected)
@@ -59,3 +61,4 @@ func _update_slices(slice_index : int = 0):
 	# Update the state
 	state.radius = origin_radius
 	state.slice_rotation = slices[0].rotation
+	state.slice_position = slices[0].position

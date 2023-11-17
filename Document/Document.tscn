@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkihrohu0hh6e"]
+
+[ext_resource type="Script" path="res://Document/Document.gd" id="1_3rhj1"]
+[ext_resource type="PackedScene" uid="uid://b7fwwj6jtev" path="res://Element/Element.tscn" id="2_oakl1"]
+
+[node name="Document" type="Node2D" node_paths=PackedStringArray("elements_node")]
+script = ExtResource("1_3rhj1")
+element_scene = ExtResource("2_oakl1")
+elements_node = NodePath("Elements")
+
+[node name="Elements" type="Node2D" parent="."]

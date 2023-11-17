@@ -10,6 +10,7 @@ script = ExtResource("4_nywvh")
 slice_count = 8
 radius = 200.0
 slice_rotation = 0.0
+slice_position = Vector2(0, 0)
 
 [node name="Element" type="Node2D" node_paths=PackedStringArray("slices_node")]
 script = ExtResource("1_0qwk2")
