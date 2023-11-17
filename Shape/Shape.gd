@@ -76,7 +76,7 @@ func _on_selection_changed():
 		ui_state.selected_slice_index == slice_index
 	)
 
-func _is_point_in_shape(point):
+func _is_point_in_shape(point) -> bool:
 	return Geometry2D.is_point_in_polygon(
 		point,
 		polygon.get_polygon() * Transform2D(-rotation, Vector2.ZERO)
