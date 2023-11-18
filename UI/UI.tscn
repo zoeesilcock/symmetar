@@ -78,42 +78,15 @@ columns = 2
 
 [node name="CountLabel" type="Label" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
 layout_mode = 2
-text = "Count:"
+size_flags_horizontal = 3
+text = "Slice count:"
 
 [node name="CountInput" type="SpinBox" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="RadiusLabel" type="Label" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Radius:"
-
-[node name="RadiusInput" type="SpinBox" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="RotationLabel" type="Label" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-text = "Rotation:"
-
-[node name="RotationInput" type="SpinBox" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="Space3" type="Control" parent="Root/Panel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
-
-[node name="ItemsLabel" type="Label" parent="Root/Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "Items"
-
-[node name="ItemList" type="ItemList" parent="Root/Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-item_count = 2
-item_0/text = "Item 1"
-item_1/text = "Item 2"
 
 [node name="FileDialog" type="FileDialog" parent="Root"]
 position = Vector2i(300, 75)
