@@ -36,7 +36,7 @@ func _ready():
 func _unhandled_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		var world_position = view_to_world * event.position
-		if not ui_state.any_shape_is_dragging and _is_point_in_shape(world_position - position):
+		if not ui_state.any_slice_is_dragging and _is_point_in_shape(world_position - position):
 			if not is_dragging and event.pressed:
 				viewport.set_input_as_handled()
 				drag_offset = world_position - position
@@ -52,7 +52,7 @@ func _unhandled_input(event):
 
 func _start_dragging():
 	selected.emit(slice_index)
-	ui_state.any_shape_is_dragging = true
+	ui_state.any_slice_is_dragging = true
 	is_dragging = true
 	polygon.color = highlighted_color
 
@@ -62,7 +62,7 @@ func _update_dragging(event):
 
 func _end_dragging():
 	selected.emit(slice_index)
-	ui_state.any_shape_is_dragging = false
+	ui_state.any_slice_is_dragging = false
 	is_dragging = false
 	polygon.color = original_color
 
