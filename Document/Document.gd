@@ -22,19 +22,23 @@ func load_document(path : String):
 func save_document(path : String):
 	ResourceSaver.save(state, path)
 
+func get_element_state(index : int) -> ElementState:
+	return state.elements[index]
+
 func add_new_element():
 	var new_element = element_scene.instantiate()
+	var element_index = len(elements)
 
 	elements_node.add_child(new_element)
-	elements.push_front(new_element)
+	elements.push_back(new_element)
 
 	var element_state = ElementState.new()
 	element_state.slice_count = 8
 	element_state.radius = 200
 	element_state.slice_position = Vector2(element_state.radius, 0)
 
-	state.elements.push_front(element_state)
-	new_element.init(len(elements), element_state)
+	state.elements.push_back(element_state)
+	new_element.init(element_index, element_state)
 
 func clear_elements():
 	for element in elements:

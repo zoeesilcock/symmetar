@@ -18,6 +18,8 @@ func init(element_index : int, state : ElementState):
 	self.element_index = element_index
 	self.state = state
 
+	state.slice_count_changed.connect(_on_slice_count_changed)
+
 	_instantiate_slices()
 	_update_slices()
 
@@ -27,22 +29,48 @@ func _on_position_changed(slice_index : int):
 func _on_slice_selected(slice_index : int):
 	ui_state.set_selection(element_index, slice_index)
 
+func _on_slice_count_changed():
+	var current_length = len(slices)
+	var slice_count_increased = state.slice_count > current_length
+
+	if slice_count_increased:
+		var increase = state.slice_count - current_length
+		slices.resize(state.slice_count)
+		for i in range(current_length, current_length + increase):
+			_instantiate_slice(i)
+	else:
+		var decrease = current_length - state.slice_count
+		for i in range(current_length - decrease, current_length):
+			_remove_slice(i)
+		slices.resize(state.slice_count)
+
+	_update_slices()
+
 func _instantiate_slices():
 	slices = []
 	slices.resize(state.slice_count)
 
 	for i in state.slice_count:
-		slices[i] = shape_scene.instantiate()
-		slices_node.add_child(slices[i])
+		_instantiate_slice(i)
 
-		slices[i].rotation = state.slice_rotation
-		slices[i].position = state.slice_position
-		slices[i].slice_index = i
-		slices[i].element_index = element_index
-		slices[i].name = "Slice" + str(i)
+func _instantiate_slice(index : int):
+	slices[index] = shape_scene.instantiate()
+	slices_node.add_child(slices[index])
 
-		slices[i].position_changed.connect(_on_position_changed)
-		slices[i].selected.connect(_on_slice_selected)
+	slices[index].rotation = state.slice_rotation
+	slices[index].position = state.slice_position
+	slices[index].slice_index = index
+	slices[index].element_index = element_index
+	slices[index].name = "Slice" + str(index)
+
+	slices[index].position_changed.connect(_on_position_changed)
+	slices[index].selected.connect(_on_slice_selected)
+
+func _remove_slice(index : int):
+	slices[index].position_changed.disconnect(_on_position_changed)
+	slices[index].selected.disconnect(_on_slice_selected)
+	slices_node.remove_child(slices[index])
+	slices[index].queue_free()
 
 func _update_slices(slice_index : int = 0):
 	var slice = slices[slice_index]
