@@ -42,3 +42,9 @@ func _on_slice_count_changed(value : float):
 	if ui_state.selected_element_index >= 0:
 		var element_state = world.document.get_element_state(ui_state.selected_element_index)
 		element_state.slice_count = value
+
+func _on_undo_button_pressed():
+	world.document.undo()
+
+func _on_redo_button_pressed():
+	world.document.redo()

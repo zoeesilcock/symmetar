@@ -47,6 +47,12 @@ func clear_elements():
 
 	elements = []
 
+func undo():
+	print("Undo!")
+
+func redo():
+	print("Redo!")
+
 func _instantiate_elements():
 	elements.resize(len(state.elements))
 
