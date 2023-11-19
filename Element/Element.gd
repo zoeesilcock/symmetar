@@ -7,16 +7,14 @@ extends Node2D
 @export var slices_node : Node2D
 
 # Settings
-@export var element_index : int
 @export var state : ElementState
 
 # Internal
 var slices
 var is_selected
 
-func init(element_index : int, state : ElementState):
-	self.element_index = element_index
-	self.state = state
+func init(initial_state : ElementState):
+	state = initial_state
 
 	state.slice_count_changed.connect(_on_slice_count_changed)
 
@@ -27,7 +25,7 @@ func _on_position_changed(slice_index : int):
 	_update_slices(slice_index)
 
 func _on_slice_selected(slice_index : int):
-	ui_state.set_selection(element_index, slice_index)
+	ui_state.set_selection(state.index, slice_index)
 
 func _on_slice_count_changed():
 	var current_length = len(slices)
@@ -60,7 +58,7 @@ func _instantiate_slice(index : int):
 	slices[index].rotation = state.slice_rotation
 	slices[index].position = state.slice_position
 	slices[index].slice_index = index
-	slices[index].element_index = element_index
+	slices[index].element_index = state.index
 	slices[index].name = "Slice" + str(index)
 
 	slices[index].position_changed.connect(_on_position_changed)

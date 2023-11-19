@@ -33,12 +33,13 @@ func add_new_element():
 	elements.push_back(new_element)
 
 	var element_state = ElementState.new()
+	element_state.index = element_index
 	element_state.slice_count = 8
 	element_state.radius = 200
 	element_state.slice_position = Vector2(element_state.radius, 0)
 
 	state.elements.push_back(element_state)
-	new_element.init(element_index, element_state)
+	new_element.init(element_state)
 
 func clear_elements():
 	for element in elements:
@@ -54,4 +55,4 @@ func _instantiate_elements():
 		elements_node.add_child(loaded_element)
 		elements[element_index] = loaded_element
 
-		loaded_element.init(element_index, state.elements[element_index])
+		loaded_element.init(state.elements[element_index])

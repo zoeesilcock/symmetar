@@ -2,6 +2,7 @@ class_name ElementState
 extends Resource
 
 # Data
+@export var index : int
 @export var slice_count : int:
 	set(value):
 		var value_changed = value != slice_count
