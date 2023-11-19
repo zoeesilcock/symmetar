@@ -36,6 +36,11 @@ func add_new_element(element_state : ElementState):
 	state.index = element_index
 	new_element.init(element_state)
 
+func remove_element(index : int):
+	elements_node.remove_child(elements[index])
+	elements.remove_at(index)
+	_update_element_indexes()
+
 func clear_elements():
 	for element in elements:
 		elements_node.remove_child(element)
