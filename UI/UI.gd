@@ -26,7 +26,11 @@ func _on_load_button_pressed():
 	file_dialog.show()
 
 func _on_add_button_pressed():
-	world.document.add_new_element()
+	var element_state = ElementState.new()
+	element_state.slice_count = 8
+	element_state.radius = 200
+	element_state.slice_position = Vector2(element_state.radius, 0)
+	world.document.add_new_element(element_state)
 
 func _on_clear_button_pressed():
 	world.document.clear_elements()
