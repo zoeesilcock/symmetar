@@ -31,9 +31,11 @@ func _on_add_button_pressed():
 	element_state.radius = 200
 	element_state.slice_position = Vector2(element_state.radius, 0)
 	world.document.add_new_element(element_state)
+	world.undo_manager.register_diff()
 
 func _on_clear_button_pressed():
 	world.document.clear_elements()
+	world.undo_manager.register_diff()
 
 func _on_selection_changed():
 	if ui_state.selected_element_index >= 0:
@@ -45,10 +47,14 @@ func _on_selection_changed():
 func _on_slice_count_changed(value : float):
 	if ui_state.selected_element_index >= 0:
 		var element_state = world.document.get_element_state(ui_state.selected_element_index)
+		var slice_count_changed = element_state.slice_count != value
 		element_state.slice_count = value
 
+		if slice_count_changed:
+			world.undo_manager.register_diff()
+
 func _on_undo_button_pressed():
-	world.document.undo()
+	world.undo_manager.undo()
 
 func _on_redo_button_pressed():
-	world.document.redo()
+	world.undo_manager.redo()

@@ -1,13 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://b0xsay7lqoc07"]
+[gd_scene load_steps=6 format=3 uid="uid://b0xsay7lqoc07"]
 
 [ext_resource type="Script" path="res://World/World.gd" id="1_hfrd5"]
 [ext_resource type="Script" path="res://World/Background.gd" id="3_10f1g"]
+[ext_resource type="PackedScene" uid="uid://crwxcud4hr0rr" path="res://UndoManager/UndoManager.tscn" id="4_n6wyd"]
 [ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="4_r6cmr"]
 [ext_resource type="PackedScene" uid="uid://bkihrohu0hh6e" path="res://Document/Document.tscn" id="5_uwskq"]
 
-[node name="World" type="Node2D" node_paths=PackedStringArray("document")]
+[node name="World" type="Node2D" node_paths=PackedStringArray("document", "undo_manager")]
 script = ExtResource("1_hfrd5")
 document = NodePath("Document")
+undo_manager = NodePath("UndoManager")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(-128, 0)
@@ -20,4 +22,8 @@ ui_state = ExtResource("4_r6cmr")
 color = Color(1, 1, 0, 1)
 polygon = PackedVector2Array(-2, -8, 2, -8, 2, -2, 8, -2, 8, 2, 2, 2, 2, 8, -2, 8, -2, 2, -8, 2, -8, -2, -2, -2)
 
-[node name="Document" parent="." instance=ExtResource("5_uwskq")]
+[node name="UndoManager" parent="." node_paths=PackedStringArray("document") instance=ExtResource("4_n6wyd")]
+document = NodePath("../Document")
+
+[node name="Document" parent="." node_paths=PackedStringArray("undo_manager") instance=ExtResource("5_uwskq")]
+undo_manager = NodePath("../UndoManager")

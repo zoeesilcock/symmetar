@@ -9,6 +9,9 @@ extends Node2D
 # Settings
 @export var state : ElementState
 
+# Signals
+signal state_changed
+
 # Internal
 var slices
 var is_selected
@@ -21,8 +24,11 @@ func init(initial_state : ElementState):
 	_instantiate_slices()
 	_update_slices()
 
-func _on_position_changed(slice_index : int):
+func _on_slice_position_changed(slice_index : int):
 	_update_slices(slice_index)
+
+func _on_slice_dragging_ended(slice_index : int):
+	state_changed.emit()
 
 func _on_slice_selected(slice_index : int):
 	ui_state.set_selection(state.index, slice_index)
@@ -61,11 +67,13 @@ func _instantiate_slice(index : int):
 	slices[index].element_index = state.index
 	slices[index].name = "Slice" + str(index)
 
-	slices[index].position_changed.connect(_on_position_changed)
+	slices[index].position_changed.connect(_on_slice_position_changed)
+	slices[index].dragging_ended.connect(_on_slice_dragging_ended)
 	slices[index].selected.connect(_on_slice_selected)
 
 func _remove_slice(index : int):
-	slices[index].position_changed.disconnect(_on_position_changed)
+	slices[index].position_changed.disconnect(_on_slice_position_changed)
+	slices[index].dragging_ended.disconnect(_on_slice_dragging_ended)
 	slices[index].selected.disconnect(_on_slice_selected)
 	slices_node.remove_child(slices[index])
 	slices[index].queue_free()

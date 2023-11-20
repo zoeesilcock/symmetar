@@ -14,6 +14,7 @@ extends Node2D
 # Signals
 signal position_changed
 signal selected
+signal dragging_ended
 
 # Internal
 var is_selected
@@ -65,6 +66,7 @@ func _end_dragging():
 	ui_state.any_slice_is_dragging = false
 	is_dragging = false
 	polygon.color = original_color
+	dragging_ended.emit(slice_index)
 
 func _set_selection(enabled : bool):
 	is_selected = enabled
