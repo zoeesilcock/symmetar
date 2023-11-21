@@ -5,6 +5,7 @@ extends Node2D
 @export var state : DocumentState
 
 # References
+@export var ui_state : UIState
 @export var undo_manager : UndoManager
 @export var element_scene : PackedScene
 @export var elements_node : Node2D
@@ -40,6 +41,8 @@ func add_new_element(element_state : ElementState):
 	element_state.index = element_index
 	new_element.init(element_state)
 	new_element.state_changed.connect(_on_element_state_changed)
+
+	ui_state.set_selection(element_index, 0)
 
 func remove_element(index : int):
 	elements_node.remove_child(elements[index])
