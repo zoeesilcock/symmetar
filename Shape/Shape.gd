@@ -62,7 +62,6 @@ func _update_dragging(event):
 	position_changed.emit(slice_index)
 
 func _end_dragging():
-	selected.emit(slice_index)
 	ui_state.any_slice_is_dragging = false
 	is_dragging = false
 	polygon.color = original_color
