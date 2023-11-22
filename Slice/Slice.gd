@@ -1,4 +1,4 @@
-class_name Shape
+class_name Slice
 extends Node2D
 
 # References
@@ -37,7 +37,7 @@ func _ready():
 func _unhandled_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		var world_position = view_to_world * event.position
-		if not ui_state.any_slice_is_dragging and _is_point_in_shape(world_position - position):
+		if not ui_state.any_slice_is_dragging and _is_point_in_slice(world_position - position):
 			if not is_dragging and event.pressed:
 				viewport.set_input_as_handled()
 				drag_offset = world_position - position
@@ -77,7 +77,7 @@ func _on_selection_changed():
 		ui_state.selected_slice_index == slice_index
 	)
 
-func _is_point_in_shape(point) -> bool:
+func _is_point_in_slice(point) -> bool:
 	return Geometry2D.is_point_in_polygon(
 		point,
 		polygon.get_polygon() * Transform2D(-rotation, Vector2.ZERO)

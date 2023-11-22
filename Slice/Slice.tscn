@@ -1,11 +1,11 @@
 [gd_scene load_steps=3 format=3 uid="uid://cwks7l8024dh0"]
 
-[ext_resource type="Script" path="res://Shape/Shape.gd" id="1_7fo6t"]
-[ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="2_0fw5t"]
+[ext_resource type="Script" path="res://Slice/Slice.gd" id="1_hloax"]
+[ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="2_gdm0n"]
 
-[node name="Shape" type="Node2D" node_paths=PackedStringArray("polygon", "selection_node")]
-script = ExtResource("1_7fo6t")
-ui_state = ExtResource("2_0fw5t")
+[node name="Slice" type="Node2D" node_paths=PackedStringArray("polygon", "selection_node")]
+script = ExtResource("1_hloax")
+ui_state = ExtResource("2_gdm0n")
 polygon = NodePath("Polygon2D")
 selection_node = NodePath("Selection")
 highlight_brighten = 0.5

@@ -3,7 +3,7 @@ extends Node2D
 
 # References
 @export var ui_state : UIState
-@export var shape_scene : PackedScene
+@export var slice_scene : PackedScene
 @export var slices_node : Node2D
 
 # Settings
@@ -58,7 +58,7 @@ func _instantiate_slices():
 		_instantiate_slice(i)
 
 func _instantiate_slice(index : int):
-	slices[index] = shape_scene.instantiate()
+	slices[index] = slice_scene.instantiate()
 	slices_node.add_child(slices[index])
 
 	slices[index].rotation = state.slice_rotation
