@@ -14,7 +14,10 @@ signal state_changed
 
 # Internal
 var slices
-var is_selected
+var is_selected : bool
+var theta_increment : float:
+	get:
+		return deg_to_rad(360.0 / state.slice_count)
 
 func init(initial_state : ElementState):
 	state = initial_state
@@ -22,13 +25,17 @@ func init(initial_state : ElementState):
 	state.slice_count_changed.connect(_on_slice_count_changed)
 
 	_instantiate_slices()
-	_update_slices()
+	_update_slice_positions()
+	_update_slice_rotations()
 
 func _on_slice_position_changed(slice_index : int):
-	_update_slices(slice_index)
+	_update_slice_positions(slice_index)
+
+func _on_slice_rotation_changed(slice_index : int):
+	_update_slice_rotations(slice_index)
 
 func _on_slice_dragging_ended(slice_index : int):
-	state_changed.emit()
+	state_changed.emit(slice_index)
 
 func _on_slice_selected(slice_index : int):
 	ui_state.set_selection(state.index, slice_index)
@@ -48,7 +55,8 @@ func _on_slice_count_changed():
 			_remove_slice(i)
 		slices.resize(state.slice_count)
 
-	_update_slices()
+	_update_slice_positions()
+	_update_slice_rotations()
 
 func _instantiate_slices():
 	slices = []
@@ -61,28 +69,30 @@ func _instantiate_slice(index : int):
 	slices[index] = slice_scene.instantiate()
 	slices_node.add_child(slices[index])
 
-	slices[index].rotation = state.slice_rotation
-	slices[index].position = state.slice_position
-	slices[index].slice_index = index
-	slices[index].element_index = state.index
-	slices[index].name = "Slice" + str(index)
+	slices[index].init(
+		state.slice_position,
+		state.slice_rotation,
+		index,
+		state.index
+	)
 
 	slices[index].position_changed.connect(_on_slice_position_changed)
+	slices[index].rotation_changed.connect(_on_slice_rotation_changed)
 	slices[index].dragging_ended.connect(_on_slice_dragging_ended)
 	slices[index].selected.connect(_on_slice_selected)
 
 func _remove_slice(index : int):
 	slices[index].position_changed.disconnect(_on_slice_position_changed)
+	slices[index].rotation_changed.disconnect(_on_slice_rotation_changed)
 	slices[index].dragging_ended.disconnect(_on_slice_dragging_ended)
 	slices[index].selected.disconnect(_on_slice_selected)
 	slices_node.remove_child(slices[index])
 	slices[index].queue_free()
 
-func _update_slices(slice_index : int = 0):
+func _update_slice_positions(slice_index : int = 0):
 	var slice = slices[slice_index]
 	var origin_radius = sqrt(pow(slice.position.x, 2) + pow(slice.position.y, 2))
 	var origin_theta = atan2(slice.position.y, slice.position.x)
-	var theta_increment = deg_to_rad(360.0 / state.slice_count)
 
 	for i in state.slice_count:
 		var theta = (slice_index - i) * theta_increment
@@ -90,9 +100,19 @@ func _update_slices(slice_index : int = 0):
 
 		if (i != slice_index):
 			slices[i].position = slice_position - position
-		slices[i].rotation = origin_theta + deg_to_rad(state.slice_rotation) + theta
 
 	# Update the state
 	state.radius = origin_radius
 	state.slice_rotation = slices[0].rotation
 	state.slice_position = slices[0].position
+
+func _update_slice_rotations(slice_index : int = 0):
+	var slice_rotation = slices[slice_index].rotation
+
+	for i in state.slice_count:
+		if (i != slice_index):
+			var theta = (slice_index - i) * theta_increment
+			slices[i].rotation = slice_rotation + theta
+
+	# Update the state
+	state.slice_rotation = slices[0].rotation
