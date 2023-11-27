@@ -29,11 +29,14 @@ func _on_load_button_pressed():
 	file_dialog.show()
 
 func _on_add_button_pressed():
-	var element_state = ElementState.new()
-	element_state.slice_count = 8
-	element_state.radius = 200
-	element_state.slice_position = Vector2(element_state.radius, 0)
-	element_state.slice_color = Color("#e85500")
+	var element_state = ElementState.new(
+		200.0,
+		slice_count_input.value,
+		0.0,
+		Vector2(),
+		slice_color_input.color
+	)
+
 	world.document.add_new_element(element_state)
 	world.undo_manager.register_diff()
 
@@ -46,8 +49,6 @@ func _on_selection_changed():
 		var element_state = world.document.get_element_state(ui_state.selected_element_index)
 		slice_count_input.value = element_state.slice_count
 		slice_color_input.color = element_state.slice_color
-	else:
-		slice_count_input.value = 0
 
 func _on_slice_count_changed(value : float):
 	if ui_state.selected_element_index >= 0:

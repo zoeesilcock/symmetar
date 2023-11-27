@@ -23,6 +23,13 @@ extends Resource
 signal slice_count_changed
 signal slice_color_changed
 
+func _init(p_radius : float = 200.0, p_slice_count : int = 8, p_slice_rotation : float = 0, p_slice_position : Vector2 = Vector2(), p_slice_color : Color = Color("#e85500")):
+	radius = p_radius
+	slice_count = p_slice_count
+	slice_rotation = p_slice_rotation
+	slice_position = p_slice_position
+	slice_color = p_slice_color
+
 static func get_exported_properties() -> Array[String]:
 	var exported_properties : Array[String] = []
 	for property in ElementState.new().get_property_list():
