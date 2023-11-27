@@ -7,14 +7,21 @@ extends Resource
 @export var slice_count : int:
 	set(value):
 		var value_changed = value != slice_count
-		slice_count = value
 		if value_changed:
+			slice_count = value
 			slice_count_changed.emit()
 @export var slice_rotation : float
 @export var slice_position : Vector2
+@export var slice_color : Color:
+	set(value):
+		var value_changed = value != slice_color
+		if value_changed:
+			slice_color = value
+			slice_color_changed.emit()
 
 # Signals
 signal slice_count_changed
+signal slice_color_changed
 
 static func get_exported_properties() -> Array[String]:
 	var exported_properties : Array[String] = []

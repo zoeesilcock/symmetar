@@ -15,7 +15,6 @@ signal elements_count_changed
 func calculate_diff() -> DocumentStateDiff:
 	var diff : Array[ElementState] = []
 	var count_change = len(elements) - len(previous_elements)
-	var element_properties = ElementState.get_exported_properties()
 
 	for index in len(elements):
 		var element = elements[index]
@@ -31,7 +30,6 @@ func calculate_diff() -> DocumentStateDiff:
 func apply_diff(diff : DocumentStateDiff, reverse : bool) -> void:
 	var current_count = len(elements)
 	var direction = 1
-	var element_properties = ElementState.get_exported_properties()
 	if reverse: direction = -1
 
 	if (diff.element_count_change != 0):

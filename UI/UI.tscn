@@ -6,11 +6,12 @@
 
 [sub_resource type="Theme" id="Theme_uuqi3"]
 
-[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("file_dialog", "slice_count_input")]
+[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("file_dialog", "slice_count_input", "slice_color_input")]
 script = ExtResource("1_nhcn2")
 ui_state = ExtResource("2_ot8s7")
 file_dialog = NodePath("Root/FileDialog")
 slice_count_input = NodePath("Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/CountInput")
+slice_color_input = NodePath("Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/ColorPickerButton")
 
 [node name="Root" type="Control" parent="."]
 layout_mode = 3
@@ -89,6 +90,14 @@ value = 1.0
 rounded = true
 alignment = 2
 select_all_on_focus = true
+
+[node name="ColorLabel" type="Label" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Color"
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+layout_mode = 2
 
 [node name="Space3" type="Control" parent="Root/Panel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)

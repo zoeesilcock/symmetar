@@ -23,6 +23,7 @@ func init(initial_state : ElementState):
 	state = initial_state
 
 	state.slice_count_changed.connect(_on_slice_count_changed)
+	state.slice_color_changed.connect(_on_slice_color_changed)
 
 	_instantiate_slices()
 	_update_slice_positions()
@@ -58,6 +59,10 @@ func _on_slice_count_changed():
 	_update_slice_positions()
 	_update_slice_rotations()
 
+func _on_slice_color_changed():
+	for slice in slices:
+		slice.set_color(state.slice_color)
+
 func _instantiate_slices():
 	slices = []
 	slices.resize(state.slice_count)
@@ -73,7 +78,8 @@ func _instantiate_slice(index : int):
 		state.slice_position,
 		state.slice_rotation,
 		index,
-		state.index
+		state.index,
+		state.slice_color
 	)
 
 	slices[index].position_changed.connect(_on_slice_position_changed)

@@ -36,10 +36,11 @@ var original_color
 var highlighted_color
 var viewport
 
-func init(slice_position : Vector2, slice_rotation : float, index : int, element_index : int):
+func init(slice_position : Vector2, slice_rotation : float, index : int, element_index : int, color : Color):
+	name = "Slice" + str(index)
 	position = slice_position
 	rotation = slice_rotation
-	name = "Slice" + str(index)
+	set_color(color)
 
 	slice_index = index
 	self.element_index = element_index
@@ -47,12 +48,15 @@ func init(slice_position : Vector2, slice_rotation : float, index : int, element
 
 func _ready():
 	view_to_world = get_canvas_transform().affine_inverse()
-	original_color = polygon.color
-	highlighted_color = polygon.color
-	highlighted_color.v += highlight_brighten
 	viewport = get_viewport()
 
 	ui_state.selection_changed.connect(_on_selection_changed)
+
+func set_color(color : Color):
+	original_color = color
+	polygon.color = color
+	highlighted_color = color
+	highlighted_color.v += highlight_brighten
 
 func _unhandled_input(event : InputEvent):
 	var world_position = view_to_world * event.position
