@@ -59,12 +59,13 @@ func _on_slice_count_changed(value : float):
 			world.undo_manager.register_diff()
 
 func _on_slice_color_changed(value : Color):
-	var element_state = world.document.get_element_state(ui_state.selected_element_index)
-	var slice_color_changed = element_state.slice_color != value
+	if ui_state.selected_element_index >= 0:
+		var element_state = world.document.get_element_state(ui_state.selected_element_index)
+		var slice_color_changed = element_state.slice_color != value
 
-	if slice_color_changed:
-		element_state.slice_color = value
-		world.undo_manager.register_diff()
+		if slice_color_changed:
+			element_state.slice_color = value
+			world.undo_manager.register_diff()
 
 func _on_undo_button_pressed():
 	world.undo_manager.undo()
