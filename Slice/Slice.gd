@@ -59,49 +59,50 @@ func set_color(color : Color):
 	highlighted_color.v += highlight_brighten
 
 func _unhandled_input(event : InputEvent):
-	var world_position = view_to_world * event.position
-	var cursor_in_slice = _is_point_in_slice(world_position - position)
-	var any_slice_busy = ui_state.any_slice_is_dragging || ui_state.any_slice_is_rotating
+	if event is InputEventMouseButton || event is InputEventMouseMotion:
+		var world_position = view_to_world * event.position
+		var cursor_in_slice = _is_point_in_slice(world_position - position)
+		var any_slice_busy = ui_state.any_slice_is_dragging || ui_state.any_slice_is_rotating
 
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		# Dragging
-		if event.pressed and not any_slice_busy and cursor_in_slice:
-			viewport.set_input_as_handled()
-			_start_dragging(world_position)
-		elif not event.pressed and is_dragging:
-			viewport.set_input_as_handled()
-			_end_dragging()
-
-		# Rotating
-		if is_selected:
-			if event.pressed and not any_slice_busy and not cursor_in_slice and \
-				_is_point_in_rotation_area(world_position - position):
-					viewport.set_input_as_handled()
-					_start_rotating(world_position)
-			elif not event.pressed and is_rotating:
+		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+			# Dragging
+			if event.pressed and not any_slice_busy and cursor_in_slice:
 				viewport.set_input_as_handled()
-				_end_rotating()
+				_start_dragging(world_position)
+			elif not event.pressed and is_dragging:
+				viewport.set_input_as_handled()
+				_end_dragging()
 
-	if is_selected and event is InputEventMouseMotion:
-		if is_dragging:
-			viewport.set_input_as_handled()
-			_update_dragging(event)
+			# Rotating
+			if is_selected:
+				if event.pressed and not any_slice_busy and not cursor_in_slice and \
+					_is_point_in_rotation_area(world_position - position):
+						viewport.set_input_as_handled()
+						_start_rotating(world_position)
+				elif not event.pressed and is_rotating:
+					viewport.set_input_as_handled()
+					_end_rotating()
 
-			if not selection_node.visible:
-				_show_selection()
-		elif is_rotating:
-			viewport.set_input_as_handled()
-			_update_rotating(event, world_position)
+		if is_selected and event is InputEventMouseMotion:
+			if is_dragging:
+				viewport.set_input_as_handled()
+				_update_dragging(event)
 
-			if not rotation_selection_node.visible:
-				_show_rotation_selection()
-		else:
-			var cursor_in_rotation_area = not cursor_in_slice and _is_point_in_rotation_area(world_position - position)
+				if not selection_node.visible:
+					_show_selection()
+			elif is_rotating:
+				viewport.set_input_as_handled()
+				_update_rotating(event, world_position)
 
-			if selection_node.visible and cursor_in_rotation_area:
-				_show_rotation_selection()
-			elif rotation_selection_node.visible and not cursor_in_rotation_area:
-				_show_selection()
+				if not rotation_selection_node.visible:
+					_show_rotation_selection()
+			else:
+				var cursor_in_rotation_area = not cursor_in_slice and _is_point_in_rotation_area(world_position - position)
+
+				if selection_node.visible and cursor_in_rotation_area:
+					_show_rotation_selection()
+				elif rotation_selection_node.visible and not cursor_in_rotation_area:
+					_show_selection()
 
 func _show_selection():
 	selection_node.visible = true
