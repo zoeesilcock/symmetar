@@ -77,5 +77,5 @@ func _update_element_indexes():
 	for element_index in len(elements):
 		elements[element_index].index = element_index
 
-func _on_element_state_changed():
+func _on_element_state_changed(_element_index : int):
 	undo_manager.register_diff()
