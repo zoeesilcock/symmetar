@@ -10,12 +10,12 @@ extends Resource
 # Signals
 signal selection_changed
 
-func _init():
+func _init() -> void:
 	any_slice_is_dragging = false
 	selected_element_index = -1
 	selected_slice_index = -1
 
-func set_selection(element_index : int, slice_index : int):
+func set_selection(element_index : int, slice_index : int) -> void:
 	selected_element_index = element_index
 	selected_slice_index = slice_index
 	selection_changed.emit()

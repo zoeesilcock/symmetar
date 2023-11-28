@@ -8,8 +8,8 @@ func _recognize(resource : Resource) -> bool:
 	return resource is DocumentState
 
 func _save(resource : Resource, path : String, _flags : int) -> Error:
-	var file = FileAccess.open(path, FileAccess.WRITE)
-	file.store_pascal_string(var_to_str(resource))
+	var file : FileAccess = FileAccess.open(path, FileAccess.WRITE)
+	file.store_pascal_string(var_to_str(resource as DocumentState))
 	file.close()
 
 	return OK

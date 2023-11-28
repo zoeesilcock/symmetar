@@ -8,13 +8,13 @@ extends CanvasLayer
 @export var slice_count_input : SpinBox
 @export var slice_color_input : ColorPickerButton
 
-func _ready():
+func _ready() -> void:
 	ui_state.selection_changed.connect(_on_selection_changed)
 	slice_color_input.get_picker().color_changed.connect(_on_slice_color_changed)
 
 	file_dialog.set_filters(PackedStringArray(["*.smtr ; Symmetar Files"]))
 
-func _input(event : InputEvent):
+func _input(event : InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
 		event.command_or_control_autoremap = true
 
@@ -36,22 +36,22 @@ func _input(event : InputEvent):
 			elif event.keycode == KEY_DOWN:
 				slice_count_input.value -= 1
 
-func _on_save_button_pressed():
+func _on_save_button_pressed() -> void:
 	file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	file_dialog.show()
 
-func _on_file_selected(path : String):
+func _on_file_selected(path : String) -> void:
 	if file_dialog.file_mode == FileDialog.FILE_MODE_SAVE_FILE:
 		world.document.save_document(path)
 	elif file_dialog.file_mode == FileDialog.FILE_MODE_OPEN_FILE:
 		world.document.load_document(path)
 
-func _on_load_button_pressed():
+func _on_load_button_pressed() -> void:
 	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 	file_dialog.show()
 
-func _on_add_button_pressed():
-	var element_state = ElementState.new(
+func _on_add_button_pressed() -> void:
+	var element_state : ElementState = ElementState.new(
 		200.0,
 		slice_count_input.value as int,
 		0.0,
@@ -62,36 +62,36 @@ func _on_add_button_pressed():
 	world.document.add_new_element(element_state)
 	world.undo_manager.register_diff()
 
-func _on_clear_button_pressed():
+func _on_clear_button_pressed() -> void:
 	world.document.clear_elements()
 	world.undo_manager.register_diff()
 
-func _on_selection_changed():
+func _on_selection_changed() -> void:
 	if ui_state.selected_element_index >= 0:
-		var element_state = world.document.get_element_state(ui_state.selected_element_index)
+		var element_state : ElementState = world.document.get_element_state(ui_state.selected_element_index)
 		slice_count_input.value = element_state.slice_count
 		slice_color_input.color = element_state.slice_color
 
-func _on_slice_count_changed(value : float):
+func _on_slice_count_changed(value : float) -> void:
 	if ui_state.selected_element_index >= 0:
-		var element_state = world.document.get_element_state(ui_state.selected_element_index)
-		var slice_count_changed = element_state.slice_count != value
+		var element_state : ElementState = world.document.get_element_state(ui_state.selected_element_index)
+		var slice_count_changed : bool = element_state.slice_count != value
 
 		if slice_count_changed:
-			element_state.slice_count = value
+			element_state.slice_count = value as int
 			world.undo_manager.register_diff()
 
-func _on_slice_color_changed(value : Color):
+func _on_slice_color_changed(value : Color) -> void:
 	if ui_state.selected_element_index >= 0:
-		var element_state = world.document.get_element_state(ui_state.selected_element_index)
-		var slice_color_changed = element_state.slice_color != value
+		var element_state : ElementState = world.document.get_element_state(ui_state.selected_element_index)
+		var slice_color_changed : bool = element_state.slice_color != value
 
 		if slice_color_changed:
 			element_state.slice_color = value
 			world.undo_manager.register_diff()
 
-func _on_undo_button_pressed():
+func _on_undo_button_pressed() -> void:
 	world.undo_manager.undo()
 
-func _on_redo_button_pressed():
+func _on_redo_button_pressed() -> void:
 	world.undo_manager.redo()
