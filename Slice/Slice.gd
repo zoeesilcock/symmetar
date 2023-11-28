@@ -59,7 +59,7 @@ func set_color(color : Color):
 	highlighted_color.v += highlight_brighten
 
 func _unhandled_input(event : InputEvent):
-	if event is InputEventMouseButton || event is InputEventMouseMotion:
+	if event is InputEventMouse:
 		var world_position = view_to_world * event.position
 		var cursor_in_slice = _is_point_in_slice(world_position - position)
 		var any_slice_busy = ui_state.any_slice_is_dragging || ui_state.any_slice_is_rotating
