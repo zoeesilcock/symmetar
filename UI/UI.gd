@@ -14,6 +14,28 @@ func _ready():
 
 	file_dialog.set_filters(PackedStringArray(["*.smtr ; Symmetar Files"]))
 
+func _input(event : InputEvent):
+	if event is InputEventKey and event.pressed:
+		event.command_or_control_autoremap = true
+
+		if event.ctrl_pressed:
+			if event.keycode == KEY_Z and not event.shift_pressed:
+				_on_undo_button_pressed()
+			elif event.keycode == KEY_Z and event.shift_pressed:
+				_on_redo_button_pressed()
+			elif event.keycode == KEY_S:
+				_on_save_button_pressed()
+			elif event.keycode == KEY_O:
+				_on_load_button_pressed()
+			elif event.keycode == KEY_X:
+				_on_clear_button_pressed()
+			elif event.keycode == KEY_A:
+				_on_add_button_pressed()
+			elif event.keycode == KEY_UP:
+				slice_count_input.value += 1
+			elif event.keycode == KEY_DOWN:
+				slice_count_input.value -= 1
+
 func _on_save_button_pressed():
 	file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	file_dialog.show()
