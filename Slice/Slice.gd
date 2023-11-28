@@ -36,14 +36,14 @@ var original_color
 var highlighted_color
 var viewport
 
-func init(slice_position : Vector2, slice_rotation : float, index : int, element_index : int, color : Color):
-	name = "Slice" + str(index)
-	position = slice_position
-	rotation = slice_rotation
-	set_color(color)
+func init(p_slice_position : Vector2, p_slice_rotation : float, p_index : int, p_element_index : int, p_color : Color):
+	name = "Slice" + str(p_index)
+	position = p_slice_position
+	rotation = p_slice_rotation
+	set_color(p_color)
 
-	slice_index = index
-	self.element_index = element_index
+	slice_index = p_index
+	element_index = p_element_index
 	debug_slice_index.text = str(slice_index)
 
 func _ready():

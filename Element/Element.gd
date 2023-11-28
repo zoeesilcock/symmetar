@@ -19,8 +19,8 @@ var theta_increment : float:
 	get:
 		return deg_to_rad(360.0 / state.slice_count)
 
-func init(initial_state : ElementState):
-	state = initial_state
+func init(p_state : ElementState):
+	state = p_state
 
 	state.slice_count_changed.connect(_on_slice_count_changed)
 	state.slice_color_changed.connect(_on_slice_color_changed)
