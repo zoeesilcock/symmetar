@@ -55,7 +55,7 @@ func clear_elements():
 
 	elements = []
 
-func _on_element_count_changed(count_change : int):
+func _on_element_count_changed(_count_change : int):
 	clear_elements()
 	_instantiate_elements()
 
