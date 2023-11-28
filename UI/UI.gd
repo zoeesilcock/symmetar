@@ -53,7 +53,7 @@ func _on_load_button_pressed():
 func _on_add_button_pressed():
 	var element_state = ElementState.new(
 		200.0,
-		slice_count_input.value,
+		slice_count_input.value as int,
 		0.0,
 		Vector2(200, 0),
 		slice_color_input.color
