@@ -33,7 +33,7 @@ func _on_add_button_pressed():
 		200.0,
 		slice_count_input.value,
 		0.0,
-		Vector2(),
+		Vector2(200, 0),
 		slice_color_input.color
 	)
 

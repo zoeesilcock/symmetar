@@ -86,7 +86,7 @@ text = "Slice count:"
 [node name="CountInput" type="SpinBox" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 min_value = 1.0
-value = 1.0
+value = 8.0
 rounded = true
 alignment = 2
 select_all_on_focus = true
@@ -98,6 +98,7 @@ text = "Color"
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
 layout_mode = 2
+color = Color(0.909804, 0.333333, 0, 1)
 
 [node name="Space3" type="Control" parent="Root/Panel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
