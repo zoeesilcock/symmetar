@@ -32,7 +32,7 @@ func apply_diff(diff : DocumentStateDiff, reverse : bool) -> void:
 	var direction : int = 1
 	if reverse: direction = -1
 
-	if (diff.element_count_change != 0):
+	if diff.element_count_change != 0:
 		elements.resize(current_count + diff.element_count_change * direction)
 		_fill_empty_slots()
 

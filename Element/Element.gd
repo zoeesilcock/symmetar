@@ -118,7 +118,7 @@ func _update_slice_positions(slice_index : int = 0) -> void:
 		var theta : float = (slice_index - index) * theta_increment
 		var slice_position : Vector2 = (origin_radius * Vector2.from_angle(theta + origin_theta))
 
-		if (index != slice_index):
+		if index != slice_index:
 			slices[index].position = slice_position - position
 
 	# Update the state
@@ -130,7 +130,7 @@ func _update_slice_rotations(slice_index : int = 0) -> void:
 	var slice_rotation : float = slices[slice_index].rotation
 
 	for index : int in state.slice_count:
-		if (index != slice_index):
+		if index != slice_index:
 			var theta : float = (slice_index - index) * theta_increment
 			slices[index].rotation = slice_rotation + theta
 
