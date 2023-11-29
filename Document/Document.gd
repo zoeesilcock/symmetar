@@ -23,7 +23,7 @@ func load_document(path : String) -> void:
 	state.element_changed.disconnect(_on_element_changed)
 	clear_elements()
 
-	state = ResourceLoader.load(path)
+	state = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE) as DocumentState
 	state.element_changed.connect(_on_element_changed)
 	_instantiate_elements()
 
