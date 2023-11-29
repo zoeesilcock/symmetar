@@ -15,11 +15,11 @@ extends Node2D
 @export var slice_index : int
 
 # Signals
-signal selected
-signal position_changed
-signal dragging_ended
-signal rotation_changed
-signal rotating_ended
+signal selected(index : int)
+signal position_changed(index : int)
+signal dragging_ended(index : int)
+signal rotation_changed(index : int)
+signal rotating_ended(index : int)
 
 # Internal
 var is_selected : bool

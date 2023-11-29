@@ -3,24 +3,41 @@ extends Resource
 
 # Data
 @export var index : int
-@export var radius : float
+@export var radius : float:
+	set(value):
+		if value != radius:
+			radius = value
+			radius_changed.emit()
+
 @export var slice_count : int:
 	set(value):
-		var value_changed : bool = value != slice_count
-		if value_changed:
+		if value != slice_count:
 			slice_count = value
 			slice_count_changed.emit()
-@export var slice_rotation : float
-@export var slice_position : Vector2
+
+@export var slice_rotation : float:
+	set(value):
+		if value != slice_rotation:
+			slice_rotation = value
+			slice_rotation_changed.emit()
+
+@export var slice_position : Vector2:
+	set(value):
+		if value != slice_position:
+			slice_position = value
+			slice_position_changed.emit()
+
 @export var slice_color : Color:
 	set(value):
-		var value_changed : bool = value != slice_color
-		if value_changed:
+		if value != slice_color:
 			slice_color = value
 			slice_color_changed.emit()
 
 # Signals
+signal radius_changed
 signal slice_count_changed
+signal slice_rotation_changed
+signal slice_position_changed
 signal slice_color_changed
 
 func _init(p_radius : float = 200.0, p_slice_count : int = 8, p_slice_rotation : float = 0, p_slice_position : Vector2 = Vector2(), p_slice_color : Color = Color("#e85500")) -> void:

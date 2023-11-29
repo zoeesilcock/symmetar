@@ -22,26 +22,16 @@ var theta_increment : float:
 func init(p_state : ElementState) -> void:
 	state = p_state
 
-	state.slice_count_changed.connect(_on_slice_count_changed)
-	state.slice_color_changed.connect(_on_slice_color_changed)
+	state.slice_count_changed.connect(_on_slice_count_state_changed)
+	state.slice_rotation_changed.connect(_on_slice_rotation_state_changed)
+	state.slice_position_changed.connect(_on_slice_position_state_changed)
+	state.slice_color_changed.connect(_on_slice_color_state_changed)
 
 	_instantiate_slices()
 	_update_slice_positions()
 	_update_slice_rotations()
 
-func _on_slice_position_changed(slice_index : int) -> void:
-	_update_slice_positions(slice_index)
-
-func _on_slice_rotation_changed(slice_index : int) -> void:
-	_update_slice_rotations(slice_index)
-
-func _on_slice_dragging_ended(slice_index : int) -> void:
-	state_changed.emit(slice_index)
-
-func _on_slice_selected(slice_index : int) -> void:
-	ui_state.set_selection(state.index, slice_index)
-
-func _on_slice_count_changed() -> void:
+func _on_slice_count_state_changed() -> void:
 	var current_length : int = len(slices)
 	var slice_count_increased : bool = state.slice_count > current_length
 
@@ -59,9 +49,33 @@ func _on_slice_count_changed() -> void:
 	_update_slice_positions()
 	_update_slice_rotations()
 
+func _on_slice_rotation_state_changed() -> void:
+	slices[0].rotation = state.slice_rotation
+	_update_slice_rotations()
+
+func _on_slice_position_state_changed() -> void:
+	slices[0].position = state.slice_position
+	_update_slice_positions()
+
+func _on_slice_color_state_changed() -> void:
+	for slice : Slice in slices:
+		slice.set_color(state.slice_color)
+
+func _on_slice_position_changed(slice_index : int) -> void:
+	_update_slice_positions(slice_index)
+
+func _on_slice_rotation_changed(slice_index : int) -> void:
+	_update_slice_rotations(slice_index)
+
 func _on_slice_color_changed() -> void:
 	for slice : Slice in slices:
 		slice.set_color(state.slice_color)
+
+func _on_slice_dragging_ended(slice_index : int) -> void:
+	state_changed.emit(slice_index)
+
+func _on_slice_selected(slice_index : int) -> void:
+	ui_state.set_selection(state.index, slice_index)
 
 func _instantiate_slices() -> void:
 	slices = []

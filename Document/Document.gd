@@ -17,14 +17,14 @@ func _ready() -> void:
 	elements = []
 
 	state = DocumentState.new()
-	state.element_changed.connect(_on_element_changed)
+	state.element_count_changed.connect(_on_element_count_changed)
 
 func load_document(path : String) -> void:
-	state.element_changed.disconnect(_on_element_changed)
+	state.element_count_changed.disconnect(_on_element_count_changed)
 	clear_elements()
 
 	state = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE) as DocumentState
-	state.element_changed.connect(_on_element_changed)
+	state.element_count_changed.connect(_on_element_count_changed)
 	_instantiate_elements()
 
 func save_document(path : String) -> void:
@@ -58,7 +58,7 @@ func clear_elements() -> void:
 
 	elements = []
 
-func _on_element_changed() -> void:
+func _on_element_count_changed() -> void:
 	clear_elements()
 	_instantiate_elements()
 
