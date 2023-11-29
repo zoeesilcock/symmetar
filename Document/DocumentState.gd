@@ -10,7 +10,7 @@ extends Resource
 @export var diffs_undone : Array[DocumentStateDiff]
 
 # Signals
-signal elements_count_changed
+signal element_changed
 
 func calculate_diff() -> DocumentStateDiff:
 	var diff : Array[ElementState] = []
@@ -40,7 +40,7 @@ func apply_diff(diff : DocumentStateDiff, reverse : bool) -> void:
 		if index < len(elements):
 			elements[index].apply_diff(diff.element_changes[index], direction)
 
-	elements_count_changed.emit(diff.element_count_change * direction)
+	element_changed.emit()
 
 func _fill_empty_slots() -> void:
 	for index : int in len(elements):
