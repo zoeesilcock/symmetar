@@ -40,6 +40,15 @@ signal slice_rotation_changed
 signal slice_position_changed
 signal slice_color_changed
 
+static func empty() -> ElementState:
+	return ElementState.new(
+		0.0,
+		1,
+		0.0,
+		Vector2(),
+		Color()
+	)
+
 func _init(p_radius : float = 200.0, p_slice_count : int = 8, p_slice_rotation : float = 0, p_slice_position : Vector2 = Vector2(), p_slice_color : Color = Color("#e85500")) -> void:
 	radius = p_radius
 	slice_count = p_slice_count

@@ -15,10 +15,14 @@ signal element_count_changed
 func calculate_diff() -> DocumentStateDiff:
 	var diff : Array[ElementState] = []
 	var count_change : int = len(elements) - len(previous_elements)
+	var element_count : int = max(len(elements), len(previous_elements))
 
-	for index : int in len(elements):
-		var element : ElementState = elements[index]
-		var previous_element : ElementState = ElementState.new()
+	for index : int in element_count:
+		var element : ElementState = ElementState.empty()
+		var previous_element : ElementState = ElementState.empty()
+
+		if index < len(elements):
+			element = elements[index]
 
 		if index < len(previous_elements):
 			previous_element = previous_elements[index]
@@ -46,4 +50,4 @@ func apply_diff(diff : DocumentStateDiff, reverse : bool) -> void:
 func _fill_empty_slots() -> void:
 	for index : int in len(elements):
 		if elements[index] == null:
-			elements[index] = ElementState.new()
+			elements[index] = ElementState.empty()
