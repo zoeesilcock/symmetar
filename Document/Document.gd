@@ -53,14 +53,18 @@ func remove_element(index : int) -> void:
 	_update_element_indexes()
 
 func clear_elements() -> void:
+	_remove_all_elements()
+	state.elements = []
+
+func _on_element_count_changed() -> void:
+	_remove_all_elements()
+	_instantiate_elements()
+
+func _remove_all_elements() -> void:
 	for element : Node in elements:
 		elements_node.remove_child(element)
 
 	elements = []
-
-func _on_element_count_changed() -> void:
-	clear_elements()
-	_instantiate_elements()
 
 func _instantiate_elements() -> void:
 	elements.resize(len(state.elements))
