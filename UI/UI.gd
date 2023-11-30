@@ -8,10 +8,14 @@ extends CanvasLayer
 @export var slice_count_input : SpinBox
 @export var slice_color_input : ColorPickerButton
 
+var slice_color_picker_popup : PopupPanel
+
 func _ready() -> void:
 	ui_state.selection_changed.connect(_on_selection_changed)
+
+	slice_color_picker_popup = slice_color_input.get_popup()
+	slice_color_picker_popup.visibility_changed.connect(_on_slice_color_picker_visibility_changed)
 	slice_color_input.color_changed.connect(_on_slice_color_changed)
-	slice_color_input.popup_closed.connect(_on_slice_color_picker_closed)
 
 	file_dialog.set_filters(PackedStringArray(["*.smtr ; Symmetar Files"]))
 
@@ -90,7 +94,9 @@ func _on_slice_color_changed(value : Color) -> void:
 		if slice_color_changed:
 			element_state.slice_color = value
 
-func _on_slice_color_picker_closed() -> void:
+func _on_slice_color_picker_visibility_changed() -> void:
+	ui_state.slice_color_picker_visible = slice_color_input.get_popup().visible
+
 	if ui_state.selected_element_index >= 0:
 		world.undo_manager.register_diff()
 

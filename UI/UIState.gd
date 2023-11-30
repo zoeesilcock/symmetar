@@ -6,6 +6,7 @@ extends Resource
 @export var any_slice_is_rotating : bool
 @export var selected_element_index : int
 @export var selected_slice_index : int
+@export var slice_color_picker_visible : bool
 
 # Signals
 signal selection_changed
