@@ -10,7 +10,8 @@ extends CanvasLayer
 
 func _ready() -> void:
 	ui_state.selection_changed.connect(_on_selection_changed)
-	slice_color_input.get_picker().color_changed.connect(_on_slice_color_changed)
+	slice_color_input.color_changed.connect(_on_slice_color_changed)
+	slice_color_input.popup_closed.connect(_on_slice_color_picker_closed)
 
 	file_dialog.set_filters(PackedStringArray(["*.smtr ; Symmetar Files"]))
 
@@ -88,7 +89,10 @@ func _on_slice_color_changed(value : Color) -> void:
 
 		if slice_color_changed:
 			element_state.slice_color = value
-			world.undo_manager.register_diff()
+
+func _on_slice_color_picker_closed() -> void:
+	if ui_state.selected_element_index >= 0:
+		world.undo_manager.register_diff()
 
 func _on_undo_button_pressed() -> void:
 	world.undo_manager.undo()
