@@ -1,15 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://cwks7l8024dh0"]
+[gd_scene load_steps=4 format=3 uid="uid://cwks7l8024dh0"]
 
 [ext_resource type="Script" path="res://Slice/Slice.gd" id="1_hloax"]
 [ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="2_gdm0n"]
+[ext_resource type="PackedScene" uid="uid://ct48hlkrr7nw6" path="res://Slice/SliceWidgets.tscn" id="3_703v2"]
 
-[node name="Slice" type="Node2D" node_paths=PackedStringArray("polygon", "rotation_polygon", "selection_node", "rotation_selection_node", "debug_slice_index")]
+[node name="Slice" type="Node2D" node_paths=PackedStringArray("polygon", "slice_widgets", "debug_slice_index")]
 script = ExtResource("1_hloax")
 ui_state = ExtResource("2_gdm0n")
 polygon = NodePath("Polygon2D")
-rotation_polygon = NodePath("RotationArea")
-selection_node = NodePath("Selection")
-rotation_selection_node = NodePath("RotationSelection")
+slice_widgets = NodePath("SliceWidgets")
 debug_slice_index = NodePath("Debug/SliceIndexLabel")
 highlight_brighten = 0.5
 
@@ -17,66 +16,7 @@ highlight_brighten = 0.5
 color = Color(0.909804, 0.333333, 0, 1)
 polygon = PackedVector2Array(-50, 0, 50, 0, 0, -75)
 
-[node name="RotationArea" type="Polygon2D" parent="."]
-color = Color(1, 1, 1, 0)
-polygon = PackedVector2Array(-70, -95, 70, -95, 70, 20, -70, 20)
-
-[node name="Selection" type="Node2D" parent="."]
-visible = false
-z_index = 5
-
-[node name="TopLeft" type="Polygon2D" parent="Selection"]
-position = Vector2(-50, -75)
-color = Color(1, 1, 0, 1)
-polygon = PackedVector2Array(2, -2, 8, -2, 8, 2, 2, 2, 2, 8, -2, 8, -2, 2, -2, -2)
-
-[node name="TopRight" type="Polygon2D" parent="Selection"]
-position = Vector2(50, -75)
-rotation = 1.5708
-color = Color(1, 1, 0, 1)
-polygon = PackedVector2Array(2, -2, 8, -2, 8, 2, 2, 2, 2, 8, -2, 8, -2, 2, -2, -2)
-
-[node name="BottomLeft" type="Polygon2D" parent="Selection"]
-position = Vector2(-50, 0)
-rotation = -1.5708
-color = Color(1, 1, 0, 1)
-polygon = PackedVector2Array(2, -2, 8, -2, 8, 2, 2, 2, 2, 8, -2, 8, -2, 2, -2, -2)
-
-[node name="BottomRight" type="Polygon2D" parent="Selection"]
-position = Vector2(50, 0)
-rotation = 3.14159
-color = Color(1, 1, 0, 1)
-polygon = PackedVector2Array(2, -2, 8, -2, 8, 2, 2, 2, 2, 8, -2, 8, -2, 2, -2, -2)
-
-[node name="RotationSelection" type="Node2D" parent="."]
-visible = false
-
-[node name="Center" type="Polygon2D" parent="RotationSelection"]
-color = Color(1, 1, 0, 1)
-polygon = PackedVector2Array(0, 5, 5, 0, 0, -5, -5, 0)
-
-[node name="TopLeft" type="Polygon2D" parent="RotationSelection"]
-position = Vector2(-50, -75)
-color = Color(1, 1, 0, 1)
-polygon = PackedVector2Array(4, -2, 8, -2, 8, 2, 5, 2, 3, 3, 2, 5, 2, 8, -2, 8, -2, 4, -1, 1, 0, 0, 1, -1)
-
-[node name="TopRight" type="Polygon2D" parent="RotationSelection"]
-position = Vector2(50, -75)
-rotation = 1.5708
-color = Color(1, 1, 0, 1)
-polygon = PackedVector2Array(4, -2, 8, -2, 8, 2, 5, 2, 3, 3, 2, 5, 2, 8, -2, 8, -2, 4, -1, 1, 0, 0, 1, -1)
-
-[node name="BottomLeft" type="Polygon2D" parent="RotationSelection"]
-position = Vector2(-50, 0)
-rotation = -1.5708
-color = Color(1, 1, 0, 1)
-polygon = PackedVector2Array(4, -2, 8, -2, 8, 2, 5, 2, 3, 3, 2, 5, 2, 8, -2, 8, -2, 4, -1, 1, 0, 0, 1, -1)
-
-[node name="BottomRight" type="Polygon2D" parent="RotationSelection"]
-position = Vector2(50, 0)
-rotation = 3.14159
-color = Color(1, 1, 0, 1)
-polygon = PackedVector2Array(4, -2, 8, -2, 8, 2, 5, 2, 3, 3, 2, 5, 2, 8, -2, 8, -2, 4, -1, 1, 0, 0, 1, -1)
+[node name="SliceWidgets" parent="." instance=ExtResource("3_703v2")]
 
 [node name="Debug" type="Node2D" parent="."]
 visible = false

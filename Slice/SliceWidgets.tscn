@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://ct48hlkrr7nw6"]
+
+[ext_resource type="Script" path="res://Slice/SliceWidgets.gd" id="1_h7o1w"]
+[ext_resource type="PackedScene" uid="uid://cwmw561kowolw" path="res://Slice/SliceWidgetPivot.tscn" id="2_ds0wl"]
+[ext_resource type="PackedScene" uid="uid://b01x7n7o6sci1" path="res://Slice/SliceWidgetRotation.tscn" id="2_tcrgx"]
+[ext_resource type="PackedScene" uid="uid://dfim22owbj20a" path="res://Slice/SliceWidgetScale.tscn" id="3_usw6y"]
+
+[node name="SliceWidgets" type="Node2D" node_paths=PackedStringArray("pivot_widget", "rotation_widgets", "scale_widgets")]
+script = ExtResource("1_h7o1w")
+pivot_widget = NodePath("Pivot")
+rotation_widgets = [NodePath("RotationTopLeft"), NodePath("RotationTopRight"), NodePath("RotationBottomLeft"), NodePath("RotationBottomRight")]
+scale_widgets = [NodePath("ScaleLeft"), NodePath("ScaleTop"), NodePath("ScaleRight"), NodePath("ScaleBottom")]
+
+[node name="RotationTopLeft" parent="." instance=ExtResource("2_tcrgx")]
+position = Vector2(-50, -50)
+
+[node name="RotationTopRight" parent="." instance=ExtResource("2_tcrgx")]
+position = Vector2(50, -50)
+rotation = 1.5708
+
+[node name="RotationBottomLeft" parent="." instance=ExtResource("2_tcrgx")]
+position = Vector2(-50, 50)
+rotation = -1.5708
+
+[node name="RotationBottomRight" parent="." instance=ExtResource("2_tcrgx")]
+position = Vector2(50, 50)
+rotation = 3.14159
+
+[node name="ScaleLeft" parent="." instance=ExtResource("3_usw6y")]
+position = Vector2(-50, 0)
+
+[node name="ScaleTop" parent="." instance=ExtResource("3_usw6y")]
+position = Vector2(0, -50)
+rotation = 1.5708
+
+[node name="ScaleRight" parent="." instance=ExtResource("3_usw6y")]
+position = Vector2(50, 0)
+
+[node name="ScaleBottom" parent="." instance=ExtResource("3_usw6y")]
+position = Vector2(0, 50)
+rotation = 1.5708
+
+[node name="Pivot" parent="." instance=ExtResource("2_ds0wl")]

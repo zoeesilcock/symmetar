@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://cwmw561kowolw"]
+
+[ext_resource type="Script" path="res://Slice/SliceWidget.gd" id="1_nbxmh"]
+[ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="2_hafjv"]
+
+[node name="SliceWidget" type="Node2D" node_paths=PackedStringArray("shape", "selection")]
+script = ExtResource("1_nbxmh")
+ui_state = ExtResource("2_hafjv")
+shape = NodePath("Shape")
+selection = NodePath("Selection")
+
+[node name="Selection" type="Polygon2D" parent="."]
+visible = false
+color = Color(0.831373, 0.282353, 0.647059, 1)
+polygon = PackedVector2Array(-8, -2, -6, -6, -2, -8, 2, -8, 6, -6, 8, -2, 8, 2, 6, 6, 2, 8, -2, 8, -6, 6, -8, 2)
+
+[node name="Shape" type="Polygon2D" parent="."]
+color = Color(1, 1, 0, 1)
+polygon = PackedVector2Array(0, 5, 5, 0, 0, -5, -5, 0)

@@ -4,9 +4,7 @@ extends Node2D
 # References
 @export var ui_state : UIState
 @export var polygon : Polygon2D
-@export var rotation_polygon : Polygon2D
-@export var selection_node : Node2D
-@export var rotation_selection_node : Node2D
+@export var slice_widgets : SliceWidgets
 @export var debug_slice_index : Label
 
 # Settings
@@ -51,6 +49,14 @@ func _ready() -> void:
 	viewport = get_viewport()
 
 	ui_state.selection_changed.connect(_on_selection_changed)
+	_connect_widget_signals()
+	slice_widgets.update_widget_positions(polygon)
+
+func _connect_widget_signals() -> void:
+	for rotation_widget : SliceWidget in slice_widgets.rotation_widgets:
+		rotation_widget.drag_started.connect(_rotation_started)
+		rotation_widget.drag_updated.connect(_rotation_updated)
+		rotation_widget.drag_ended.connect(_rotation_ended)
 
 func set_color(color : Color) -> void:
 	original_color = color
@@ -73,48 +79,19 @@ func _unhandled_input(event : InputEvent) -> void:
 				viewport.set_input_as_handled()
 				_end_dragging()
 
-			# Rotating
-			if is_selected:
-				if event.pressed and not any_slice_busy and not cursor_in_slice and \
-					_is_point_in_rotation_area(world_position - position):
-						viewport.set_input_as_handled()
-						_start_rotating(world_position)
-				elif not event.pressed and is_rotating:
-					viewport.set_input_as_handled()
-					_end_rotating()
-
 		if is_selected and event is InputEventMouseMotion:
 			if is_dragging:
 				viewport.set_input_as_handled()
 				_update_dragging(event)
 
-				if not selection_node.visible:
-					_show_selection()
-			elif is_rotating:
-				viewport.set_input_as_handled()
-				_update_rotating(event, world_position)
-
-				if not rotation_selection_node.visible:
-					_show_rotation_selection()
-			else:
-				var cursor_in_rotation_area : bool = not cursor_in_slice and _is_point_in_rotation_area(world_position - position)
-
-				if selection_node.visible and cursor_in_rotation_area:
-					_show_rotation_selection()
-				elif rotation_selection_node.visible and not cursor_in_rotation_area:
+				if not slice_widgets.visible:
 					_show_selection()
 
 func _show_selection() -> void:
-	selection_node.visible = true
-	rotation_selection_node.visible = false
-
-func _show_rotation_selection() -> void:
-	selection_node.visible = false
-	rotation_selection_node.visible = true
+	slice_widgets.visible = true
 
 func _hide_selection() -> void:
-	selection_node.visible = false
-	rotation_selection_node.visible = false
+	slice_widgets.visible = false
 
 func _start_dragging(world_position : Vector2) -> void:
 	selected.emit(slice_index)
@@ -134,7 +111,7 @@ func _end_dragging() -> void:
 	polygon.color = original_color
 	dragging_ended.emit(slice_index)
 
-func _start_rotating(world_position : Vector2) -> void:
+func _rotation_started(_event : InputEvent, world_position : Vector2) -> void:
 	var relative_mouse_position : Vector2 = world_position - position
 	initial_rotation = rotation
 	initial_theta = atan2(relative_mouse_position.y, relative_mouse_position.x)
@@ -142,14 +119,14 @@ func _start_rotating(world_position : Vector2) -> void:
 	is_rotating = true
 	polygon.color = highlighted_color
 
-func _update_rotating(_event : InputEvent, world_position : Vector2) -> void:
+func _rotation_updated(_event : InputEvent, world_position : Vector2) -> void:
 	var relative_mouse_position : Vector2 = world_position - position
 	var theta : float = atan2(relative_mouse_position.y, relative_mouse_position.x)
 
 	rotation = (initial_rotation - initial_theta) + theta
 	rotation_changed.emit(slice_index)
 
-func _end_rotating() -> void:
+func _rotation_ended(_event : InputEvent, _world_position : Vector2) -> void:
 	ui_state.any_slice_is_rotating = false
 	is_rotating = false
 	polygon.color = original_color
@@ -173,10 +150,4 @@ func _is_point_in_slice(point : Vector2) -> bool:
 	return Geometry2D.is_point_in_polygon(
 		point,
 		polygon.get_polygon() * Transform2D(-rotation, Vector2.ZERO)
-	)
-
-func _is_point_in_rotation_area(point : Vector2) -> bool:
-	return Geometry2D.is_point_in_polygon(
-		point,
-		rotation_polygon.get_polygon() * Transform2D(-rotation, Vector2.ZERO)
 	)
