@@ -5,6 +5,7 @@ extends Node2D
 @export var ui_state : UIState
 @export var shape : Polygon2D
 @export var selection : Polygon2D
+@export var relative_position : Vector2
 
 # Signals
 signal drag_started(event : InputEvent, world_position : Vector2)
@@ -19,6 +20,9 @@ var is_dragging : bool
 func _ready() -> void:
 	view_to_world = get_canvas_transform().affine_inverse()
 	viewport = get_viewport()
+
+func update_position(rect : Rect2) -> void:
+	position = rect.position + relative_position * rect.size
 
 func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventMouse:

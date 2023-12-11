@@ -50,7 +50,7 @@ func _ready() -> void:
 
 	ui_state.selection_changed.connect(_on_selection_changed)
 	_connect_widget_signals()
-	slice_widgets.update_widget_positions(polygon)
+	slice_widgets.update_widget_positions(_get_rect())
 
 func _connect_widget_signals() -> void:
 	for rotation_widget : SliceWidget in slice_widgets.rotation_widgets:
@@ -151,3 +151,11 @@ func _is_point_in_slice(point : Vector2) -> bool:
 		point,
 		polygon.get_polygon() * Transform2D(-rotation, Vector2.ZERO)
 	)
+
+# Calculate the extents of the shape.
+func _get_rect() -> Rect2:
+	var rect : Rect2 = Rect2()
+	for vector : Vector2 in polygon.polygon:
+		rect = rect.expand(vector)
+
+	return rect
