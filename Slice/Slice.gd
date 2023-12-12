@@ -11,6 +11,12 @@ extends Node2D
 @export var highlight_brighten : float
 @export var element_index : int
 @export var slice_index : int
+@export var slice_pivot : Vector2:
+	get:
+		return polygon.position
+	set(value):
+		polygon.position = value
+		_update_widget_positions()
 
 # Signals
 signal selected(index : int)
@@ -18,12 +24,17 @@ signal position_changed(index : int)
 signal dragging_ended(index : int)
 signal rotation_changed(index : int)
 signal rotating_ended(index : int)
+signal pivot_changed(index : int)
+signal pivot_ended(index : int)
 
 # Internal
 var is_selected : bool
 
 var is_dragging : bool
 var drag_offset : Vector2
+
+var is_pivoting	: bool
+var pivot_start : Vector2
 
 var is_rotating : bool
 var initial_theta : float
@@ -34,10 +45,11 @@ var original_color : Color
 var highlighted_color : Color
 var viewport : Viewport
 
-func init(p_slice_position : Vector2, p_slice_rotation : float, p_index : int, p_element_index : int, p_color : Color) -> void:
+func init(p_slice_position : Vector2, p_slice_rotation : float, p_slice_pivot : Vector2, p_index : int, p_element_index : int, p_color : Color) -> void:
 	name = "Slice" + str(p_index)
 	position = p_slice_position
 	rotation = p_slice_rotation
+	slice_pivot = p_slice_pivot
 	set_color(p_color)
 
 	slice_index = p_index
@@ -50,9 +62,16 @@ func _ready() -> void:
 
 	ui_state.selection_changed.connect(_on_selection_changed)
 	_connect_widget_signals()
+	_update_widget_positions()
+
+func _update_widget_positions() -> void:
 	slice_widgets.update_widget_positions(_get_rect())
 
 func _connect_widget_signals() -> void:
+	slice_widgets.pivot_widget.drag_started.connect(_pivot_started)
+	slice_widgets.pivot_widget.drag_updated.connect(_pivot_updated)
+	slice_widgets.pivot_widget.drag_ended.connect(_pivot_ended)
+
 	for rotation_widget : SliceWidget in slice_widgets.rotation_widgets:
 		rotation_widget.drag_started.connect(_rotation_started)
 		rotation_widget.drag_updated.connect(_rotation_updated)
@@ -132,6 +151,19 @@ func _rotation_ended(_event : InputEvent, _world_position : Vector2) -> void:
 	polygon.color = original_color
 	rotating_ended.emit(slice_index)
 
+func _pivot_started(_event : InputEvent, world_position : Vector2) -> void:
+	pivot_start = position + slice_pivot.rotated(rotation)
+	is_pivoting = true
+
+func _pivot_updated(_event : InputEvent, world_position : Vector2) -> void:
+	slice_pivot = Vector2(pivot_start - world_position).rotated(-rotation)
+	position = pivot_start - slice_pivot.rotated(rotation)
+	pivot_changed.emit(slice_index)
+
+func _pivot_ended(_event : InputEvent, world_position : Vector2) -> void:
+	is_pivoting = false
+	pivot_ended.emit(slice_index)
+
 func _set_selection(enabled : bool) -> void:
 	is_selected = enabled
 
@@ -148,7 +180,7 @@ func _on_selection_changed() -> void:
 
 func _is_point_in_slice(point : Vector2) -> bool:
 	return Geometry2D.is_point_in_polygon(
-		point,
+		point - slice_pivot,
 		polygon.get_polygon() * Transform2D(-rotation, Vector2.ZERO)
 	)
 
@@ -158,4 +190,4 @@ func _get_rect() -> Rect2:
 	for vector : Vector2 in polygon.polygon:
 		rect = rect.expand(vector)
 
-	return rect
+	return polygon.transform * rect

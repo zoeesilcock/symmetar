@@ -25,6 +25,7 @@ func init(p_state : ElementState) -> void:
 	state.slice_count_changed.connect(_on_slice_count_state_changed)
 	state.slice_rotation_changed.connect(_on_slice_rotation_state_changed)
 	state.slice_position_changed.connect(_on_slice_position_state_changed)
+	state.slice_pivot_changed.connect(_on_slice_pivot_state_changed)
 	state.slice_color_changed.connect(_on_slice_color_state_changed)
 
 	_instantiate_slices()
@@ -57,6 +58,10 @@ func _on_slice_position_state_changed() -> void:
 	slices[0].position = state.slice_position
 	_update_slice_positions()
 
+func _on_slice_pivot_state_changed() -> void:
+	slices[0].slice_pivot = state.slice_pivot
+	_update_slice_positions()
+
 func _on_slice_color_state_changed() -> void:
 	for slice : Slice in slices:
 		slice.set_color(state.slice_color)
@@ -66,6 +71,15 @@ func _on_slice_position_changed(slice_index : int) -> void:
 
 func _on_slice_rotation_changed(slice_index : int) -> void:
 	_update_slice_rotations(slice_index)
+
+func _on_slice_rotation_ended(slice_index : int) -> void:
+	state_changed.emit(slice_index)
+
+func _on_slice_pivot_changed(slice_index : int) -> void:
+	_update_slice_positions(slice_index)
+
+func _on_slice_pivot_ended(slice_index : int) -> void:
+	state_changed.emit(slice_index)
 
 func _on_slice_color_changed() -> void:
 	for slice : Slice in slices:
@@ -91,6 +105,7 @@ func _instantiate_slice(index : int) -> void:
 	slices[index].init(
 		state.slice_position,
 		state.slice_rotation,
+		state.slice_pivot,
 		index,
 		state.index,
 		state.slice_color
@@ -98,6 +113,9 @@ func _instantiate_slice(index : int) -> void:
 
 	slices[index].position_changed.connect(_on_slice_position_changed)
 	slices[index].rotation_changed.connect(_on_slice_rotation_changed)
+	slices[index].rotating_ended.connect(_on_slice_rotation_ended)
+	slices[index].pivot_changed.connect(_on_slice_pivot_changed)
+	slices[index].pivot_ended.connect(_on_slice_pivot_ended)
 	slices[index].dragging_ended.connect(_on_slice_dragging_ended)
 	slices[index].selected.connect(_on_slice_selected)
 
@@ -120,11 +138,13 @@ func _update_slice_positions(slice_index : int = 0) -> void:
 
 		if index != slice_index:
 			slices[index].position = slice_position - position
+			slices[index].slice_pivot = slice.slice_pivot
 
 	# Update the state
 	state.radius = origin_radius
 	state.slice_rotation = slices[0].rotation
 	state.slice_position = slices[0].position
+	state.slice_pivot = slices[0].slice_pivot
 
 func _update_slice_rotations(slice_index : int = 0) -> void:
 	var slice_rotation : float = slices[slice_index].rotation

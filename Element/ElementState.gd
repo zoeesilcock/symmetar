@@ -27,6 +27,12 @@ extends Resource
 			slice_position = value
 			slice_position_changed.emit()
 
+@export var slice_pivot : Vector2:
+	set(value):
+		if value != slice_pivot:
+			slice_pivot = value
+			slice_pivot_changed.emit()
+
 @export var slice_color : Color:
 	set(value):
 		if value != slice_color:
@@ -38,6 +44,7 @@ signal radius_changed
 signal slice_count_changed
 signal slice_rotation_changed
 signal slice_position_changed
+signal slice_pivot_changed
 signal slice_color_changed
 
 static func empty() -> ElementState:
