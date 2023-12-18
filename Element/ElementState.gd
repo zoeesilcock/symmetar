@@ -27,6 +27,12 @@ extends Resource
 			slice_position = value
 			slice_position_changed.emit()
 
+@export var slice_scale : Vector2:
+	set(value):
+		if value != slice_scale:
+			slice_scale = value
+			slice_scale_changed.emit()
+
 @export var slice_pivot : Vector2:
 	set(value):
 		if value != slice_pivot:
@@ -44,6 +50,7 @@ signal radius_changed
 signal slice_count_changed
 signal slice_rotation_changed
 signal slice_position_changed
+signal slice_scale_changed
 signal slice_pivot_changed
 signal slice_color_changed
 

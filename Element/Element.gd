@@ -81,6 +81,12 @@ func _on_slice_pivot_changed(slice_index : int) -> void:
 func _on_slice_pivot_ended(slice_index : int) -> void:
 	state_changed.emit(slice_index)
 
+func _on_slice_scale_changed(slice_index : int) -> void:
+	_update_slice_scales(slice_index)
+
+func _on_slice_scale_ended(slice_index : int) -> void:
+	state_changed.emit(slice_index)
+
 func _on_slice_color_changed() -> void:
 	for slice : Slice in slices:
 		slice.set_color(state.slice_color)
@@ -116,14 +122,22 @@ func _instantiate_slice(index : int) -> void:
 	slices[index].rotating_ended.connect(_on_slice_rotation_ended)
 	slices[index].pivot_changed.connect(_on_slice_pivot_changed)
 	slices[index].pivot_ended.connect(_on_slice_pivot_ended)
+	slices[index].scaling_changed.connect(_on_slice_scale_changed)
+	slices[index].scaling_ended.connect(_on_slice_scale_ended)
 	slices[index].dragging_ended.connect(_on_slice_dragging_ended)
 	slices[index].selected.connect(_on_slice_selected)
 
 func _remove_slice(index : int) -> void:
 	slices[index].position_changed.disconnect(_on_slice_position_changed)
 	slices[index].rotation_changed.disconnect(_on_slice_rotation_changed)
+	slices[index].rotating_ended.disconnect(_on_slice_rotation_ended)
+	slices[index].pivot_changed.disconnect(_on_slice_pivot_changed)
+	slices[index].pivot_ended.disconnect(_on_slice_pivot_ended)
+	slices[index].scaling_changed.disconnect(_on_slice_scale_changed)
+	slices[index].scaling_ended.disconnect(_on_slice_scale_ended)
 	slices[index].dragging_ended.disconnect(_on_slice_dragging_ended)
 	slices[index].selected.disconnect(_on_slice_selected)
+
 	slices_node.remove_child(slices[index])
 	slices[index].queue_free()
 
@@ -156,3 +170,12 @@ func _update_slice_rotations(slice_index : int = 0) -> void:
 
 	# Update the state
 	state.slice_rotation = slices[0].rotation
+
+func _update_slice_scales(slice_index : int = 0) -> void:
+	var slice_scale : Vector2 = slices[slice_index].slice_scale
+
+	for index : int in state.slice_count:
+		if index != slice_index:
+			slices[index].slice_scale = slice_scale
+
+	state.slice_scale = slice_scale
