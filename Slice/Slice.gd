@@ -127,10 +127,10 @@ func _unhandled_input(event : InputEvent) -> void:
 					_show_selection()
 
 func _show_selection() -> void:
-	slice_widgets.visible = true
+	slice_widgets.show_widgets()
 
 func _hide_selection() -> void:
-	slice_widgets.visible = false
+	slice_widgets.hide_widgets()
 
 func _start_dragging(world_position : Vector2) -> void:
 	selected.emit(slice_index)
