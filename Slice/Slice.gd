@@ -49,6 +49,11 @@ var initial_theta : float
 var initial_rotation : float
 
 var is_scaling : bool
+var scaling_direction : Vector2
+var scaling_start_position : Vector2
+var initial_scale : Vector2
+var initial_posisition : Vector2
+var initial_size : Vector2
 
 var view_to_world : Transform2D
 var original_color : Color
@@ -88,7 +93,7 @@ func _connect_widget_signals() -> void:
 		rotation_widget.drag_ended.connect(_rotation_ended)
 
 	for scale_widget : SliceWidget in slice_widgets.scale_widgets:
-		scale_widget.drag_started.connect(_scaling_started)
+		scale_widget.drag_started.connect(Callable(_scaling_started).bind(scale_widget.direction))
 		scale_widget.drag_updated.connect(_scaling_updated)
 		scale_widget.drag_ended.connect(_scaling_ended)
 
@@ -179,38 +184,24 @@ func _pivot_ended(_event : InputEvent, _world_position : Vector2) -> void:
 	is_pivoting = false
 	pivot_ended.emit(slice_index)
 
-# TODO: This is a lot of variables, can't we simplify?
-var start_scale : Vector2
-var start_rect : Rect2
-var start_pos : Vector2
-var scaling_start : Vector2
-var scaling_direction : Vector2
-var magic : Vector2
-func _scaling_started(event : InputEvent, world_position : Vector2) -> void:
+func _scaling_started(_event : InputEvent, world_position : Vector2, direction : Vector2) -> void:
+	scaling_direction = -direction
+	scaling_start_position = world_position
+	initial_scale = polygon.scale
+	initial_size = _get_rect().size
+	initial_posisition = polygon.position
 	is_scaling = true
-	scaling_changed.emit(slice_index)
 
-	var center : Vector2 = position + _get_rect().get_center()
-	# TODO: This still doesn't result in the correct vector when the polygon has been rotated.
-	scaling_direction = (center - world_position).normalized().round().rotated(-polygon.rotation)
-	scaling_start = world_position
-	start_scale = polygon.scale
-	start_rect = _get_rect()
-	start_pos = polygon.position
-	magic = Vector2(0, 1) # TODO: No Magic please!
-	print("Scaling started: " + str(scaling_direction) + str(start_scale) + str(start_rect.size))
-
-func _scaling_updated(event : InputEvent, world_position : Vector2) -> void:
-	var pixel_distance : Vector2 = (scaling_start - world_position) * scaling_direction
-	var distance : Vector2 = (pixel_distance / start_rect.size) * start_scale
-	polygon.scale = start_scale + distance * 2
-	polygon.position = start_pos + pixel_distance * magic
+func _scaling_updated(_event : InputEvent, world_position : Vector2) -> void:
+	var pixel_distance : Vector2 = (scaling_start_position - world_position).rotated(-rotation) * scaling_direction
+	var distance : Vector2 = (pixel_distance / initial_size) * initial_scale
+	polygon.scale = initial_scale + distance * 2
+	polygon.position = initial_posisition + pixel_distance * Vector2.DOWN # TODO: Why magic??
 
 	_update_widget_positions()
 	scaling_changed.emit(slice_index)
 
-func _scaling_ended(event : InputEvent, world_position : Vector2) -> void:
-	print("Scaling ended")
+func _scaling_ended(_event : InputEvent, _world_position : Vector2) -> void:
 	is_scaling = false
 	scaling_ended.emit(slice_index)
 

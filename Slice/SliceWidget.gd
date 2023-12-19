@@ -6,6 +6,7 @@ extends Node2D
 @export var shape : Polygon2D
 @export var selection : Polygon2D
 @export var relative_position : Vector2
+@export var direction : Vector2
 
 # Signals
 signal drag_started(event : InputEvent, world_position : Vector2)
