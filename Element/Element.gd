@@ -172,10 +172,11 @@ func _update_slice_rotations(slice_index : int = 0) -> void:
 	state.slice_rotation = slices[0].rotation
 
 func _update_slice_scales(slice_index : int = 0) -> void:
-	var slice_scale : Vector2 = slices[slice_index].slice_scale
+	var slice : Slice = slices[slice_index]
 
 	for index : int in state.slice_count:
 		if index != slice_index:
-			slices[index].slice_scale = slice_scale
+			slices[index].slice_scale = slice.slice_scale
+			slices[index].slice_pivot = slice.slice_pivot
 
-	state.slice_scale = slice_scale
+	state.slice_scale = slice.slice_scale
