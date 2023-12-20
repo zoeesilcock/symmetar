@@ -195,8 +195,12 @@ func _scaling_started(_event : InputEvent, world_position : Vector2, direction :
 func _scaling_updated(_event : InputEvent, world_position : Vector2) -> void:
 	var pixel_distance : Vector2 = (scaling_start_position - world_position).rotated(-rotation) * scaling_direction
 	var distance : Vector2 = (pixel_distance / initial_size) * initial_scale
-	polygon.scale = initial_scale + distance * 2
-	polygon.position = initial_posisition + pixel_distance * Vector2.DOWN # TODO: Why magic??
+
+	if scaling_direction == Vector2.LEFT or scaling_direction == Vector2.RIGHT:
+		polygon.scale = initial_scale + distance * 2
+	else:
+		polygon.scale = initial_scale + distance
+		polygon.position = initial_posisition + pixel_distance / 2 * Vector2.DOWN
 
 	_update_widget_positions()
 	scaling_changed.emit(slice_index)
