@@ -219,10 +219,19 @@ func _on_selection_changed() -> void:
 		ui_state.selected_slice_index == slice_index
 	)
 
+func get_transformed_polygon() -> PackedVector2Array:
+	var transformed_polygon : PackedVector2Array = []
+	var translation : Transform2D = Transform2D(rotation, polygon.scale, 0, slice_pivot.rotated(rotation))
+
+	for _vector : Vector2 in polygon.polygon:
+		transformed_polygon.append(translation * _vector)
+
+	return transformed_polygon
+
 func _is_point_in_slice(point : Vector2) -> bool:
 	return Geometry2D.is_point_in_polygon(
-		point - slice_pivot,
-		polygon.get_polygon() * Transform2D(-rotation, Vector2.ZERO)
+		point,
+		get_transformed_polygon()
 	)
 
 # Calculate the extents of the shape.
