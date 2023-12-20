@@ -55,6 +55,9 @@ var initial_scale : Vector2
 var initial_posisition : Vector2
 var initial_size : Vector2
 
+var last_scaling_world_position : Vector2
+var uniform_scaling : bool
+
 var view_to_world : Transform2D
 var original_color : Color
 var highlighted_color : Color
@@ -105,26 +108,50 @@ func set_color(color : Color) -> void:
 
 func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventMouse:
-		var world_position : Vector2 = view_to_world * event.position
-		var cursor_in_slice : bool = _is_point_in_slice(world_position - position)
-		var any_slice_busy : bool = ui_state.any_slice_is_dragging || ui_state.any_slice_is_rotating
+		_handle_mouse_input(event)
 
-		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-			# Dragging
-			if event.pressed and not any_slice_busy and cursor_in_slice:
-				viewport.set_input_as_handled()
-				_start_dragging(world_position)
-			elif not event.pressed and is_dragging:
-				viewport.set_input_as_handled()
-				_end_dragging()
+	if event is InputEventKey and event.keycode == KEY_SHIFT:
+		_handle_shift_key(event)
 
-		if is_selected and event is InputEventMouseMotion:
-			if is_dragging:
-				viewport.set_input_as_handled()
-				_update_dragging(event)
+func _handle_mouse_input(event : InputEventMouse) -> void:
+	var world_position : Vector2 = view_to_world * event.position
+	var cursor_in_slice : bool = _is_point_in_slice(world_position - position)
 
-				if not slice_widgets.visible:
-					_show_selection()
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		_handle_mouse_button(event, cursor_in_slice, world_position)
+
+	if event is InputEventMouseMotion:
+		_handle_mouse_motion(event, cursor_in_slice)
+
+func _handle_mouse_button(event : InputEventMouseButton, cursor_in_slice : bool, world_position : Vector2) -> void:
+	var any_slice_busy : bool = ui_state.any_slice_is_dragging || ui_state.any_slice_is_rotating
+
+	if event.pressed and not any_slice_busy and cursor_in_slice:
+		viewport.set_input_as_handled()
+		_start_dragging(world_position)
+	elif not event.pressed and is_dragging:
+		viewport.set_input_as_handled()
+		_end_dragging()
+
+func _handle_mouse_motion(event : InputEventMouseMotion, _cursor_in_slice : bool) -> void:
+	if is_selected and is_dragging:
+		viewport.set_input_as_handled()
+		_update_dragging(event)
+
+		if not slice_widgets.visible:
+			_show_selection()
+
+func _handle_shift_key(event : InputEventKey) -> void:
+	if not uniform_scaling and event.pressed:
+		uniform_scaling = true
+
+		if is_scaling:
+			_repeat_last_scaling()
+	elif uniform_scaling and not event.pressed:
+		uniform_scaling = false
+
+		if is_scaling:
+			_repeat_last_scaling()
 
 func _show_selection() -> void:
 	slice_widgets.show_widgets()
@@ -190,6 +217,7 @@ func _scaling_started(_event : InputEvent, world_position : Vector2, direction :
 	initial_scale = polygon.scale
 	initial_size = _get_rect().size
 	initial_posisition = polygon.position
+	last_scaling_world_position = world_position
 	is_scaling = true
 
 func _scaling_updated(_event : InputEvent, world_position : Vector2) -> void:
@@ -197,13 +225,23 @@ func _scaling_updated(_event : InputEvent, world_position : Vector2) -> void:
 	var distance : Vector2 = (pixel_distance / initial_size) * initial_scale
 
 	if scaling_direction == Vector2.LEFT or scaling_direction == Vector2.RIGHT:
+		if uniform_scaling:
+			distance.y = distance.x
+
 		polygon.scale = initial_scale + distance * 2
 	else:
+		if uniform_scaling:
+			distance.x = distance.y
+
 		polygon.scale = initial_scale + distance
 		polygon.position = initial_posisition + pixel_distance / 2 * Vector2.DOWN
 
 	_update_widget_positions()
 	scaling_changed.emit(slice_index)
+	last_scaling_world_position = world_position
+
+func _repeat_last_scaling() -> void:
+	_scaling_updated(null, last_scaling_world_position)
 
 func _scaling_ended(_event : InputEvent, _world_position : Vector2) -> void:
 	is_scaling = false
