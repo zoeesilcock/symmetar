@@ -3,11 +3,6 @@ extends Resource
 
 # Data
 @export var index : int
-@export var radius : float:
-	set(value):
-		if value != radius:
-			radius = value
-			radius_changed.emit()
 
 @export var slice_count : int:
 	set(value):
@@ -46,7 +41,6 @@ extends Resource
 			slice_color_changed.emit()
 
 # Signals
-signal radius_changed
 signal slice_count_changed
 signal slice_rotation_changed
 signal slice_position_changed
@@ -56,15 +50,13 @@ signal slice_color_changed
 
 static func empty() -> ElementState:
 	return ElementState.new(
-		0.0,
 		1,
 		0.0,
 		Vector2(),
 		Color()
 	)
 
-func _init(p_radius : float = 200.0, p_slice_count : int = 8, p_slice_rotation : float = 0, p_slice_position : Vector2 = Vector2(), p_slice_color : Color = Color("#e85500")) -> void:
-	radius = p_radius
+func _init(p_slice_count : int = 8, p_slice_rotation : float = 0, p_slice_position : Vector2 = Vector2(), p_slice_color : Color = Color("#e85500")) -> void:
 	slice_count = p_slice_count
 	slice_rotation = p_slice_rotation
 	slice_position = p_slice_position

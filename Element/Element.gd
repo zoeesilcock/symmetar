@@ -155,7 +155,6 @@ func _update_slice_positions(slice_index : int = 0) -> void:
 			slices[index].slice_pivot = slice.slice_pivot
 
 	# Update the state
-	state.radius = origin_radius
 	state.slice_rotation = slices[0].rotation
 	state.slice_position = slices[0].position
 	state.slice_pivot = slices[0].slice_pivot
