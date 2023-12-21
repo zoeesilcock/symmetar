@@ -6,6 +6,7 @@ extends Resource
 @export var any_slice_is_rotating : bool
 @export var any_slice_is_pivoting : bool
 @export var any_slice_is_scaling : bool
+@export var any_slice_is_highlighted : bool
 
 @export var any_slice_is_busy : bool:
 	get:

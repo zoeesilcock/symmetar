@@ -174,14 +174,17 @@ func _hide_selection() -> void:
 	slice_widgets.hide_widgets()
 
 func _show_highlight() -> void:
-	if this_slice_is_busy or not ui_state.any_slice_is_busy:
+	if this_slice_is_busy or not ui_state.any_slice_is_busy and not ui_state.any_slice_is_highlighted:
 		polygon.color = highlighted_color
 		is_highlighted = true
+		ui_state.any_slice_is_highlighted = true
+		viewport.set_input_as_handled()
 
 func _hide_highlight() -> void:
-	if not cursor_is_in_slice:
+	if not this_slice_is_busy and not cursor_is_in_slice:
 		polygon.color = original_color
 		is_highlighted = false
+		ui_state.any_slice_is_highlighted = false
 
 func _start_dragging(world_position : Vector2) -> void:
 	selected.emit(slice_index)
