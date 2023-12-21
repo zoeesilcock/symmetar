@@ -179,12 +179,14 @@ func _show_highlight() -> void:
 		is_highlighted = true
 		ui_state.any_slice_is_highlighted = true
 		viewport.set_input_as_handled()
+		polygon.z_index = 1
 
 func _hide_highlight() -> void:
 	if not this_slice_is_busy and not cursor_is_in_slice:
 		polygon.color = original_color
 		is_highlighted = false
 		ui_state.any_slice_is_highlighted = false
+		polygon.z_index = 0
 
 func _start_dragging(world_position : Vector2) -> void:
 	selected.emit(slice_index)
