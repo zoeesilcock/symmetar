@@ -37,6 +37,17 @@ signal scaling_ended(index : int)
 
 # Internal
 var is_selected : bool
+var is_highlighted : bool
+var cursor_is_in_slice : bool
+
+var this_slice_is_busy : bool:
+	get:
+		return (
+			is_dragging or
+			is_rotating or
+			is_pivoting or
+			is_scaling
+		)
 
 var is_dragging : bool
 var drag_offset : Vector2
@@ -115,25 +126,28 @@ func _unhandled_input(event : InputEvent) -> void:
 
 func _handle_mouse_input(event : InputEventMouse) -> void:
 	var world_position : Vector2 = view_to_world * event.position
-	var cursor_in_slice : bool = _is_point_in_slice(world_position - position)
+	cursor_is_in_slice = _is_point_in_slice(world_position - position)
+
+	if is_highlighted and not cursor_is_in_slice:
+		_hide_highlight()
+	elif not is_highlighted and cursor_is_in_slice:
+		_show_highlight()
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		_handle_mouse_button(event, cursor_in_slice, world_position)
+		_handle_mouse_button(event, world_position)
 
 	if event is InputEventMouseMotion:
-		_handle_mouse_motion(event, cursor_in_slice)
+		_handle_mouse_motion(event)
 
-func _handle_mouse_button(event : InputEventMouseButton, cursor_in_slice : bool, world_position : Vector2) -> void:
-	var any_slice_busy : bool = ui_state.any_slice_is_dragging || ui_state.any_slice_is_rotating
-
-	if event.pressed and not any_slice_busy and cursor_in_slice:
+func _handle_mouse_button(event : InputEventMouseButton, world_position : Vector2) -> void:
+	if event.pressed and not ui_state.any_slice_is_busy and cursor_is_in_slice:
 		viewport.set_input_as_handled()
 		_start_dragging(world_position)
 	elif not event.pressed and is_dragging:
 		viewport.set_input_as_handled()
 		_end_dragging()
 
-func _handle_mouse_motion(event : InputEventMouseMotion, _cursor_in_slice : bool) -> void:
+func _handle_mouse_motion(event : InputEventMouseMotion) -> void:
 	if is_selected and is_dragging:
 		viewport.set_input_as_handled()
 		_update_dragging(event)
@@ -160,10 +174,14 @@ func _hide_selection() -> void:
 	slice_widgets.hide_widgets()
 
 func _show_highlight() -> void:
-	polygon.color = highlighted_color
+	if this_slice_is_busy or not ui_state.any_slice_is_busy:
+		polygon.color = highlighted_color
+		is_highlighted = true
 
 func _hide_highlight() -> void:
-	polygon.color = original_color
+	if not cursor_is_in_slice:
+		polygon.color = original_color
+		is_highlighted = false
 
 func _start_dragging(world_position : Vector2) -> void:
 	selected.emit(slice_index)
@@ -206,6 +224,7 @@ func _rotation_ended(_event : InputEvent, _world_position : Vector2) -> void:
 
 func _pivot_started(_event : InputEvent, _world_position : Vector2) -> void:
 	pivot_start = position + slice_pivot.rotated(rotation)
+	ui_state.any_slice_is_pivoting = true
 	is_pivoting = true
 	_show_highlight()
 
@@ -215,6 +234,7 @@ func _pivot_updated(_event : InputEvent, world_position : Vector2) -> void:
 	pivot_changed.emit(slice_index)
 
 func _pivot_ended(_event : InputEvent, _world_position : Vector2) -> void:
+	ui_state.any_slice_is_pivoting = false
 	is_pivoting = false
 	_hide_highlight()
 	pivot_ended.emit(slice_index)
@@ -226,6 +246,7 @@ func _scaling_started(_event : InputEvent, world_position : Vector2, direction :
 	initial_size = _get_rect().size
 	initial_posisition = polygon.position
 	last_scaling_world_position = world_position
+	ui_state.any_slice_is_scaling = true
 	is_scaling = true
 	_show_highlight()
 
@@ -253,6 +274,7 @@ func _repeat_last_scaling() -> void:
 	_scaling_updated(null, last_scaling_world_position)
 
 func _scaling_ended(_event : InputEvent, _world_position : Vector2) -> void:
+	ui_state.any_slice_is_scaling = false
 	is_scaling = false
 	_hide_highlight()
 	scaling_ended.emit(slice_index)
