@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dfim22owbj20a" path="res://Slice/SliceWidgetScale.tscn" id="3_usw6y"]
 
 [node name="SliceWidgets" type="Node2D" node_paths=PackedStringArray("pivot_widget", "rotation_widgets", "scale_widgets")]
+z_index = 2
 script = ExtResource("1_h7o1w")
 pivot_widget = NodePath("Pivot")
 rotation_widgets = [NodePath("RotationTopLeft"), NodePath("RotationTopRight"), NodePath("RotationBottomLeft"), NodePath("RotationBottomRight")]
