@@ -159,13 +159,19 @@ func _show_selection() -> void:
 func _hide_selection() -> void:
 	slice_widgets.hide_widgets()
 
+func _show_highlight() -> void:
+	polygon.color = highlighted_color
+
+func _hide_highlight() -> void:
+	polygon.color = original_color
+
 func _start_dragging(world_position : Vector2) -> void:
 	selected.emit(slice_index)
 
 	drag_offset = world_position - position
 	ui_state.any_slice_is_dragging = true
 	is_dragging = true
-	polygon.color = highlighted_color
+	_show_highlight()
 
 func _update_dragging(event : InputEvent) -> void:
 	position = view_to_world * (event.position - drag_offset)
@@ -174,7 +180,7 @@ func _update_dragging(event : InputEvent) -> void:
 func _end_dragging() -> void:
 	ui_state.any_slice_is_dragging = false
 	is_dragging = false
-	polygon.color = original_color
+	_hide_highlight()
 	dragging_ended.emit(slice_index)
 
 func _rotation_started(_event : InputEvent, world_position : Vector2) -> void:
@@ -183,7 +189,7 @@ func _rotation_started(_event : InputEvent, world_position : Vector2) -> void:
 	initial_theta = atan2(relative_mouse_position.y, relative_mouse_position.x)
 	ui_state.any_slice_is_rotating = true
 	is_rotating = true
-	polygon.color = highlighted_color
+	_show_highlight()
 
 func _rotation_updated(_event : InputEvent, world_position : Vector2) -> void:
 	var relative_mouse_position : Vector2 = world_position - position
@@ -195,12 +201,13 @@ func _rotation_updated(_event : InputEvent, world_position : Vector2) -> void:
 func _rotation_ended(_event : InputEvent, _world_position : Vector2) -> void:
 	ui_state.any_slice_is_rotating = false
 	is_rotating = false
-	polygon.color = original_color
+	_hide_highlight()
 	rotating_ended.emit(slice_index)
 
 func _pivot_started(_event : InputEvent, _world_position : Vector2) -> void:
 	pivot_start = position + slice_pivot.rotated(rotation)
 	is_pivoting = true
+	_show_highlight()
 
 func _pivot_updated(_event : InputEvent, world_position : Vector2) -> void:
 	slice_pivot = Vector2(pivot_start - world_position).rotated(-rotation)
@@ -209,6 +216,7 @@ func _pivot_updated(_event : InputEvent, world_position : Vector2) -> void:
 
 func _pivot_ended(_event : InputEvent, _world_position : Vector2) -> void:
 	is_pivoting = false
+	_hide_highlight()
 	pivot_ended.emit(slice_index)
 
 func _scaling_started(_event : InputEvent, world_position : Vector2, direction : Vector2) -> void:
@@ -219,6 +227,7 @@ func _scaling_started(_event : InputEvent, world_position : Vector2, direction :
 	initial_posisition = polygon.position
 	last_scaling_world_position = world_position
 	is_scaling = true
+	_show_highlight()
 
 func _scaling_updated(_event : InputEvent, world_position : Vector2) -> void:
 	var pixel_distance : Vector2 = (scaling_start_position - world_position).rotated(-rotation) * scaling_direction
@@ -245,6 +254,7 @@ func _repeat_last_scaling() -> void:
 
 func _scaling_ended(_event : InputEvent, _world_position : Vector2) -> void:
 	is_scaling = false
+	_hide_highlight()
 	scaling_ended.emit(slice_index)
 
 func _set_selection(enabled : bool) -> void:
