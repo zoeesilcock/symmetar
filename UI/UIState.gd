@@ -20,14 +20,21 @@ extends Resource
 @export var selected_element_index : int
 @export var selected_slice_index : int
 @export var slice_color_picker_visible : bool
+@export var document_is_dirty : bool:
+	set(value):
+		if value != document_is_dirty:
+			document_is_dirty = value
+			document_is_dirty_changed.emit()
 
 # Signals
 signal selection_changed
+signal document_is_dirty_changed
 
-func _init() -> void:
+func init() -> void:
 	any_slice_is_dragging = false
 	selected_element_index = -1
 	selected_slice_index = -1
+	document_is_dirty = true
 
 func set_selection(element_index : int, slice_index : int) -> void:
 	selected_element_index = element_index

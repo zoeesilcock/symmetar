@@ -4,6 +4,7 @@ extends CanvasLayer
 # References
 @export var world : World
 @export var ui_state : UIState
+@export var save_button : Button
 @export var file_dialog : FileDialog
 @export var slice_count_input : SpinBox
 @export var slice_color_input : ColorPickerButton
@@ -11,13 +12,17 @@ extends CanvasLayer
 var slice_color_picker_popup : PopupPanel
 
 func _ready() -> void:
+	ui_state.init()
 	ui_state.selection_changed.connect(_on_selection_changed)
+	ui_state.document_is_dirty_changed.connect(_on_document_is_dirty_changed)
 
 	slice_color_picker_popup = slice_color_input.get_popup()
 	slice_color_picker_popup.visibility_changed.connect(_on_slice_color_picker_visibility_changed)
 	slice_color_input.color_changed.connect(_on_slice_color_changed)
 
 	file_dialog.set_filters(PackedStringArray(["*.smtr ; Symmetar Files"]))
+
+	_update_save_button_text()
 
 func _input(event : InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
@@ -75,6 +80,15 @@ func _on_selection_changed() -> void:
 		var element_state : ElementState = world.document.get_element_state(ui_state.selected_element_index)
 		slice_count_input.value = element_state.slice_count
 		slice_color_input.color = element_state.slice_color
+
+func _on_document_is_dirty_changed() -> void:
+	_update_save_button_text()
+
+func _update_save_button_text() -> void:
+	if ui_state.document_is_dirty:
+		save_button.text = "Save (edited)"
+	else:
+		save_button.text = "Save"
 
 func _on_slice_count_changed(value : float) -> void:
 	if ui_state.selected_element_index >= 0:

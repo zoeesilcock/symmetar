@@ -29,6 +29,7 @@ func load_document(path : String) -> void:
 
 func save_document(path : String) -> void:
 	ResourceSaver.save(state, path)
+	ui_state.document_is_dirty = false
 
 func get_element_state(index : int) -> ElementState:
 	return state.elements[index]
@@ -46,6 +47,7 @@ func add_new_element(element_state : ElementState) -> void:
 	new_element.state_changed.connect(_on_element_state_changed)
 
 	ui_state.set_selection(element_index, 0)
+	ui_state.document_is_dirty = true
 
 func remove_element(index : int) -> void:
 	elements_node.remove_child(elements[index])
@@ -55,10 +57,16 @@ func remove_element(index : int) -> void:
 func clear_elements() -> void:
 	_remove_all_elements()
 	state.elements = []
+	ui_state.document_is_dirty = true
 
 func _on_element_count_changed() -> void:
 	_remove_all_elements()
 	_instantiate_elements()
+	ui_state.document_is_dirty = true
+
+func _on_element_state_changed(_element_index : int) -> void:
+	undo_manager.register_diff()
+	ui_state.document_is_dirty = true
 
 func _remove_all_elements() -> void:
 	for element : Node in elements:
@@ -83,6 +91,3 @@ func _instantiate_element(element_index : int) -> void:
 func _update_element_indexes() -> void:
 	for element_index : int in len(elements):
 		elements[element_index].index = element_index
-
-func _on_element_state_changed(_element_index : int) -> void:
-	undo_manager.register_diff()
