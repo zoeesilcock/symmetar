@@ -27,8 +27,13 @@ func load_document(path : String) -> void:
 	state.element_count_changed.connect(_on_element_count_changed)
 	_instantiate_elements()
 
+	ui_state.document_name = path.get_file()
+	ui_state.document_is_dirty = false
+
 func save_document(path : String) -> void:
 	ResourceSaver.save(state, path)
+
+	ui_state.document_name = path.get_file()
 	ui_state.document_is_dirty = false
 
 func get_element_state(index : int) -> ElementState:

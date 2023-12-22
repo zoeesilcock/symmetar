@@ -20,6 +20,7 @@ extends Resource
 @export var selected_element_index : int
 @export var selected_slice_index : int
 @export var slice_color_picker_visible : bool
+@export var document_name : String
 @export var document_is_dirty : bool:
 	set(value):
 		if value != document_is_dirty:
@@ -34,7 +35,7 @@ func init() -> void:
 	any_slice_is_dragging = false
 	selected_element_index = -1
 	selected_slice_index = -1
-	document_is_dirty = true
+	document_name = "Untitled.smtr"
 
 func set_selection(element_index : int, slice_index : int) -> void:
 	selected_element_index = element_index

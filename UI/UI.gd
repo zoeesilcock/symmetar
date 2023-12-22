@@ -23,6 +23,7 @@ func _ready() -> void:
 	file_dialog.set_filters(PackedStringArray(["*.smtr ; Symmetar Files"]))
 
 	_update_save_button_text()
+	_window_title()
 
 func _input(event : InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
@@ -45,6 +46,21 @@ func _input(event : InputEvent) -> void:
 				slice_count_input.value += 1
 			elif event.keycode == KEY_DOWN:
 				slice_count_input.value -= 1
+
+func _update_save_button_text() -> void:
+	if ui_state.document_is_dirty:
+		save_button.text = "Save (edited)"
+	else:
+		save_button.text = "Save"
+
+func _window_title() -> void:
+	if ui_state.document_is_dirty:
+		save_button.text = "Save (edited)"
+		DisplayServer.window_set_title("Symmetar - " + ui_state.document_name + " (edited)")
+	else:
+		save_button.text = "Save"
+		DisplayServer.window_set_title("Symmetar - " + ui_state.document_name)
+	pass
 
 func _on_save_button_pressed() -> void:
 	file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
@@ -83,12 +99,7 @@ func _on_selection_changed() -> void:
 
 func _on_document_is_dirty_changed() -> void:
 	_update_save_button_text()
-
-func _update_save_button_text() -> void:
-	if ui_state.document_is_dirty:
-		save_button.text = "Save (edited)"
-	else:
-		save_button.text = "Save"
+	_window_title()
 
 func _on_slice_count_changed(value : float) -> void:
 	if ui_state.selected_element_index >= 0:
