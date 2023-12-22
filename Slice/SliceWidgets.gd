@@ -6,6 +6,9 @@ extends Node2D
 @export var rotation_widgets : Array[SliceWidget]
 @export var scale_widgets : Array[SliceWidget]
 
+func _ready() -> void:
+	hide_widgets()
+
 func update_widget_positions(rect : Rect2) -> void:
 	pivot_widget.position = Vector2.ZERO
 
