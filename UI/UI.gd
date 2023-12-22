@@ -64,6 +64,7 @@ func _window_title() -> void:
 
 func _on_save_button_pressed() -> void:
 	file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	file_dialog.current_file = ui_state.document_name
 	file_dialog.show()
 
 func _on_file_selected(path : String) -> void:
@@ -74,6 +75,7 @@ func _on_file_selected(path : String) -> void:
 
 func _on_load_button_pressed() -> void:
 	file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	file_dialog.current_file = ""
 	file_dialog.show()
 
 func _on_add_button_pressed() -> void:
