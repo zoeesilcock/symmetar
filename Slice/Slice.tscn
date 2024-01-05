@@ -1,13 +1,15 @@
-[gd_scene load_steps=4 format=3 uid="uid://cwks7l8024dh0"]
+[gd_scene load_steps=5 format=3 uid="uid://cwks7l8024dh0"]
 
 [ext_resource type="Script" path="res://Slice/Slice.gd" id="1_hloax"]
 [ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="2_gdm0n"]
 [ext_resource type="PackedScene" uid="uid://ct48hlkrr7nw6" path="res://Slice/SliceWidgets.tscn" id="3_703v2"]
+[ext_resource type="Script" path="res://Slice/SliceOutline.gd" id="3_sfcn7"]
 
-[node name="Slice" type="Node2D" node_paths=PackedStringArray("polygon", "slice_widgets", "debug_slice_index")]
+[node name="Slice" type="Node2D" node_paths=PackedStringArray("polygon", "outline", "slice_widgets", "debug_slice_index")]
 script = ExtResource("1_hloax")
 ui_state = ExtResource("2_gdm0n")
 polygon = NodePath("Polygon2D")
+outline = NodePath("SliceOutline")
 slice_widgets = NodePath("SliceWidgets")
 debug_slice_index = NodePath("Debug/SliceIndexLabel")
 highlight_brighten = 0.5
@@ -15,6 +17,10 @@ highlight_brighten = 0.5
 [node name="Polygon2D" type="Polygon2D" parent="."]
 color = Color(0.909804, 0.333333, 0, 1)
 polygon = PackedVector2Array(-50, 0, 50, 0, 0, -75)
+
+[node name="SliceOutline" type="Node2D" parent="." node_paths=PackedStringArray("polygon")]
+script = ExtResource("3_sfcn7")
+polygon = NodePath("../Polygon2D")
 
 [node name="SliceWidgets" parent="." instance=ExtResource("3_703v2")]
 

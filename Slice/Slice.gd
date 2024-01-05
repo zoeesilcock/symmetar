@@ -4,6 +4,7 @@ extends Node2D
 # References
 @export var ui_state : UIState
 @export var polygon : Polygon2D
+@export var outline : SliceOutline
 @export var slice_widgets : SliceWidgets
 @export var debug_slice_index : Label
 
@@ -74,14 +75,24 @@ var original_color : Color
 var highlighted_color : Color
 var viewport : Viewport
 
-func init(p_slice_position : Vector2, p_slice_rotation : float, p_slice_pivot : Vector2, p_index : int, p_element_index : int, p_color : Color) -> void:
-	name = "Slice" + str(p_index)
+func init(
+		p_element_index : int,
+		p_slice_index : int,
+		p_slice_position : Vector2,
+		p_slice_rotation : float,
+		p_slice_pivot : Vector2,
+		p_slice_color : Color,
+		p_slice_outline_width : float,
+		p_slice_outline_color : Color) -> void:
+	name = "Slice" + str(p_slice_index)
 	position = p_slice_position
 	rotation = p_slice_rotation
 	slice_pivot = p_slice_pivot
-	set_color(p_color)
+	set_color(p_slice_color)
+	set_outline_width(p_slice_outline_width)
+	set_outline_color(p_slice_outline_color)
 
-	slice_index = p_index
+	slice_index = p_slice_index
 	element_index = p_element_index
 	debug_slice_index.text = str(slice_index)
 
@@ -116,6 +127,12 @@ func set_color(color : Color) -> void:
 	polygon.color = color
 	highlighted_color = color
 	highlighted_color.v += highlight_brighten
+
+func set_outline_width(width : float) -> void:
+	outline.set_width(width)
+
+func set_outline_color(color : Color) -> void:
+	outline.set_color(color)
 
 func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventMouse:
@@ -180,6 +197,7 @@ func _show_highlight() -> void:
 		ui_state.any_slice_is_highlighted = true
 		viewport.set_input_as_handled()
 		polygon.z_index = 1
+		outline.z_index = 1
 
 func _hide_highlight() -> void:
 	if not this_slice_is_busy and not cursor_is_in_slice:
@@ -187,6 +205,7 @@ func _hide_highlight() -> void:
 		is_highlighted = false
 		ui_state.any_slice_is_highlighted = false
 		polygon.z_index = 0
+		outline.z_index = 0
 
 func _start_dragging(world_position : Vector2) -> void:
 	selected.emit(slice_index)

@@ -27,6 +27,8 @@ func init(p_state : ElementState) -> void:
 	state.slice_position_changed.connect(_on_slice_position_state_changed)
 	state.slice_pivot_changed.connect(_on_slice_pivot_state_changed)
 	state.slice_color_changed.connect(_on_slice_color_state_changed)
+	state.slice_outline_width_changed.connect(_on_slice_outline_width_state_changed)
+	state.slice_outline_color_changed.connect(_on_slice_outline_color_state_changed)
 
 	_instantiate_slices()
 	_update_slice_positions()
@@ -65,6 +67,14 @@ func _on_slice_pivot_state_changed() -> void:
 func _on_slice_color_state_changed() -> void:
 	for slice : Slice in slices:
 		slice.set_color(state.slice_color)
+
+func _on_slice_outline_width_state_changed() -> void:
+	for slice : Slice in slices:
+		slice.set_outline_width(state.slice_outline_width)
+
+func _on_slice_outline_color_state_changed() -> void:
+	for slice : Slice in slices:
+		slice.set_outline_color(state.slice_outline_color)
 
 func _on_slice_position_changed(slice_index : int) -> void:
 	_update_slice_positions(slice_index)
@@ -109,12 +119,14 @@ func _instantiate_slice(index : int) -> void:
 	slices_node.add_child(slices[index])
 
 	slices[index].init(
+		state.index,
+		index,
 		state.slice_position,
 		state.slice_rotation,
 		state.slice_pivot,
-		index,
-		state.index,
-		state.slice_color
+		state.slice_color,
+		state.slice_outline_width,
+		state.slice_outline_color,
 	)
 
 	slices[index].position_changed.connect(_on_slice_position_changed)

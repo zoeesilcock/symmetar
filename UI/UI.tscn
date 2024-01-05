@@ -6,13 +6,15 @@
 
 [sub_resource type="Theme" id="Theme_uuqi3"]
 
-[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("save_button", "file_dialog", "slice_count_input", "slice_color_input")]
+[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("save_button", "file_dialog", "slice_count_input", "slice_color_input", "slice_outline_width_input", "slice_outline_color_input")]
 script = ExtResource("1_nhcn2")
 ui_state = ExtResource("2_ot8s7")
 save_button = NodePath("Root/Panel/MarginContainer/VBoxContainer/SaveButton")
 file_dialog = NodePath("Root/FileDialog")
 slice_count_input = NodePath("Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/CountInput")
 slice_color_input = NodePath("Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/ColorPickerButton")
+slice_outline_width_input = NodePath("Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/OutlineWidthInput")
+slice_outline_color_input = NodePath("Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/OutlineColorPickerButton")
 
 [node name="Root" type="Control" parent="."]
 layout_mode = 3
@@ -102,6 +104,27 @@ text = "Color:"
 layout_mode = 2
 color = Color(0.909804, 0.333333, 0, 1)
 
+[node name="OutlineWidthLabel" type="Label" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Outline width:"
+
+[node name="OutlineWidthInput" type="SpinBox" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+min_value = 1.0
+value = 2.0
+alignment = 2
+select_all_on_focus = true
+
+[node name="OutlineColorLabel" type="Label" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Outline color:"
+
+[node name="OutlineColorPickerButton" type="ColorPickerButton" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+color = Color(1, 0.960784, 0, 1)
+
 [node name="Space3" type="Control" parent="Root/Panel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
@@ -130,6 +153,7 @@ access = 2
 [connection signal="pressed" from="Root/Panel/MarginContainer/VBoxContainer/ClearButton" to="." method="_on_clear_button_pressed"]
 [connection signal="pressed" from="Root/Panel/MarginContainer/VBoxContainer/AddButton" to="." method="_on_add_button_pressed"]
 [connection signal="value_changed" from="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/CountInput" to="." method="_on_slice_count_changed"]
+[connection signal="value_changed" from="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/OutlineWidthInput" to="." method="_on_slice_outline_width_changed"]
 [connection signal="pressed" from="Root/Panel/MarginContainer/VBoxContainer/UndoContainer/UndoButton" to="." method="_on_undo_button_pressed"]
 [connection signal="pressed" from="Root/Panel/MarginContainer/VBoxContainer/UndoContainer/RedoButton" to="." method="_on_redo_button_pressed"]
 [connection signal="file_selected" from="Root/FileDialog" to="." method="_on_file_selected"]

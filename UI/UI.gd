@@ -8,8 +8,11 @@ extends CanvasLayer
 @export var file_dialog : FileDialog
 @export var slice_count_input : SpinBox
 @export var slice_color_input : ColorPickerButton
+@export var slice_outline_width_input : SpinBox
+@export var slice_outline_color_input : ColorPickerButton
 
 var slice_color_picker_popup : PopupPanel
+var outline_color_picker_popup : PopupPanel
 
 func _ready() -> void:
 	ui_state.init()
@@ -19,6 +22,10 @@ func _ready() -> void:
 	slice_color_picker_popup = slice_color_input.get_popup()
 	slice_color_picker_popup.visibility_changed.connect(_on_slice_color_picker_visibility_changed)
 	slice_color_input.color_changed.connect(_on_slice_color_changed)
+
+	outline_color_picker_popup = slice_outline_color_input.get_popup()
+	outline_color_picker_popup.visibility_changed.connect(_on_slice_outline_color_picker_visibility_changed)
+	slice_outline_color_input.color_changed.connect(_on_slice_outline_color_changed)
 
 	file_dialog.set_filters(PackedStringArray(["*.smtr ; Symmetar Files"]))
 
@@ -83,7 +90,9 @@ func _on_add_button_pressed() -> void:
 		slice_count_input.value as int,
 		0.0,
 		Vector2(200, 0),
-		slice_color_input.color
+		slice_color_input.color,
+		slice_outline_width_input.value,
+		slice_outline_color_input.color,
 	)
 
 	world.document.add_new_element(element_state)
@@ -98,6 +107,8 @@ func _on_selection_changed() -> void:
 		var element_state : ElementState = world.document.get_element_state(ui_state.selected_element_index)
 		slice_count_input.value = element_state.slice_count
 		slice_color_input.color = element_state.slice_color
+		slice_outline_width_input.value = element_state.slice_outline_width
+		slice_outline_color_input.color = element_state.slice_outline_color
 
 func _on_document_is_dirty_changed() -> void:
 	_update_save_button_text()
@@ -122,6 +133,29 @@ func _on_slice_color_changed(value : Color) -> void:
 
 func _on_slice_color_picker_visibility_changed() -> void:
 	ui_state.slice_color_picker_visible = slice_color_input.get_popup().visible
+
+	if ui_state.selected_element_index >= 0:
+		world.undo_manager.register_diff()
+
+func _on_slice_outline_width_changed(value : float) -> void:
+	if ui_state.selected_element_index >= 0:
+		var element_state : ElementState = world.document.get_element_state(ui_state.selected_element_index)
+		var outline_width_changed : bool = element_state.slice_outline_width != value
+
+		if outline_width_changed:
+			element_state.slice_outline_width = value as int
+			world.undo_manager.register_diff()
+
+func _on_slice_outline_color_changed(value : Color) -> void:
+	if ui_state.selected_element_index >= 0:
+		var element_state : ElementState = world.document.get_element_state(ui_state.selected_element_index)
+		var outline_color_changed : bool = element_state.slice_outline_color != value
+
+		if outline_color_changed:
+			element_state.slice_outline_color = value
+
+func _on_slice_outline_color_picker_visibility_changed() -> void:
+	ui_state.slice_outline_color_picker_visible = slice_outline_color_input.get_popup().visible
 
 	if ui_state.selected_element_index >= 0:
 		world.undo_manager.register_diff()

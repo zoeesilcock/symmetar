@@ -20,6 +20,7 @@ extends Resource
 @export var selected_element_index : int
 @export var selected_slice_index : int
 @export var slice_color_picker_visible : bool
+@export var slice_outline_color_picker_visible : bool
 @export var document_name : String
 @export var document_is_dirty : bool:
 	set(value):

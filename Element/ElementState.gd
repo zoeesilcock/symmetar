@@ -40,6 +40,18 @@ extends Resource
 			slice_color = value
 			slice_color_changed.emit()
 
+@export var slice_outline_width : float:
+	set(value):
+		if value != slice_outline_width:
+			slice_outline_width = value
+			slice_outline_width_changed.emit()
+
+@export var slice_outline_color : Color:
+	set(value):
+		if value != slice_outline_color:
+			slice_outline_color = value
+			slice_outline_color_changed.emit()
+
 # Signals
 signal slice_count_changed
 signal slice_rotation_changed
@@ -47,6 +59,8 @@ signal slice_position_changed
 signal slice_scale_changed
 signal slice_pivot_changed
 signal slice_color_changed
+signal slice_outline_width_changed
+signal slice_outline_color_changed
 
 static func empty() -> ElementState:
 	return ElementState.new(
@@ -56,11 +70,19 @@ static func empty() -> ElementState:
 		Color()
 	)
 
-func _init(p_slice_count : int = 8, p_slice_rotation : float = 0, p_slice_position : Vector2 = Vector2(), p_slice_color : Color = Color("#e85500")) -> void:
+func _init(
+		p_slice_count : int = 8,
+		p_slice_rotation : float = 0,
+		p_slice_position : Vector2 = Vector2(),
+		p_slice_color : Color = Color("#e85500"),
+		p_slice_outline_width : float = 2.0,
+		p_slice_outline_color : Color = ("#fff500")) -> void:
 	slice_count = p_slice_count
 	slice_rotation = p_slice_rotation
 	slice_position = p_slice_position
 	slice_color = p_slice_color
+	slice_outline_width = p_slice_outline_width
+	slice_outline_color = p_slice_outline_color
 
 static func get_exported_properties() -> Array[String]:
 	var exported_properties : Array[String] = []
