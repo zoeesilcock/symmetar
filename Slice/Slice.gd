@@ -134,6 +134,9 @@ func set_outline_width(width : float) -> void:
 func set_outline_color(color : Color) -> void:
 	outline.set_color(color)
 
+func update_outline_scale() -> void:
+	outline.update_scale()
+
 func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventMouse:
 		_handle_mouse_input(event)

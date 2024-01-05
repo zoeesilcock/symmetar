@@ -190,4 +190,6 @@ func _update_slice_scales(slice_index : int = 0) -> void:
 			slices[index].slice_scale = slice.slice_scale
 			slices[index].slice_pivot = slice.slice_pivot
 
+		slices[index].update_outline_scale()
+
 	state.slice_scale = slice.slice_scale
