@@ -111,7 +111,6 @@ text = "Outline width:"
 
 [node name="OutlineWidthInput" type="SpinBox" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
 layout_mode = 2
-min_value = 1.0
 value = 2.0
 alignment = 2
 select_all_on_focus = true
