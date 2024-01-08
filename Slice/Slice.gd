@@ -40,6 +40,7 @@ signal scaling_ended(index : int)
 var is_selected : bool
 var is_highlighted : bool
 var cursor_is_in_slice : bool
+var shift_is_held : bool
 
 var this_slice_is_busy : bool:
 	get:
@@ -51,6 +52,7 @@ var this_slice_is_busy : bool:
 		)
 
 var is_dragging : bool
+var dragging_start_theta : float
 var drag_offset : Vector2
 
 var is_pivoting	: bool
@@ -66,9 +68,7 @@ var scaling_start_position : Vector2
 var initial_scale : Vector2
 var initial_posisition : Vector2
 var initial_size : Vector2
-
 var last_scaling_world_position : Vector2
-var uniform_scaling : bool
 
 var view_to_world : Transform2D
 var original_color : Color
@@ -157,7 +157,7 @@ func _handle_mouse_input(event : InputEventMouse) -> void:
 		_handle_mouse_button(event, world_position)
 
 	if event is InputEventMouseMotion:
-		_handle_mouse_motion(event)
+		_handle_mouse_motion(event, world_position)
 
 func _handle_mouse_button(event : InputEventMouseButton, world_position : Vector2) -> void:
 	if event.pressed and not ui_state.any_slice_is_busy and cursor_is_in_slice:
@@ -167,22 +167,22 @@ func _handle_mouse_button(event : InputEventMouseButton, world_position : Vector
 		viewport.set_input_as_handled()
 		_end_dragging()
 
-func _handle_mouse_motion(event : InputEventMouseMotion) -> void:
+func _handle_mouse_motion(event : InputEventMouseMotion, world_position : Vector2) -> void:
 	if is_selected and is_dragging:
 		viewport.set_input_as_handled()
-		_update_dragging(event)
+		_update_dragging(event, world_position)
 
 		if not slice_widgets.visible:
 			_show_selection()
 
 func _handle_shift_key(event : InputEventKey) -> void:
-	if not uniform_scaling and event.pressed:
-		uniform_scaling = true
+	if not shift_is_held and event.pressed:
+		shift_is_held = true
 
 		if is_scaling:
 			_repeat_last_scaling()
-	elif uniform_scaling and not event.pressed:
-		uniform_scaling = false
+	elif shift_is_held and not event.pressed:
+		shift_is_held = false
 
 		if is_scaling:
 			_repeat_last_scaling()
@@ -213,13 +213,20 @@ func _hide_highlight() -> void:
 func _start_dragging(world_position : Vector2) -> void:
 	selected.emit(slice_index)
 
+	dragging_start_theta = atan2(position.y, position.x)
+
 	drag_offset = world_position - position
 	ui_state.any_slice_is_dragging = true
 	is_dragging = true
 	_show_highlight()
 
-func _update_dragging(event : InputEvent) -> void:
-	position = view_to_world * (event.position - drag_offset)
+func _update_dragging(event : InputEvent, world_position : Vector2) -> void:
+	if shift_is_held:
+		var input_radius : float = sqrt(pow(world_position.x, 2) + pow(world_position.y, 2))
+		position = input_radius * Vector2.from_angle(dragging_start_theta)
+	else:
+		position = view_to_world * (event.position - drag_offset)
+
 	position_changed.emit(slice_index)
 
 func _end_dragging() -> void:
@@ -282,12 +289,12 @@ func _scaling_updated(_event : InputEvent, world_position : Vector2) -> void:
 	var distance : Vector2 = (pixel_distance / initial_size) * initial_scale
 
 	if scaling_direction == Vector2.LEFT or scaling_direction == Vector2.RIGHT:
-		if uniform_scaling:
+		if shift_is_held:
 			distance.y = distance.x
 
 		polygon.scale = initial_scale + distance * 2
 	else:
-		if uniform_scaling:
+		if shift_is_held:
 			distance.x = distance.y
 
 		polygon.scale = initial_scale + distance
