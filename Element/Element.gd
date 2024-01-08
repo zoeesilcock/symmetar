@@ -97,10 +97,6 @@ func _on_slice_scale_changed(slice_index : int) -> void:
 func _on_slice_scale_ended(slice_index : int) -> void:
 	state_changed.emit(slice_index)
 
-func _on_slice_color_changed() -> void:
-	for slice : Slice in slices:
-		slice.set_color(state.slice_color)
-
 func _on_slice_dragging_ended(slice_index : int) -> void:
 	state_changed.emit(slice_index)
 
