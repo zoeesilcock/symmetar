@@ -134,6 +134,9 @@ func set_outline_width(width : float) -> void:
 func set_outline_color(color : Color) -> void:
 	outline.set_color(color)
 
+func update_outline_position() -> void:
+	outline.update_position()
+
 func update_outline_scale() -> void:
 	outline.update_scale()
 

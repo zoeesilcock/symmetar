@@ -18,9 +18,12 @@ func set_color(color : Color) -> void:
 	for line : Line2D in lines:
 		line.default_color = color
 
-func update_scale() -> void:
+func update_position() -> void:
 	position = polygon.position
+
+func update_scale() -> void:
 	scale = polygon.scale
+	update_position()
 
 func _spawn_lines() -> void:
 	for index : int in polygon.polygon.size():
