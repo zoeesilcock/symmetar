@@ -255,7 +255,7 @@ func _rotation_updated(_event : InputEvent, world_position : Vector2) -> void:
 	var relative_mouse_position : Vector2 = world_position - position
 	var theta : float = atan2(relative_mouse_position.y, relative_mouse_position.x)
 
-	rotation = (initial_rotation - initial_theta) + theta
+	rotation = wrapf((initial_rotation - initial_theta) + theta, 0, PI * 2)
 	rotation_changed.emit(slice_index)
 
 func _rotation_ended(_event : InputEvent, _world_position : Vector2) -> void:

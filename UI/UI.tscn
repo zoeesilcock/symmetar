@@ -134,7 +134,6 @@ text = "Rotation:"
 
 [node name="RotationInput" type="SpinBox" parent="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
 layout_mode = 2
-min_value = -360.0
 max_value = 360.0
 alignment = 2
 update_on_text_changed = true

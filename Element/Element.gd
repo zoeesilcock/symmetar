@@ -193,4 +193,5 @@ func _update_slice_scales(slice_index : int = 0) -> void:
 
 		slices[index].update_outline_scale()
 
+	# Update the state
 	state.slice_scale = slice.slice_scale
