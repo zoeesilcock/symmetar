@@ -50,8 +50,6 @@ func _input(event : InputEvent) -> void:
 				_on_load_button_pressed()
 			elif event.keycode == KEY_X:
 				_on_clear_button_pressed()
-			elif event.keycode == KEY_A:
-				_on_add_button_pressed()
 			elif event.keycode == KEY_UP:
 				slice_count_input.value += 1
 			elif event.keycode == KEY_DOWN:
