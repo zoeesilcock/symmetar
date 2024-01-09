@@ -34,6 +34,9 @@ func init(p_state : ElementState) -> void:
 	_update_slice_positions()
 	_update_slice_rotations()
 
+func get_slice(index : int) -> Slice:
+	return slices[index]
+
 func _on_slice_count_state_changed() -> void:
 	var current_length : int = len(slices)
 	var slice_count_increased : bool = state.slice_count > current_length

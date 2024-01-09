@@ -140,6 +140,11 @@ func update_outline_position() -> void:
 func update_outline_scale() -> void:
 	outline.update_scale()
 
+func set_slice_rotation(value : float) -> void:
+	rotation = value
+	rotation_changed.emit(slice_index)
+	rotating_ended.emit(slice_index)
+
 func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventMouse:
 		_handle_mouse_input(event)

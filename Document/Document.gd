@@ -39,6 +39,9 @@ func save_document(path : String) -> void:
 func get_element_state(index : int) -> ElementState:
 	return state.elements[index]
 
+func get_slice(element_index : int, slice_index : int) -> Slice:
+	return elements[element_index].get_slice(slice_index)
+
 func add_new_element(element_state : ElementState) -> void:
 	var new_element : Node = element_scene.instantiate()
 	var element_index : int = len(elements)
