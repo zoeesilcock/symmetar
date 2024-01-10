@@ -1,9 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://uyebueqq35xu"]
+[gd_scene load_steps=5 format=3 uid="uid://uyebueqq35xu"]
 
 [ext_resource type="PackedScene" uid="uid://cn6aov1t3u3y2" path="res://UI/UI.tscn" id="1_tbaje"]
+[ext_resource type="Script" path="res://Main.gd" id="1_th2y0"]
 [ext_resource type="PackedScene" uid="uid://b0xsay7lqoc07" path="res://World/World.tscn" id="2_joqbc"]
+[ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="2_v7q8m"]
 
 [node name="Main" type="Node2D"]
+script = ExtResource("1_th2y0")
+ui_state = ExtResource("2_v7q8m")
 
 [node name="UI" parent="." node_paths=PackedStringArray("world") instance=ExtResource("1_tbaje")]
 world = NodePath("../World")

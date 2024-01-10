@@ -4,7 +4,16 @@
 
 [resource]
 script = ExtResource("1_tokba")
+main_window_scale = 1.0
 any_slice_is_dragging = false
 any_slice_is_rotating = false
+any_slice_is_pivoting = false
+any_slice_is_scaling = false
+any_slice_is_highlighted = false
+any_slice_is_busy = false
 selected_element_index = -1
 selected_slice_index = -1
+slice_color_picker_visible = false
+slice_outline_color_picker_visible = false
+document_name = ""
+document_is_dirty = false

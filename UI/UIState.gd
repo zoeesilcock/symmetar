@@ -2,6 +2,7 @@ class_name UIState
 extends Resource
 
 # Data
+@export var main_window_scale : float
 @export var any_slice_is_dragging : bool
 @export var any_slice_is_rotating : bool
 @export var any_slice_is_pivoting : bool
