@@ -70,7 +70,6 @@ var initial_posisition : Vector2
 var initial_size : Vector2
 var last_scaling_world_position : Vector2
 
-var view_to_world : Transform2D
 var original_color : Color
 var highlighted_color : Color
 var viewport : Viewport
@@ -97,7 +96,6 @@ func init(
 	debug_slice_index.text = str(slice_index)
 
 func _ready() -> void:
-	view_to_world = get_canvas_transform().affine_inverse()
 	viewport = get_viewport()
 
 	ui_state.selection_changed.connect(_on_selection_changed)
@@ -152,8 +150,11 @@ func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventKey and event.keycode == KEY_SHIFT:
 		_handle_shift_key(event)
 
+func _get_world_position(event_position : Vector2) -> Vector2:
+	return get_canvas_transform().affine_inverse() * event_position
+
 func _handle_mouse_input(event : InputEventMouse) -> void:
-	var world_position : Vector2 = view_to_world * event.position
+	var world_position : Vector2 = _get_world_position(event.position)
 	cursor_is_in_slice = _is_point_in_slice(world_position - position)
 
 	if is_highlighted and not cursor_is_in_slice:
@@ -233,7 +234,7 @@ func _update_dragging(event : InputEvent, world_position : Vector2) -> void:
 		var input_radius : float = sqrt(pow(world_position.x, 2) + pow(world_position.y, 2))
 		position = input_radius * Vector2.from_angle(dragging_start_theta)
 	else:
-		position = view_to_world * (event.position - drag_offset)
+		position = _get_world_position(event.position - drag_offset)
 
 	position_changed.emit(slice_index)
 
