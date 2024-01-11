@@ -1,12 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://cn6aov1t3u3y2"]
+[gd_scene load_steps=6 format=3 uid="uid://cn6aov1t3u3y2"]
 
 [ext_resource type="Script" path="res://UI/UI.gd" id="1_nhcn2"]
 [ext_resource type="Theme" uid="uid://hgjigpeoaius" path="res://UI/UITheme.tres" id="2_dusos"]
 [ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="2_ot8s7"]
+[ext_resource type="PackedScene" uid="uid://dcrg4argct36y" path="res://UI/AboutDialog.tscn" id="4_dj2o0"]
 
 [sub_resource type="Theme" id="Theme_uuqi3"]
 
-[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("save_button", "file_dialog", "slice_count_input", "slice_color_input", "slice_outline_width_input", "slice_outline_color_input", "slice_rotation_input")]
+[node name="UI" type="CanvasLayer" node_paths=PackedStringArray("save_button", "file_dialog", "slice_count_input", "slice_color_input", "slice_outline_width_input", "slice_outline_color_input", "slice_rotation_input", "about_dialog")]
 script = ExtResource("1_nhcn2")
 ui_state = ExtResource("2_ot8s7")
 save_button = NodePath("Root/Panel/MarginContainer/VBoxContainer/SaveButton")
@@ -16,6 +17,7 @@ slice_color_input = NodePath("Root/Panel/MarginContainer/VBoxContainer/EditConta
 slice_outline_width_input = NodePath("Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/OutlineWidthInput")
 slice_outline_color_input = NodePath("Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/OutlineColorPickerButton")
 slice_rotation_input = NodePath("Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/RotationInput")
+about_dialog = NodePath("Root/AboutDialog")
 
 [node name="Root" type="Control" parent="."]
 layout_mode = 3
@@ -157,10 +159,21 @@ size_flags_horizontal = 3
 text = "Redo
 "
 
+[node name="Space4" type="Control" parent="Root/Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="AboutButton" type="Button" parent="Root/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "About Symmetar"
+
 [node name="FileDialog" type="FileDialog" parent="Root"]
 position = Vector2i(300, 75)
 size = Vector2i(800, 520)
 access = 2
+
+[node name="AboutDialog" parent="Root" instance=ExtResource("4_dj2o0")]
+visible = false
 
 [connection signal="pressed" from="Root/Panel/MarginContainer/VBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="Root/Panel/MarginContainer/VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
@@ -171,4 +184,5 @@ access = 2
 [connection signal="value_changed" from="Root/Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/RotationInput" to="." method="_on_slice_rotation_changed"]
 [connection signal="pressed" from="Root/Panel/MarginContainer/VBoxContainer/UndoContainer/UndoButton" to="." method="_on_undo_button_pressed"]
 [connection signal="pressed" from="Root/Panel/MarginContainer/VBoxContainer/UndoContainer/RedoButton" to="." method="_on_redo_button_pressed"]
+[connection signal="pressed" from="Root/Panel/MarginContainer/VBoxContainer/AboutButton" to="." method="_on_about_button_pressed"]
 [connection signal="file_selected" from="Root/FileDialog" to="." method="_on_file_selected"]

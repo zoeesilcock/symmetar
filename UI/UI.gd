@@ -11,6 +11,7 @@ extends CanvasLayer
 @export var slice_outline_width_input : SpinBox
 @export var slice_outline_color_input : ColorPickerButton
 @export var slice_rotation_input : SpinBox
+@export var about_dialog : AcceptDialog
 
 var slice_color_picker_popup : PopupPanel
 var outline_color_picker_popup : PopupPanel
@@ -188,3 +189,6 @@ func _on_undo_button_pressed() -> void:
 
 func _on_redo_button_pressed() -> void:
 	world.undo_manager.redo()
+
+func _on_about_button_pressed() -> void:
+	about_dialog.show()

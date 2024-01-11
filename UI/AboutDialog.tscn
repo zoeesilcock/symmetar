@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://dcrg4argct36y"]
+
+[node name="AcceptDialog" type="AcceptDialog"]
+title = "About Symmetar"
+initial_position = 2
+size = Vector2i(320, 198)
+visible = true
+ok_button_text = "Neat!"
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 312.0
+offset_bottom = 149.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/MarginContainer"]
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]Symmetry explorer.[/center]
+
+[b]Version:[/b] Alpha
+[b]More info:[/b] [url=https://github.com/zoeesilcock/symmetar]GitHub[/url]
+[b]Copyright:[/b] Zoee Silcock"
+fit_content = true
