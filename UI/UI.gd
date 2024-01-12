@@ -13,10 +13,13 @@ extends CanvasLayer
 @export var slice_rotation_input : SpinBox
 @export var about_dialog : AcceptDialog
 
+# Internal
 var slice_color_picker_popup : PopupPanel
 var outline_color_picker_popup : PopupPanel
 var current_element_state : ElementState
 var current_element_index : int
+var current_slice_index : int
+var current_slice : Slice
 
 func _ready() -> void:
 	ui_state.init()
@@ -61,6 +64,14 @@ func _update_save_button_text() -> void:
 		save_button.text = "Save (edited)"
 	else:
 		save_button.text = "Save"
+
+func _update_edit_form() -> void:
+	if current_element_state != null:
+		slice_count_input.value = current_element_state.slice_count
+		slice_color_input.color = current_element_state.slice_color
+		slice_outline_width_input.value = current_element_state.slice_outline_width
+		slice_outline_color_input.color = current_element_state.slice_outline_color
+		slice_rotation_input.value = rad_to_deg(current_slice.rotation)
 
 func _window_title() -> void:
 	if ui_state.document_is_dirty:
@@ -113,16 +124,14 @@ func _on_selection_changed() -> void:
 			if !current_element_state.slice_rotation_changed.is_connected(_on_slice_rotation_state_changed):
 				current_element_state.slice_rotation_changed.connect(_on_slice_rotation_state_changed)
 
-		slice_count_input.value = current_element_state.slice_count
-		slice_color_input.color = current_element_state.slice_color
-		slice_outline_width_input.value = current_element_state.slice_outline_width
-		slice_outline_color_input.color = current_element_state.slice_outline_color
-
-		var slice : Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
-		slice_rotation_input.value = rad_to_deg(slice.rotation)
+		if current_slice == null or current_slice_index != ui_state.selected_slice_index:
+			current_slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
 	elif current_element_state != null:
 		current_element_state.slice_rotation_changed.disconnect(_on_slice_rotation_state_changed)
 		current_element_state = null
+		current_slice = null
+
+	_update_edit_form()
 
 func _on_slice_rotation_state_changed() -> void:
 	if ui_state.selected_element_index >= 0:
@@ -186,9 +195,11 @@ func _on_slice_rotation_changed(value : float) -> void:
 
 func _on_undo_button_pressed() -> void:
 	world.undo_manager.undo()
+	_update_edit_form()
 
 func _on_redo_button_pressed() -> void:
 	world.undo_manager.redo()
+	_update_edit_form()
 
 func _on_about_button_pressed() -> void:
 	about_dialog.show()
