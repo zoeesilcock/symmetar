@@ -37,7 +37,7 @@ func _ready() -> void:
 	file_dialog.set_filters(PackedStringArray(["*.smtr ; Symmetar Files"]))
 
 	_update_save_button_text()
-	_window_title()
+	_update_window_title()
 
 func _input(event : InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
@@ -73,7 +73,7 @@ func _update_edit_form() -> void:
 		slice_outline_color_input.color = current_element_state.slice_outline_color
 		slice_rotation_input.value = rad_to_deg(current_slice.rotation)
 
-func _window_title() -> void:
+func _update_window_title() -> void:
 	if ui_state.document_is_dirty:
 		save_button.text = "Save (edited)"
 		DisplayServer.window_set_title("Symmetar - " + ui_state.document_name + " (edited)")
@@ -82,6 +82,36 @@ func _window_title() -> void:
 		DisplayServer.window_set_title("Symmetar - " + ui_state.document_name)
 	pass
 
+#region External signal handlers
+func _on_selection_changed() -> void:
+	if ui_state.selected_element_index >= 0:
+		if current_element_state == null or current_element_index != ui_state.selected_element_index:
+			current_element_state = world.document.get_element_state(ui_state.selected_element_index)
+			current_element_index = ui_state.selected_element_index
+
+			if !current_element_state.slice_rotation_changed.is_connected(_on_slice_rotation_state_changed):
+				current_element_state.slice_rotation_changed.connect(_on_slice_rotation_state_changed)
+
+		if current_slice == null or current_slice_index != ui_state.selected_slice_index:
+			current_slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+	elif current_element_state != null:
+		current_element_state.slice_rotation_changed.disconnect(_on_slice_rotation_state_changed)
+		current_element_state = null
+		current_slice = null
+
+	_update_edit_form()
+
+func _on_slice_rotation_state_changed() -> void:
+	if ui_state.selected_element_index >= 0:
+		var slice : Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+		slice_rotation_input.set_value_no_signal(rad_to_deg(slice.rotation))
+
+func _on_document_is_dirty_changed() -> void:
+	_update_save_button_text()
+	_update_window_title()
+#endregion
+
+#region UI signal handlers
 func _on_save_button_pressed() -> void:
 	file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 	file_dialog.current_file = ui_state.document_name
@@ -114,33 +144,6 @@ func _on_add_button_pressed() -> void:
 func _on_clear_button_pressed() -> void:
 	world.document.clear_elements()
 	world.undo_manager.register_diff()
-
-func _on_selection_changed() -> void:
-	if ui_state.selected_element_index >= 0:
-		if current_element_state == null or current_element_index != ui_state.selected_element_index:
-			current_element_state = world.document.get_element_state(ui_state.selected_element_index)
-			current_element_index = ui_state.selected_element_index
-
-			if !current_element_state.slice_rotation_changed.is_connected(_on_slice_rotation_state_changed):
-				current_element_state.slice_rotation_changed.connect(_on_slice_rotation_state_changed)
-
-		if current_slice == null or current_slice_index != ui_state.selected_slice_index:
-			current_slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
-	elif current_element_state != null:
-		current_element_state.slice_rotation_changed.disconnect(_on_slice_rotation_state_changed)
-		current_element_state = null
-		current_slice = null
-
-	_update_edit_form()
-
-func _on_slice_rotation_state_changed() -> void:
-	if ui_state.selected_element_index >= 0:
-		var slice : Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
-		slice_rotation_input.set_value_no_signal(rad_to_deg(slice.rotation))
-
-func _on_document_is_dirty_changed() -> void:
-	_update_save_button_text()
-	_window_title()
 
 func _on_slice_count_changed(value : float) -> void:
 	if ui_state.selected_element_index >= 0:
@@ -203,3 +206,4 @@ func _on_redo_button_pressed() -> void:
 
 func _on_about_button_pressed() -> void:
 	about_dialog.show()
+#endregion
