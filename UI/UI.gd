@@ -131,7 +131,7 @@ func _on_load_button_pressed() -> void:
 func _on_add_button_pressed() -> void:
 	var element_state : ElementState = ElementState.new(
 		slice_count_input.value as int,
-		0.0,
+		deg_to_rad(slice_rotation_input.value),
 		Vector2(200, 0),
 		slice_color_input.color,
 		slice_outline_width_input.value,
