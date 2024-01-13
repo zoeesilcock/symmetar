@@ -31,5 +31,4 @@ window/stretch/aspect="ignore"
 [rendering]
 
 renderer/rendering_method="mobile"
-environment/defaults/default_clear_color=Color(0.627451, 0.141176, 0.141176, 1)
 anti_aliasing/quality/screen_space_aa=1

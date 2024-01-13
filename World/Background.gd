@@ -9,3 +9,8 @@ func _unhandled_input(event : InputEvent) -> void:
 		not ui_state.slice_outline_color_picker_visible and \
 		event.pressed:
 			ui_state.set_selection(-1, -1)
+
+func _draw() -> void:
+	var rect : Rect2 = get_viewport().get_visible_rect()
+	rect.position = Vector2(-rect.size.x / 2, -rect.size.y / 2)
+	draw_rect(rect, Color("#a02424"))
