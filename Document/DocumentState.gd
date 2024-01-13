@@ -4,6 +4,12 @@ extends Resource
 # Data
 @export var elements : Array[ElementState]
 @export var previous_elements : Array[ElementState]
+@export var background_color : Color:
+	set(value):
+		if value != background_color:
+			background_color = value
+			background_color_changed.emit()
+@export var previous_background_color: Color
 
 # Diff
 @export var diffs_applied : Array[DocumentStateDiff]
@@ -11,11 +17,20 @@ extends Resource
 
 # Signals
 signal element_count_changed
+signal background_color_changed
+
+# Constants
+const DEFAULT_BACKGROUND_COLOR : Color = Color("#a02424")
+
+func _init(p_background_color : Color = DEFAULT_BACKGROUND_COLOR) -> void:
+	background_color = p_background_color
+	previous_background_color = background_color
 
 func calculate_diff() -> DocumentStateDiff:
 	var diff : Array[ElementState] = []
 	var count_change : int = len(elements) - len(previous_elements)
 	var element_count : int = max(len(elements), len(previous_elements))
+	var background_color_change : Color = Color.BLACK
 
 	for index : int in element_count:
 		var element : ElementState = ElementState.empty()
@@ -29,7 +44,11 @@ func calculate_diff() -> DocumentStateDiff:
 
 		diff.push_back(element.get_diff(previous_element))
 
-	return DocumentStateDiff.new(count_change, diff)
+	background_color_change.r = background_color.r - previous_background_color.r
+	background_color_change.g = background_color.g - previous_background_color.g
+	background_color_change.b = background_color.b - previous_background_color.b
+
+	return DocumentStateDiff.new(count_change, diff, background_color_change)
 
 func apply_diff(diff : DocumentStateDiff, reverse : bool) -> void:
 	var current_count : int = len(elements)
@@ -46,6 +65,14 @@ func apply_diff(diff : DocumentStateDiff, reverse : bool) -> void:
 
 	if diff.element_count_change != 0:
 		element_count_changed.emit()
+
+	var new_background_color : Color = Color(
+		background_color.r + diff.background_color_change.r * direction,
+		background_color.g + diff.background_color_change.g * direction,
+		background_color.b + diff.background_color_change.b * direction
+	)
+
+	background_color = new_background_color
 
 func _fill_empty_slots() -> void:
 	for index : int in len(elements):

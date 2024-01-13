@@ -9,15 +9,20 @@ extends Node2D
 @export var undo_manager : UndoManager
 @export var element_scene : PackedScene
 @export var elements_node : Node2D
+@export var background : Background
 
 # Internal
 var elements : Array[Node]
+
+# Signals
+signal document_state_replaced
 
 func _ready() -> void:
 	elements = []
 
 	state = DocumentState.new()
 	state.element_count_changed.connect(_on_element_count_changed)
+	document_state_replaced.emit()
 
 func load_document(path : String) -> void:
 	state.element_count_changed.disconnect(_on_element_count_changed)
@@ -25,7 +30,10 @@ func load_document(path : String) -> void:
 
 	state = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_IGNORE) as DocumentState
 	state.element_count_changed.connect(_on_element_count_changed)
+	document_state_replaced.emit()
+
 	_instantiate_elements()
+	state.background_color_changed.emit()
 
 	ui_state.document_name = path.get_file()
 	ui_state.document_is_dirty = false

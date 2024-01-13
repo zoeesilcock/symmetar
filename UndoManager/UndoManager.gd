@@ -27,3 +27,5 @@ func _sync_previous_state() -> void:
 	document.state.previous_elements = []
 	for element : ElementState in document.state.elements:
 		document.state.previous_elements.push_back(element.duplicate())
+
+	document.state.previous_background_color = document.state.background_color

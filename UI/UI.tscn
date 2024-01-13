@@ -7,7 +7,7 @@
 
 [sub_resource type="Theme" id="Theme_uuqi3"]
 
-[node name="UI" type="Control" node_paths=PackedStringArray("save_button", "file_dialog", "slice_count_input", "slice_color_input", "slice_outline_width_input", "slice_outline_color_input", "slice_rotation_input", "about_dialog")]
+[node name="UI" type="Control" node_paths=PackedStringArray("save_button", "file_dialog", "background_color_input", "slice_count_input", "slice_color_input", "slice_outline_width_input", "slice_outline_color_input", "slice_rotation_input", "about_dialog")]
 layout_mode = 3
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -17,11 +17,12 @@ script = ExtResource("1_nhcn2")
 ui_state = ExtResource("2_ot8s7")
 save_button = NodePath("Panel/MarginContainer/VBoxContainer/SaveButton")
 file_dialog = NodePath("FileDialog")
-slice_count_input = NodePath("Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/CountInput")
-slice_color_input = NodePath("Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/ColorPickerButton")
-slice_outline_width_input = NodePath("Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/OutlineWidthInput")
-slice_outline_color_input = NodePath("Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/OutlineColorPickerButton")
-slice_rotation_input = NodePath("Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/RotationInput")
+background_color_input = NodePath("Panel/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/GridContainer/BackgroundColorPickerButton")
+slice_count_input = NodePath("Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/CountInput")
+slice_color_input = NodePath("Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/ColorPickerButton")
+slice_outline_width_input = NodePath("Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/OutlineWidthInput")
+slice_outline_color_input = NodePath("Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/OutlineColorPickerButton")
+slice_rotation_input = NodePath("Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/RotationInput")
 about_dialog = NodePath("AboutDialog")
 
 [node name="Panel" type="Panel" parent="."]
@@ -69,26 +70,55 @@ text = "Add"
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="EditLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="EditDocumentLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Edit item"
+text = "Document settings"
 
-[node name="EditContainer" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/EditContainer"]
+[node name="EditDocumentContainer" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="GridContainer" type="GridContainer" parent="Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/EditDocumentContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="Panel/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer"]
 layout_mode = 2
 columns = 2
 
-[node name="CountLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+[node name="BackgroundColorLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Background:"
+
+[node name="BackgroundColorPickerButton" type="ColorPickerButton" parent="Panel/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/GridContainer"]
+custom_minimum_size = Vector2(82, 0)
+layout_mode = 2
+focus_mode = 0
+color = Color(0.627451, 0.141176, 0.141176, 1)
+
+[node name="Space3" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="EditItemLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Item settings"
+
+[node name="EditItemContainer" type="PanelContainer" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/MarginContainer/VBoxContainer/EditItemContainer"]
+layout_mode = 2
+
+[node name="GridContainer" type="GridContainer" parent="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="CountLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Slice count:"
 
-[node name="CountInput" type="SpinBox" parent="Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+[node name="CountInput" type="SpinBox" parent="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 min_value = 1.0
 value = 8.0
@@ -96,50 +126,50 @@ rounded = true
 alignment = 2
 select_all_on_focus = true
 
-[node name="ColorLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+[node name="ColorLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Color:"
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+[node name="ColorPickerButton" type="ColorPickerButton" parent="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 focus_mode = 0
 color = Color(0.909804, 0.333333, 0, 1)
 
-[node name="OutlineWidthLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+[node name="OutlineWidthLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Outline width:"
 
-[node name="OutlineWidthInput" type="SpinBox" parent="Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+[node name="OutlineWidthInput" type="SpinBox" parent="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 value = 2.0
 alignment = 2
 select_all_on_focus = true
 
-[node name="OutlineColorLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+[node name="OutlineColorLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Outline color:"
 
-[node name="OutlineColorPickerButton" type="ColorPickerButton" parent="Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+[node name="OutlineColorPickerButton" type="ColorPickerButton" parent="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 focus_mode = 0
 color = Color(1, 0.960784, 0, 1)
 
-[node name="RotationLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+[node name="RotationLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Rotation:"
 
-[node name="RotationInput" type="SpinBox" parent="Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer"]
+[node name="RotationInput" type="SpinBox" parent="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 max_value = 360.0
 alignment = 2
 update_on_text_changed = true
 select_all_on_focus = true
 
-[node name="Space3" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="Space4" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
@@ -157,7 +187,7 @@ size_flags_horizontal = 3
 text = "Redo
 "
 
-[node name="Space4" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
+[node name="Space5" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
@@ -177,9 +207,9 @@ visible = false
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/ClearButton" to="." method="_on_clear_button_pressed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/AddButton" to="." method="_on_add_button_pressed"]
-[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/CountInput" to="." method="_on_slice_count_changed"]
-[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/OutlineWidthInput" to="." method="_on_slice_outline_width_changed"]
-[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/EditContainer/MarginContainer/GridContainer/RotationInput" to="." method="_on_slice_rotation_changed"]
+[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/CountInput" to="." method="_on_slice_count_changed"]
+[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/OutlineWidthInput" to="." method="_on_slice_outline_width_changed"]
+[connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/RotationInput" to="." method="_on_slice_rotation_changed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/UndoContainer/UndoButton" to="." method="_on_undo_button_pressed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/UndoContainer/RedoButton" to="." method="_on_redo_button_pressed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/AboutButton" to="." method="_on_about_button_pressed"]

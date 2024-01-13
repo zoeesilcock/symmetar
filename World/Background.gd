@@ -1,6 +1,18 @@
+class_name Background
 extends Node2D
 
+# References
 @export var ui_state : UIState
+@export var document : Document
+
+func _ready() -> void:
+	document.document_state_replaced.connect(_on_document_state_replaced)
+
+func _on_document_state_replaced() -> void:
+	document.state.background_color_changed.connect(_on_background_color_changed)
+
+func _on_background_color_changed() -> void:
+	queue_redraw()
 
 func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton and \
@@ -13,4 +25,4 @@ func _unhandled_input(event : InputEvent) -> void:
 func _draw() -> void:
 	var rect : Rect2 = get_viewport().get_visible_rect()
 	rect.position = Vector2(-rect.size.x / 2, -rect.size.y / 2)
-	draw_rect(rect, Color("#a02424"))
+	draw_rect(rect, document.state.background_color)

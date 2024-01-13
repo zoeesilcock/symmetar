@@ -6,6 +6,7 @@ extends Control
 @export var ui_state : UIState
 @export var save_button : Button
 @export var file_dialog : FileDialog
+@export var background_color_input : ColorPickerButton
 @export var slice_count_input : SpinBox
 @export var slice_color_input : ColorPickerButton
 @export var slice_outline_width_input : SpinBox
@@ -14,6 +15,7 @@ extends Control
 @export var about_dialog : AcceptDialog
 
 # Internal
+var background_color_picker_popup : PopupPanel
 var slice_color_picker_popup : PopupPanel
 var outline_color_picker_popup : PopupPanel
 var current_element_state : ElementState
@@ -25,6 +27,10 @@ func _ready() -> void:
 	ui_state.init()
 	ui_state.selection_changed.connect(_on_selection_changed)
 	ui_state.document_is_dirty_changed.connect(_on_document_is_dirty_changed)
+
+	background_color_picker_popup = background_color_input.get_popup()
+	background_color_picker_popup.visibility_changed.connect(_on_background_color_picker_visibility_changed)
+	background_color_input.color_changed.connect(_on_background_color_changed)
 
 	slice_color_picker_popup = slice_color_input.get_popup()
 	slice_color_picker_popup.visibility_changed.connect(_on_slice_color_picker_visibility_changed)
@@ -38,6 +44,8 @@ func _ready() -> void:
 
 	_update_save_button_text()
 	_update_window_title()
+
+	world.document.document_state_replaced.connect(_on_document_state_replaced)
 
 func _input(event : InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
@@ -83,6 +91,9 @@ func _update_window_title() -> void:
 	pass
 
 #region External signal handlers
+func _on_document_state_replaced() -> void:
+	world.document.state.background_color_changed.connect(_on_background_color_state_changed)
+
 func _on_selection_changed() -> void:
 	if ui_state.selected_element_index >= 0:
 		if current_element_state == null or current_element_index != ui_state.selected_element_index:
@@ -105,6 +116,9 @@ func _on_slice_rotation_state_changed() -> void:
 	if ui_state.selected_element_index >= 0:
 		var slice : Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
 		slice_rotation_input.set_value_no_signal(rad_to_deg(slice.rotation))
+
+func _on_background_color_state_changed() -> void:
+	background_color_input.color = world.document.state.background_color
 
 func _on_document_is_dirty_changed() -> void:
 	_update_save_button_text()
@@ -153,6 +167,16 @@ func _on_slice_count_changed(value : float) -> void:
 		if slice_count_changed:
 			element_state.slice_count = value as int
 			world.undo_manager.register_diff()
+
+func _on_background_color_changed(value : Color) -> void:
+	var background_color_changed : bool = world.document.state.background_color != value
+
+	if background_color_changed:
+		world.document.state.background_color = value
+
+func _on_background_color_picker_visibility_changed() -> void:
+	ui_state.background_color_picker_visible = background_color_input.get_popup().visible
+	world.undo_manager.register_diff()
 
 func _on_slice_color_changed(value : Color) -> void:
 	if ui_state.selected_element_index >= 0:
