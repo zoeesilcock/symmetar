@@ -1,5 +1,5 @@
 class_name World
-extends Node2D
+extends SubViewportContainer
 
 # References
 @export var document : Document

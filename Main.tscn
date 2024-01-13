@@ -9,7 +9,21 @@
 script = ExtResource("1_th2y0")
 ui_state = ExtResource("2_v7q8m")
 
-[node name="UI" parent="." node_paths=PackedStringArray("world") instance=ExtResource("1_tbaje")]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="SplitContainer" type="SplitContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+dragger_visibility = 2
+
+[node name="UI" parent="CanvasLayer/SplitContainer" node_paths=PackedStringArray("world") instance=ExtResource("1_tbaje")]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
 world = NodePath("../World")
 
-[node name="World" parent="." instance=ExtResource("2_joqbc")]
+[node name="World" parent="CanvasLayer/SplitContainer" instance=ExtResource("2_joqbc")]
+layout_mode = 2
+size_flags_horizontal = 3

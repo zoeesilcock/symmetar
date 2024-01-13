@@ -1,5 +1,5 @@
 class_name UI
-extends CanvasLayer
+extends Control
 
 # References
 @export var world : World
