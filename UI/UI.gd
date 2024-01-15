@@ -51,6 +51,10 @@ func _input(event : InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
 		event.command_or_control_autoremap = true
 
+		if event.alt_pressed:
+			if event.keycode == KEY_ENTER:
+				_toggle_full_screen()
+
 		if event.ctrl_pressed:
 			if event.keycode == KEY_Z and not event.shift_pressed:
 				_on_undo_button_pressed()
@@ -89,6 +93,14 @@ func _update_window_title() -> void:
 		save_button.text = "Save"
 		DisplayServer.window_set_title("Symmetar - " + ui_state.document_name)
 	pass
+
+func _toggle_full_screen() -> void:
+	var current_mode : DisplayServer.WindowMode = DisplayServer.window_get_mode()
+
+	if current_mode == DisplayServer.WindowMode.WINDOW_MODE_WINDOWED:
+		DisplayServer.window_set_mode(DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN)
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WindowMode.WINDOW_MODE_WINDOWED)
 
 #region External signal handlers
 func _on_document_state_replaced() -> void:
