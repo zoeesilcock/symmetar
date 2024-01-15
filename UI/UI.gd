@@ -71,6 +71,9 @@ func _input(event : InputEvent) -> void:
 			elif event.keycode == KEY_DOWN:
 				slice_count_input.value -= 1
 
+		if event.keycode == KEY_TAB:
+			_toggle_ui()
+
 func _update_save_button_text() -> void:
 	if ui_state.document_is_dirty:
 		save_button.text = "Save (edited)"
@@ -101,6 +104,10 @@ func _toggle_full_screen() -> void:
 		DisplayServer.window_set_mode(DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN)
 	else:
 		DisplayServer.window_set_mode(DisplayServer.WindowMode.WINDOW_MODE_WINDOWED)
+
+func _toggle_ui() -> void:
+	visible = !visible
+	ui_state.ui_is_visible = visible
 
 #region External signal handlers
 func _on_document_state_replaced() -> void:

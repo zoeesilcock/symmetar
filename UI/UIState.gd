@@ -3,6 +3,7 @@ extends Resource
 
 # Data
 @export var main_window_scale : float
+@export var ui_is_visible : bool
 @export var any_slice_is_dragging : bool
 @export var any_slice_is_rotating : bool
 @export var any_slice_is_pivoting : bool
@@ -35,6 +36,7 @@ signal selection_changed
 signal document_is_dirty_changed
 
 func init() -> void:
+	ui_is_visible = true
 	any_slice_is_dragging = false
 	selected_element_index = -1
 	selected_slice_index = -1
