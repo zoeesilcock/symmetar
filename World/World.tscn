@@ -7,7 +7,7 @@
 [ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="4_r6cmr"]
 [ext_resource type="PackedScene" uid="uid://bkihrohu0hh6e" path="res://Document/Document.tscn" id="5_uwskq"]
 
-[node name="SubViewportContainer" type="SubViewportContainer" node_paths=PackedStringArray("document", "undo_manager", "main_camera")]
+[node name="World" type="SubViewportContainer" node_paths=PackedStringArray("document", "undo_manager", "main_camera")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -29,10 +29,11 @@ render_target_update_mode = 4
 script = ExtResource("2_af7f5")
 scroll_wheel_zoom_amount = 0.05
 
-[node name="Background" type="Node2D" parent="SubViewport/MainCamera" node_paths=PackedStringArray("document")]
+[node name="Background" type="Node2D" parent="SubViewport/MainCamera" node_paths=PackedStringArray("document", "main_camera")]
 script = ExtResource("3_10f1g")
 ui_state = ExtResource("4_r6cmr")
 document = NodePath("../../Document")
+main_camera = NodePath("..")
 
 [node name="Center" type="Polygon2D" parent="SubViewport"]
 color = Color(1, 1, 0, 1)

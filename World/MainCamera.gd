@@ -9,6 +9,9 @@ var is_panning : bool
 var panning_start_camera_position : Vector2
 var panning_start_mouse_position : Vector2
 
+# Signals
+signal zoom_changed
+
 func reset_to_center() -> void:
 	position = Vector2.ZERO
 
@@ -45,4 +48,4 @@ func _end_panning() -> void:
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 
 func _change_zoom(amount : float) -> void:
-	zoom += Vector2(amount, amount)
+	zoom_changed.emit()
