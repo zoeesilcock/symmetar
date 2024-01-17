@@ -28,6 +28,8 @@ render_target_update_mode = 4
 [node name="MainCamera" type="Camera2D" parent="SubViewport"]
 script = ExtResource("2_af7f5")
 scroll_wheel_zoom_amount = 0.05
+min_zoom = 0.15
+max_zoom = 10.0
 
 [node name="Background" type="Node2D" parent="SubViewport/MainCamera" node_paths=PackedStringArray("document", "main_camera")]
 script = ExtResource("3_10f1g")
