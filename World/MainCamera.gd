@@ -1,6 +1,9 @@
 class_name MainCamera
 extends Camera2D
 
+# Settings
+@export var scroll_wheel_zoom_amount : float
+
 # Internal
 var is_panning : bool
 var panning_start_camera_position : Vector2
@@ -16,6 +19,10 @@ func _unhandled_input(event : InputEvent) -> void:
 				_start_panning(event)
 			else:
 				_end_panning()
+		elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			_change_zoom(scroll_wheel_zoom_amount)
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			_change_zoom(-scroll_wheel_zoom_amount)
 
 	if event is InputEventMouseMotion and is_panning:
 		_update_panning(event)
@@ -36,3 +43,6 @@ func _update_panning(event : InputEvent) -> void:
 func _end_panning() -> void:
 	is_panning = false
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+
+func _change_zoom(amount : float) -> void:
+	zoom += Vector2(amount, amount)
