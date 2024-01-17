@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://b0xsay7lqoc07"]
+[gd_scene load_steps=7 format=3 uid="uid://b0xsay7lqoc07"]
 
 [ext_resource type="Script" path="res://World/World.gd" id="1_hfrd5"]
+[ext_resource type="Script" path="res://World/MainCamera.gd" id="2_af7f5"]
 [ext_resource type="Script" path="res://World/Background.gd" id="3_10f1g"]
 [ext_resource type="PackedScene" uid="uid://crwxcud4hr0rr" path="res://UndoManager/UndoManager.tscn" id="4_n6wyd"]
 [ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="4_r6cmr"]
@@ -24,6 +25,7 @@ size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
 [node name="Camera2D" type="Camera2D" parent="SubViewport"]
+script = ExtResource("2_af7f5")
 
 [node name="Background" type="Node2D" parent="SubViewport/Camera2D" node_paths=PackedStringArray("document")]
 script = ExtResource("3_10f1g")
