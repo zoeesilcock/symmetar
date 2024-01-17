@@ -7,7 +7,7 @@
 [ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="4_r6cmr"]
 [ext_resource type="PackedScene" uid="uid://bkihrohu0hh6e" path="res://Document/Document.tscn" id="5_uwskq"]
 
-[node name="SubViewportContainer" type="SubViewportContainer" node_paths=PackedStringArray("document", "undo_manager")]
+[node name="SubViewportContainer" type="SubViewportContainer" node_paths=PackedStringArray("document", "undo_manager", "main_camera")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -17,6 +17,7 @@ stretch = true
 script = ExtResource("1_hfrd5")
 document = NodePath("SubViewport/Document")
 undo_manager = NodePath("SubViewport/UndoManager")
+main_camera = NodePath("SubViewport/Camera2D")
 metadata/_edit_use_anchors_ = true
 
 [node name="SubViewport" type="SubViewport" parent="."]

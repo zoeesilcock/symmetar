@@ -191,6 +191,14 @@ text = "Redo
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
+[node name="CenterButton" type="Button" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Center	"
+
+[node name="Space6" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
 [node name="AboutButton" type="Button" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "About Symmetar"
@@ -212,5 +220,6 @@ visible = false
 [connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/RotationInput" to="." method="_on_slice_rotation_changed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/UndoContainer/UndoButton" to="." method="_on_undo_button_pressed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/UndoContainer/RedoButton" to="." method="_on_redo_button_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/CenterButton" to="." method="_on_center_button_pressed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/AboutButton" to="." method="_on_about_button_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_selected"]

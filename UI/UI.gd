@@ -247,6 +247,9 @@ func _on_redo_button_pressed() -> void:
 	world.undo_manager.redo()
 	_update_edit_form()
 
+func _on_center_button_pressed() -> void:
+	world.main_camera.reset_to_center()
+
 func _on_about_button_pressed() -> void:
 	about_dialog.show()
 #endregion

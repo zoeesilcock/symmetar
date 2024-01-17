@@ -6,6 +6,9 @@ var is_panning : bool
 var panning_start_camera_position : Vector2
 var panning_start_mouse_position : Vector2
 
+func reset_to_center() -> void:
+	position = Vector2.ZERO
+
 func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_MIDDLE:
