@@ -82,11 +82,11 @@ func _update_save_button_text() -> void:
 
 func _update_edit_form() -> void:
 	if current_element_state != null:
-		slice_count_input.value = current_element_state.slice_count
+		slice_count_input.set_value_no_signal(current_element_state.slice_count)
 		slice_color_input.color = current_element_state.slice_color
-		slice_outline_width_input.value = current_element_state.slice_outline_width
+		slice_outline_width_input.set_value_no_signal(current_element_state.slice_outline_width)
 		slice_outline_color_input.color = current_element_state.slice_outline_color
-		slice_rotation_input.value = rad_to_deg(current_slice.rotation)
+		slice_rotation_input.set_value_no_signal(rad_to_deg(current_slice.rotation))
 
 func _update_window_title() -> void:
 	if ui_state.document_is_dirty:
