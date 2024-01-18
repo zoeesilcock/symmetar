@@ -234,7 +234,7 @@ func _update_dragging(event : InputEvent, world_position : Vector2) -> void:
 		var input_radius : float = sqrt(pow(world_position.x, 2) + pow(world_position.y, 2))
 		position = input_radius * Vector2.from_angle(dragging_start_theta)
 	else:
-		position = _get_world_position(event.position - drag_offset)
+		position = _get_world_position(event.position) - drag_offset
 
 	position_changed.emit(slice_index)
 
