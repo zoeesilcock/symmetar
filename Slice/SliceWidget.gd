@@ -14,12 +14,10 @@ signal drag_updated(event : InputEvent, world_position : Vector2)
 signal drag_ended(event : InputEvent, world_position : Vector2)
 
 # Internal
-var view_to_world : Transform2D
 var viewport : Viewport
 var is_dragging : bool
 
 func _ready() -> void:
-	view_to_world = get_canvas_transform().affine_inverse()
 	viewport = get_viewport()
 
 func update_position(rect : Rect2) -> void:
@@ -27,7 +25,7 @@ func update_position(rect : Rect2) -> void:
 
 func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventMouse:
-		var world_position : Vector2 = view_to_world * event.position
+		var world_position : Vector2 = _get_world_position(event.position)
 		var cursor_in_selection : bool = _is_in_selection(world_position - global_position)
 
 		if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -46,6 +44,9 @@ func _unhandled_input(event : InputEvent) -> void:
 				selection.visible = true
 			else:
 				selection.visible = false
+
+func _get_world_position(event_position : Vector2) -> Vector2:
+	return get_canvas_transform().affine_inverse() * event_position
 
 func _is_in_selection(point : Vector2) -> bool:
 	return Geometry2D.is_point_in_polygon(point, selection.get_polygon())
