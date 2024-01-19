@@ -197,6 +197,12 @@ func _on_background_color_picker_visibility_changed() -> void:
 	ui_state.background_color_picker_visible = background_color_input.get_popup().visible
 	world.undo_manager.register_diff()
 
+func _on_reset_zoom_button_pressed() -> void:
+	pass
+
+func _on_reset_position_button_pressed() -> void:
+	world.main_camera.reset_to_center()
+
 func _on_slice_color_changed(value : Color) -> void:
 	if ui_state.selected_element_index >= 0:
 		var element_state : ElementState = world.document.get_element_state(ui_state.selected_element_index)
@@ -246,9 +252,6 @@ func _on_undo_button_pressed() -> void:
 func _on_redo_button_pressed() -> void:
 	world.undo_manager.redo()
 	_update_edit_form()
-
-func _on_center_button_pressed() -> void:
-	world.main_camera.reset_to_center()
 
 func _on_about_button_pressed() -> void:
 	about_dialog.show()
