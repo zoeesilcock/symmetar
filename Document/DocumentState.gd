@@ -10,6 +10,18 @@ extends Resource
 			background_color = value
 			background_color_changed.emit()
 @export var previous_background_color: Color
+@export var zoom : float:
+	set(value):
+		if value != zoom:
+			zoom = value
+			zoom_changed.emit()
+@export var previous_zoom : float
+@export var pan_position : Vector2:
+	set(value):
+		if value != pan_position:
+			pan_position = value
+			pan_position_changed.emit()
+@export var previous_pan_position : Vector2
 
 # Diff
 @export var diffs_applied : Array[DocumentStateDiff]
@@ -18,13 +30,22 @@ extends Resource
 # Signals
 signal element_count_changed
 signal background_color_changed
+signal zoom_changed
+signal pan_position_changed
 
 # Constants
 const DEFAULT_BACKGROUND_COLOR : Color = Color("#a02424")
 
-func _init(p_background_color : Color = DEFAULT_BACKGROUND_COLOR) -> void:
+func _init(
+		p_background_color : Color = DEFAULT_BACKGROUND_COLOR,
+		p_zoom : float = 1,
+		p_pan_position : Vector2 = Vector2.ZERO) -> void:
 	background_color = p_background_color
 	previous_background_color = background_color
+	zoom = p_zoom
+	previous_zoom = zoom
+	pan_position = p_pan_position
+	previous_pan_position = pan_position
 
 func calculate_diff() -> DocumentStateDiff:
 	var diff : Array[ElementState] = []

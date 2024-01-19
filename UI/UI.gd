@@ -7,6 +7,9 @@ extends Control
 @export var save_button : Button
 @export var file_dialog : FileDialog
 @export var background_color_input : ColorPickerButton
+@export var zoom_input : SpinBox
+@export var position_x_input : SpinBox
+@export var position_y_input : SpinBox
 @export var slice_count_input : SpinBox
 @export var slice_color_input : ColorPickerButton
 @export var slice_outline_width_input : SpinBox
@@ -111,7 +114,18 @@ func _toggle_ui() -> void:
 
 #region External signal handlers
 func _on_document_state_replaced() -> void:
+	# TODO: Is this where we set the initial values of the form?
 	world.document.state.background_color_changed.connect(_on_background_color_state_changed)
+	world.document.state.zoom_changed.connect(_on_zoom_state_changed)
+	world.document.state.pan_position_changed.connect(_on_pan_position_state_changed)
+
+func _on_zoom_state_changed() -> void:
+	# TODO: Convert from scale to percentage here.
+	zoom_input.set_value_no_signal(world.document.state.zoom * 100.0)
+
+func _on_pan_position_state_changed() -> void:
+	position_x_input.set_value_no_signal(world.document.state.pan_position.x)
+	position_y_input.set_value_no_signal(world.document.state.pan_position.y)
 
 func _on_selection_changed() -> void:
 	if ui_state.selected_element_index >= 0:
@@ -197,11 +211,25 @@ func _on_background_color_picker_visibility_changed() -> void:
 	ui_state.background_color_picker_visible = background_color_input.get_popup().visible
 	world.undo_manager.register_diff()
 
+func _on_zoom_changed(value : float) -> void:
+	world.document.state.zoom = value / 100.0
+	world.undo_manager.register_diff()
+
 func _on_reset_zoom_button_pressed() -> void:
-	pass
+	world.document.state.zoom = 1
+	world.undo_manager.register_diff()
+
+func _on_position_x_changed(value : float) -> void:
+	world.document.state.pan_position.x = value
+	world.undo_manager.register_diff()
+
+func _on_position_y_changed(value : float) -> void:
+	world.document.state.pan_position.y = value
+	world.undo_manager.register_diff()
 
 func _on_reset_position_button_pressed() -> void:
-	world.main_camera.reset_to_center()
+	world.document.state.pan_position = Vector2.ZERO
+	world.undo_manager.register_diff()
 
 func _on_slice_color_changed(value : Color) -> void:
 	if ui_state.selected_element_index >= 0:

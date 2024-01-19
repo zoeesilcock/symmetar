@@ -6,16 +6,26 @@ extends Camera2D
 @export var min_zoom : float
 @export var max_zoom : float
 
+# References
+@export var document : Document
+
 # Internal
 var is_panning : bool
 var panning_start_camera_position : Vector2
 var panning_start_mouse_position : Vector2
 
-# Signals
-signal zoom_changed
+func _ready() -> void:
+	document.document_state_replaced.connect(_on_document_state_replaced)
 
-func reset_to_center() -> void:
-	position = Vector2.ZERO
+func _on_document_state_replaced() -> void:
+	document.state.zoom_changed.connect(_on_zoom_state_changed)
+	document.state.pan_position_changed.connect(_on_pan_position_state_changed)
+
+func _on_zoom_state_changed() -> void:
+	zoom = Vector2(document.state.zoom, document.state.zoom)
+
+func _on_pan_position_state_changed() -> void:
+	position = document.state.pan_position
 
 func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -43,7 +53,7 @@ func _start_panning(event : InputEvent) -> void:
 
 func _update_panning(event : InputEvent) -> void:
 	var world_position : Vector2 = _get_world_position(event.position) - position
-	position = panning_start_camera_position - (world_position - panning_start_mouse_position)
+	document.state.pan_position = panning_start_camera_position - (world_position - panning_start_mouse_position)
 
 func _end_panning() -> void:
 	is_panning = false
@@ -51,5 +61,4 @@ func _end_panning() -> void:
 
 func _change_zoom(amount : float) -> void:
 	var new_zoom : float = clamp(zoom.x + amount, min_zoom, max_zoom)
-	zoom = Vector2(new_zoom, new_zoom)
-	zoom_changed.emit()
+	document.state.zoom = new_zoom

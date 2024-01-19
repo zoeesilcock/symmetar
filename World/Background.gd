@@ -8,10 +8,10 @@ extends Node2D
 
 func _ready() -> void:
 	document.document_state_replaced.connect(_on_document_state_replaced)
-	main_camera.zoom_changed.connect(_on_camera_zoom_changed)
 
 func _on_document_state_replaced() -> void:
 	document.state.background_color_changed.connect(_on_background_color_changed)
+	document.state.zoom_changed.connect(_on_camera_zoom_changed)
 
 func _on_background_color_changed() -> void:
 	queue_redraw()
