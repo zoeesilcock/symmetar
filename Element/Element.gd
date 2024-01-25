@@ -34,6 +34,12 @@ func init(p_state : ElementState) -> void:
 	_update_slice_positions()
 	_update_slice_rotations()
 
+func set_index(index : int) -> void:
+	state.index = index
+
+	for slice : Slice in slices:
+		slice.element_index = index
+
 func get_slice(index : int) -> Slice:
 	return slices[index]
 

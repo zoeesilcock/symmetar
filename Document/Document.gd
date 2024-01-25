@@ -12,7 +12,7 @@ extends Node2D
 @export var background : Background
 
 # Internal
-var elements : Array[Node]
+var elements : Array[Element]
 
 # Signals
 signal document_state_replaced
@@ -51,7 +51,7 @@ func get_slice(element_index : int, slice_index : int) -> Slice:
 	return elements[element_index].get_slice(slice_index)
 
 func add_new_element(element_state : ElementState) -> void:
-	var new_element : Node = element_scene.instantiate()
+	var new_element : Element = element_scene.instantiate()
 	var element_index : int = len(elements)
 
 	elements_node.add_child(new_element)
@@ -68,7 +68,13 @@ func add_new_element(element_state : ElementState) -> void:
 func remove_element(index : int) -> void:
 	elements_node.remove_child(elements[index])
 	elements.remove_at(index)
+	state.elements.remove_at(index)
+
 	_update_element_indexes()
+	undo_manager.register_diff()
+
+	ui_state.set_selection(-1, -1)
+	ui_state.document_is_dirty = true
 
 func clear_elements() -> void:
 	_remove_all_elements()
@@ -106,4 +112,4 @@ func _instantiate_element(element_index : int) -> void:
 
 func _update_element_indexes() -> void:
 	for element_index : int in len(elements):
-		elements[element_index].index = element_index
+		elements[element_index].set_index(element_index)

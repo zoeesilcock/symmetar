@@ -6,6 +6,7 @@ extends Control
 @export var ui_state : UIState
 @export var save_button : Button
 @export var file_dialog : FileDialog
+@export var remove_button : Button
 @export var background_color_input : ColorPickerButton
 @export var zoom_input : SpinBox
 @export var position_x_input : SpinBox
@@ -128,6 +129,7 @@ func _on_pan_position_state_changed() -> void:
 	position_y_input.set_value_no_signal(world.document.state.pan_position.y)
 
 func _on_selection_changed() -> void:
+	print(ui_state.selected_element_index)
 	if ui_state.selected_element_index >= 0:
 		if current_element_state == null or current_element_index != ui_state.selected_element_index:
 			current_element_state = world.document.get_element_state(ui_state.selected_element_index)
@@ -138,10 +140,14 @@ func _on_selection_changed() -> void:
 
 		if current_slice == null or current_slice_index != ui_state.selected_slice_index:
 			current_slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+
+		remove_button.disabled = false
 	elif current_element_state != null:
 		current_element_state.slice_rotation_changed.disconnect(_on_slice_rotation_state_changed)
 		current_element_state = null
 		current_slice = null
+
+		remove_button.disabled = true
 
 	_update_edit_form()
 
@@ -187,6 +193,10 @@ func _on_add_button_pressed() -> void:
 
 	world.document.add_new_element(element_state)
 	world.undo_manager.register_diff()
+
+func _on_remove_button_pressed() -> void:
+	if ui_state.selected_element_index >= 0:
+		world.document.remove_element(ui_state.selected_element_index)
 
 func _on_clear_button_pressed() -> void:
 	world.document.clear_elements()
