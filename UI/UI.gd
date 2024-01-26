@@ -58,8 +58,7 @@ func _input(event : InputEvent) -> void:
 		if event.alt_pressed:
 			if event.keycode == KEY_ENTER:
 				_toggle_full_screen()
-
-		if event.ctrl_pressed:
+		elif event.ctrl_pressed:
 			if event.keycode == KEY_Z and not event.shift_pressed:
 				_on_undo_button_pressed()
 			elif event.keycode == KEY_Z and event.shift_pressed:
@@ -70,12 +69,15 @@ func _input(event : InputEvent) -> void:
 				_on_load_button_pressed()
 			elif event.keycode == KEY_X:
 				_on_clear_button_pressed()
+			elif event.keycode == KEY_N:
+				_on_add_button_pressed()
+			elif event.keycode == KEY_DELETE:
+				_on_remove_button_pressed()
 			elif event.keycode == KEY_UP:
 				slice_count_input.value += 1
 			elif event.keycode == KEY_DOWN:
 				slice_count_input.value -= 1
-
-		if event.keycode == KEY_TAB:
+		elif event.keycode == KEY_TAB:
 			_toggle_ui()
 
 func _update_save_button_text() -> void:
