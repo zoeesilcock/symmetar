@@ -13,6 +13,7 @@ config_version=5
 config/name="symmetar"
 run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
+boot_splash/bg_color=Color(0.627451, 0.141176, 0.141176, 1)
 config/icon="res://icon.svg"
 
 [audio]
