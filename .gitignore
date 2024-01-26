@@ -9,3 +9,5 @@ export_presets.cfg
 # Imported translations (automatically generated from CSV files)
 *.translation
 
+# Affinity design lock files
+*.afdesign~lock~
