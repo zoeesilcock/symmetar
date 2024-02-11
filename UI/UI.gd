@@ -303,11 +303,15 @@ func _on_slice_radius_changed(value : float) -> void:
 	if ui_state.selected_element_index >= 0:
 		var slice : Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
 		slice.set_radius(value)
+		world.undo_manager.register_diff()
+		ui_state.document_is_dirty = true
 
 func _on_slice_theta_changed(value : float) -> void:
 	if ui_state.selected_element_index >= 0:
 		var slice : Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
 		slice.set_theta(deg_to_rad(value))
+		world.undo_manager.register_diff()
+		ui_state.document_is_dirty = true
 
 func _on_undo_button_pressed() -> void:
 	world.undo_manager.undo()
