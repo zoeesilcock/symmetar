@@ -139,15 +139,17 @@ func _on_selection_changed() -> void:
 		if current_element_state == null or current_element_index != ui_state.selected_element_index:
 			current_element_state = world.document.get_element_state(ui_state.selected_element_index)
 			current_element_index = ui_state.selected_element_index
+			current_slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+			current_slice_index = ui_state.selected_slice_index
 
 			if !current_element_state.slice_rotation_changed.is_connected(_on_slice_rotation_state_changed):
 				current_element_state.slice_rotation_changed.connect(_on_slice_rotation_state_changed)
 
 			if !current_element_state.slice_position_changed.is_connected(_on_slice_position_state_changed):
 				current_element_state.slice_position_changed.connect(_on_slice_position_state_changed)
-
-		if current_slice == null or current_slice_index != ui_state.selected_slice_index:
+		elif current_slice == null or current_slice_index != ui_state.selected_slice_index:
 			current_slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+			current_slice_index = ui_state.selected_slice_index
 
 		remove_button.disabled = false
 	elif current_element_state != null:
