@@ -16,6 +16,8 @@ extends Control
 @export var slice_outline_width_input : SpinBox
 @export var slice_outline_color_input : ColorPickerButton
 @export var slice_rotation_input : SpinBox
+@export var slice_radius_input : SpinBox
+@export var slice_theta_input : SpinBox
 @export var about_dialog : AcceptDialog
 
 # Internal
@@ -93,6 +95,8 @@ func _update_edit_form() -> void:
 		slice_outline_width_input.set_value_no_signal(current_element_state.slice_outline_width)
 		slice_outline_color_input.color = current_element_state.slice_outline_color
 		slice_rotation_input.set_value_no_signal(rad_to_deg(current_slice.rotation))
+		slice_radius_input.set_value_no_signal(current_slice.get_radius())
+		slice_theta_input.set_value_no_signal(rad_to_deg(current_slice.get_theta()))
 
 func _update_window_title() -> void:
 	if ui_state.document_is_dirty:
@@ -131,7 +135,6 @@ func _on_pan_position_state_changed() -> void:
 	position_y_input.set_value_no_signal(world.document.state.pan_position.y)
 
 func _on_selection_changed() -> void:
-	print(ui_state.selected_element_index)
 	if ui_state.selected_element_index >= 0:
 		if current_element_state == null or current_element_index != ui_state.selected_element_index:
 			current_element_state = world.document.get_element_state(ui_state.selected_element_index)
@@ -139,6 +142,9 @@ func _on_selection_changed() -> void:
 
 			if !current_element_state.slice_rotation_changed.is_connected(_on_slice_rotation_state_changed):
 				current_element_state.slice_rotation_changed.connect(_on_slice_rotation_state_changed)
+
+			if !current_element_state.slice_position_changed.is_connected(_on_slice_position_state_changed):
+				current_element_state.slice_position_changed.connect(_on_slice_position_state_changed)
 
 		if current_slice == null or current_slice_index != ui_state.selected_slice_index:
 			current_slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
@@ -152,6 +158,12 @@ func _on_selection_changed() -> void:
 		remove_button.disabled = true
 
 	_update_edit_form()
+
+func _on_slice_position_state_changed() -> void:
+	if ui_state.selected_element_index >= 0:
+		var slice : Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+		slice_radius_input.set_value_no_signal(slice.get_radius())
+		slice_theta_input.set_value_no_signal(rad_to_deg(slice.get_theta()))
 
 func _on_slice_rotation_state_changed() -> void:
 	if ui_state.selected_element_index >= 0:
@@ -284,6 +296,16 @@ func _on_slice_rotation_changed(value : float) -> void:
 	if ui_state.selected_element_index >= 0:
 		var slice : Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
 		slice.set_slice_rotation(deg_to_rad(value))
+
+func _on_slice_radius_changed(value : float) -> void:
+	if ui_state.selected_element_index >= 0:
+		var slice : Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+		slice.set_radius(value)
+
+func _on_slice_theta_changed(value : float) -> void:
+	if ui_state.selected_element_index >= 0:
+		var slice : Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+		slice.set_theta(deg_to_rad(value))
 
 func _on_undo_button_pressed() -> void:
 	world.undo_manager.undo()

@@ -143,6 +143,22 @@ func set_slice_rotation(value : float) -> void:
 	rotation_changed.emit(slice_index)
 	rotating_ended.emit(slice_index)
 
+func get_radius() -> float:
+	return position.distance_to(Vector2.ZERO)
+
+func set_radius(radius : float) -> void:
+	var theta : float = get_theta()
+	position = radius * Vector2.from_angle(theta)
+	position_changed.emit(slice_index)
+
+func get_theta() -> float:
+	return wrapf(atan2(position.y, position.x), 0, PI * 2)
+
+func set_theta(theta : float) -> void:
+	var radius : float = get_radius()
+	position = radius * Vector2.from_angle(theta)
+	position_changed.emit(slice_index)
+
 func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventMouse:
 		_handle_mouse_input(event)
