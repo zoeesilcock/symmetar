@@ -1,13 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://cn6aov1t3u3y2"]
+[gd_scene load_steps=7 format=3 uid="uid://cn6aov1t3u3y2"]
 
 [ext_resource type="Script" path="res://UI/UI.gd" id="1_nhcn2"]
 [ext_resource type="Theme" uid="uid://hgjigpeoaius" path="res://UI/UITheme.tres" id="2_dusos"]
 [ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="2_ot8s7"]
 [ext_resource type="PackedScene" uid="uid://dcrg4argct36y" path="res://UI/AboutDialog.tscn" id="4_dj2o0"]
+[ext_resource type="PackedScene" uid="uid://dnn12yk63bxl0" path="res://UI/MenuBar.tscn" id="4_u137w"]
 
 [sub_resource type="Theme" id="Theme_uuqi3"]
 
-[node name="UI" type="Control" node_paths=PackedStringArray("save_button", "file_dialog", "remove_button", "background_color_input", "zoom_input", "position_x_input", "position_y_input", "slice_count_input", "slice_color_input", "slice_outline_width_input", "slice_outline_color_input", "slice_rotation_input", "slice_radius_input", "slice_theta_input", "about_dialog")]
+[node name="UI" type="Control" node_paths=PackedStringArray("side_bar", "save_button", "file_dialog", "remove_button", "background_color_input", "zoom_input", "position_x_input", "position_y_input", "slice_count_input", "slice_color_input", "slice_outline_width_input", "slice_outline_color_input", "slice_rotation_input", "slice_radius_input", "slice_theta_input", "about_dialog")]
 layout_mode = 3
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -15,9 +16,10 @@ offset_right = 256.0
 grow_vertical = 2
 script = ExtResource("1_nhcn2")
 ui_state = ExtResource("2_ot8s7")
-save_button = NodePath("Panel/MarginContainer/VBoxContainer/HBoxContainer/SaveButton")
+side_bar = NodePath("Panel")
+save_button = NodePath("")
 file_dialog = NodePath("FileDialog")
-remove_button = NodePath("Panel/MarginContainer/VBoxContainer/HBoxContainer2/RemoveButton")
+remove_button = NodePath("")
 background_color_input = NodePath("Panel/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/VBoxContainer/GridContainer/BackgroundColorPickerButton")
 zoom_input = NodePath("Panel/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/VBoxContainer/GridContainer/ZoomInputContainer/ZoomInput")
 position_x_input = NodePath("Panel/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/VBoxContainer/GridContainer/XContainer/XInput")
@@ -31,12 +33,19 @@ slice_radius_input = NodePath("Panel/MarginContainer/VBoxContainer/EditItemConta
 slice_theta_input = NodePath("Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/ThetaInput")
 about_dialog = NodePath("AboutDialog")
 
+[node name="MenuBar" parent="." node_paths=PackedStringArray("ui", "file_dialog", "about_dialog") instance=ExtResource("4_u137w")]
+layout_mode = 1
+ui = NodePath("..")
+ui_state = ExtResource("2_ot8s7")
+file_dialog = NodePath("../FileDialog")
+about_dialog = NodePath("../AboutDialog")
+
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 9
 anchor_bottom = 1.0
-grow_horizontal = 2
+offset_top = 32.0
+offset_right = 256.0
 grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel"]
@@ -51,41 +60,6 @@ theme = ExtResource("2_dusos")
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
 layout_mode = 2
 theme = SubResource("Theme_uuqi3")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="SaveButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Save"
-
-[node name="LoadButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Load"
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="AddButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Add"
-
-[node name="RemoveButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 3
-disabled = true
-text = "Remove"
-
-[node name="ClearButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-text = "Clear"
-
-[node name="Space2" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 10)
-layout_mode = 2
 
 [node name="EditDocumentLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -288,28 +262,6 @@ alignment = 2
 update_on_text_changed = true
 select_all_on_focus = true
 
-[node name="Space4" type="Control" parent="Panel/MarginContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 10)
-layout_mode = 2
-
-[node name="UndoContainer" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="UndoButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/UndoContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Undo"
-
-[node name="RedoButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/UndoContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Redo
-"
-
-[node name="AboutButton" type="Button" parent="Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-text = "About Symmetar"
-
 [node name="FileDialog" type="FileDialog" parent="."]
 position = Vector2i(300, 75)
 size = Vector2i(800, 520)
@@ -318,11 +270,6 @@ access = 2
 [node name="AboutDialog" parent="." instance=ExtResource("4_dj2o0")]
 visible = false
 
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer/SaveButton" to="." method="_on_save_button_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/AddButton" to="." method="_on_add_button_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/RemoveButton" to="." method="_on_remove_button_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/HBoxContainer2/ClearButton" to="." method="_on_clear_button_pressed"]
 [connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/VBoxContainer/GridContainer/ZoomInputContainer/ZoomInput" to="." method="_on_zoom_changed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/VBoxContainer/GridContainer/ZoomInputContainer/ResetZoomButton" to="." method="_on_reset_zoom_button_pressed"]
 [connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/VBoxContainer/GridContainer/PositionResetContainer/ResetPositionButton" to="." method="_on_reset_position_button_pressed"]
@@ -333,7 +280,4 @@ visible = false
 [connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/RotationInput" to="." method="_on_slice_rotation_changed"]
 [connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/RadiusInput" to="." method="_on_slice_radius_changed"]
 [connection signal="value_changed" from="Panel/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/ThetaInput" to="." method="_on_slice_theta_changed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/UndoContainer/UndoButton" to="." method="_on_undo_button_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/UndoContainer/RedoButton" to="." method="_on_redo_button_pressed"]
-[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/AboutButton" to="." method="_on_about_button_pressed"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_selected"]

@@ -4,6 +4,7 @@ extends Control
 # References
 @export var world : World
 @export var ui_state : UIState
+@export var side_bar : Panel
 @export var save_button : Button
 @export var file_dialog : FileDialog
 @export var remove_button : Button
@@ -57,30 +58,12 @@ func _input(event : InputEvent) -> void:
 	if event is InputEventKey and event.pressed:
 		event.command_or_control_autoremap = true
 
-		if event.alt_pressed:
-			if event.keycode == KEY_ENTER:
-				_toggle_full_screen()
-		elif event.ctrl_pressed:
-			if event.keycode == KEY_Z and not event.shift_pressed:
-				_on_undo_button_pressed()
-			elif event.keycode == KEY_Z and event.shift_pressed:
-				_on_redo_button_pressed()
-			elif event.keycode == KEY_S:
-				_on_save_button_pressed()
-			elif event.keycode == KEY_O:
-				_on_load_button_pressed()
-			elif event.keycode == KEY_X:
-				_on_clear_button_pressed()
-			elif event.keycode == KEY_N:
-				_on_add_button_pressed()
-			elif event.keycode == KEY_DELETE:
-				_on_remove_button_pressed()
-			elif event.keycode == KEY_UP:
+		if event.ctrl_pressed:
+			if event.keycode == KEY_UP:
 				slice_count_input.value += 1
 			elif event.keycode == KEY_DOWN:
 				slice_count_input.value -= 1
-		elif event.keycode == KEY_TAB:
-			_toggle_ui()
+
 
 func _update_save_button_text() -> void:
 	if ui_state.document_is_dirty:
