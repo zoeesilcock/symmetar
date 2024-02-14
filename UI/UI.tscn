@@ -1,14 +1,13 @@
-[gd_scene load_steps=7 format=3 uid="uid://cn6aov1t3u3y2"]
+[gd_scene load_steps=6 format=3 uid="uid://cn6aov1t3u3y2"]
 
 [ext_resource type="Script" path="res://UI/UI.gd" id="1_nhcn2"]
 [ext_resource type="Theme" uid="uid://hgjigpeoaius" path="res://UI/UITheme.tres" id="2_dusos"]
 [ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="2_ot8s7"]
 [ext_resource type="PackedScene" uid="uid://dcrg4argct36y" path="res://UI/AboutDialog.tscn" id="4_dj2o0"]
-[ext_resource type="PackedScene" uid="uid://dnn12yk63bxl0" path="res://UI/AppMenuBar.tscn" id="4_u137w"]
 
 [sub_resource type="Theme" id="Theme_uuqi3"]
 
-[node name="UI" type="Control" node_paths=PackedStringArray("menu_bar", "side_bar", "file_dialog", "background_color_input", "zoom_input", "position_x_input", "position_y_input", "slice_count_input", "slice_color_input", "slice_outline_width_input", "slice_outline_color_input", "slice_rotation_input", "slice_radius_input", "slice_theta_input", "about_dialog")]
+[node name="UI" type="Control" node_paths=PackedStringArray("side_bar", "file_dialog", "background_color_input", "zoom_input", "position_x_input", "position_y_input", "slice_count_input", "slice_color_input", "slice_outline_width_input", "slice_outline_color_input", "slice_rotation_input", "slice_radius_input", "slice_theta_input", "about_dialog")]
 layout_mode = 3
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -16,7 +15,6 @@ offset_right = 256.0
 grow_vertical = 2
 script = ExtResource("1_nhcn2")
 ui_state = ExtResource("2_ot8s7")
-menu_bar = NodePath("AppMenuBar")
 side_bar = NodePath("SideBar")
 file_dialog = NodePath("FileDialog")
 background_color_input = NodePath("SideBar/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/VBoxContainer/GridContainer/BackgroundColorPickerButton")
@@ -32,18 +30,10 @@ slice_radius_input = NodePath("SideBar/MarginContainer/VBoxContainer/EditItemCon
 slice_theta_input = NodePath("SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/ThetaInput")
 about_dialog = NodePath("AboutDialog")
 
-[node name="AppMenuBar" parent="." node_paths=PackedStringArray("ui", "file_dialog", "about_dialog") instance=ExtResource("4_u137w")]
-layout_mode = 1
-ui = NodePath("..")
-ui_state = ExtResource("2_ot8s7")
-file_dialog = NodePath("../FileDialog")
-about_dialog = NodePath("../AboutDialog")
-
 [node name="SideBar" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_top = 32.0
 offset_right = 256.0
 grow_vertical = 2
 

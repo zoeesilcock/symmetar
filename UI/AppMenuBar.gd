@@ -4,8 +4,6 @@ extends Panel
 # References
 @export var ui : UI
 @export var ui_state : UIState
-@export var file_dialog : FileDialog
-@export var about_dialog : AcceptDialog
 @export var file_menu : PopupMenu
 @export var edit_menu : PopupMenu
 @export var view_menu : PopupMenu
@@ -85,6 +83,7 @@ func _on_view_index_pressed(index : int) -> void:
 		VIEW_MENU.HIDE_UI:
 			ui._toggle_ui()
 			view_menu.set_item_checked(VIEW_MENU.HIDE_UI, !ui_state.ui_is_visible)
+			_update_hidden_state()
 		VIEW_MENU.FULL_SCREEN:
 			ui._toggle_full_screen()
 			view_menu.set_item_checked(VIEW_MENU.FULL_SCREEN, DisplayServer.window_get_mode() == DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN)
@@ -93,3 +92,9 @@ func _on_help_index_pressed(index : int) -> void:
 	match index:
 		HELP_MENU.ABOUT:
 			ui._on_about_button_pressed()
+
+func _update_hidden_state() -> void:
+	if ui_state.ui_is_visible:
+		custom_minimum_size.y = 32
+	else:
+		custom_minimum_size.y = 0
