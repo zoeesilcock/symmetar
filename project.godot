@@ -30,6 +30,10 @@ gdscript/warnings/inferred_declaration=1
 
 window/stretch/aspect="ignore"
 
+[gui]
+
+theme/custom="res://UI/UITheme.tres"
+
 [rendering]
 
 renderer/rendering_method="mobile"
