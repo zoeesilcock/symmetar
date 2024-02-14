@@ -4,10 +4,9 @@ extends Control
 # References
 @export var world : World
 @export var ui_state : UIState
+@export var menu_bar : AppMenuBar
 @export var side_bar : Panel
-@export var save_button : Button
 @export var file_dialog : FileDialog
-@export var remove_button : Button
 @export var background_color_input : ColorPickerButton
 @export var zoom_input : SpinBox
 @export var position_x_input : SpinBox
@@ -49,7 +48,6 @@ func _ready() -> void:
 
 	file_dialog.set_filters(PackedStringArray(["*.smtr ; Symmetar Files"]))
 
-	_update_save_button_text()
 	_update_window_title()
 
 	world.document.document_state_replaced.connect(_on_document_state_replaced)
@@ -64,13 +62,6 @@ func _input(event : InputEvent) -> void:
 			elif event.keycode == KEY_DOWN:
 				slice_count_input.value -= 1
 
-
-func _update_save_button_text() -> void:
-	if ui_state.document_is_dirty:
-		save_button.text = "Save (edited)"
-	else:
-		save_button.text = "Save"
-
 func _update_edit_form() -> void:
 	if current_element_state != null:
 		slice_count_input.set_value_no_signal(current_element_state.slice_count)
@@ -83,10 +74,8 @@ func _update_edit_form() -> void:
 
 func _update_window_title() -> void:
 	if ui_state.document_is_dirty:
-		save_button.text = "Save (edited)"
 		DisplayServer.window_set_title("Symmetar - " + ui_state.document_name + " (edited)")
 	else:
-		save_button.text = "Save"
 		DisplayServer.window_set_title("Symmetar - " + ui_state.document_name)
 	pass
 
@@ -110,7 +99,6 @@ func _on_document_state_replaced() -> void:
 	world.document.state.pan_position_changed.connect(_on_pan_position_state_changed)
 
 func _on_zoom_state_changed() -> void:
-	# TODO: Convert from scale to percentage here.
 	zoom_input.set_value_no_signal(world.document.state.zoom * 100.0)
 
 func _on_pan_position_state_changed() -> void:
@@ -134,13 +122,13 @@ func _on_selection_changed() -> void:
 			current_slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
 			current_slice_index = ui_state.selected_slice_index
 
-		remove_button.disabled = false
+		menu_bar.set_remove_enabled(true)
 	elif current_element_state != null:
 		current_element_state.slice_rotation_changed.disconnect(_on_slice_rotation_state_changed)
 		current_element_state = null
 		current_slice = null
 
-		remove_button.disabled = true
+		menu_bar.set_remove_enabled(false)
 
 	_update_edit_form()
 
@@ -159,7 +147,6 @@ func _on_background_color_state_changed() -> void:
 	background_color_input.color = world.document.state.background_color
 
 func _on_document_is_dirty_changed() -> void:
-	_update_save_button_text()
 	_update_window_title()
 #endregion
 

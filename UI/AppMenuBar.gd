@@ -1,3 +1,4 @@
+class_name AppMenuBar
 extends Panel
 
 # References
@@ -53,6 +54,9 @@ func _ready() -> void:
 
 	view_menu.set_item_accelerator(VIEW_MENU.HIDE_UI, modifier | KEY_U)
 	view_menu.set_item_accelerator(VIEW_MENU.FULL_SCREEN, modifier | KEY_F)
+
+func set_remove_enabled(enabled : bool) -> void:
+	edit_menu.set_item_disabled(EDIT_MENU.REMOVE, !enabled)
 
 func _on_file_index_pressed(index : int) -> void:
 	match index:

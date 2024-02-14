@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dnn12yk63bxl0"]
 
-[ext_resource type="Script" path="res://UI/MenuBar.gd" id="1_bhkmr"]
+[ext_resource type="Script" path="res://UI/AppMenuBar.gd" id="1_bhkmr"]
 
 [node name="MenuBar" type="Panel" node_paths=PackedStringArray("file_menu", "edit_menu", "view_menu", "help_menu")]
 anchors_preset = 10
