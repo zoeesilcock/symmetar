@@ -30,6 +30,10 @@ gdscript/warnings/inferred_declaration=1
 
 window/stretch/aspect="ignore"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/inspector_plugins/plugin.cfg")
+
 [gui]
 
 theme/custom="res://UI/UITheme.tres"
