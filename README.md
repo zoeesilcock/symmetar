@@ -39,6 +39,8 @@ Some general ideas that I hope to implement in the future.
 ### Math
 * https://en.wikipedia.org/wiki/Trigonometry
 * https://en.wikipedia.org/wiki/Geometry
+* https://en.wikipedia.org/wiki/Polygon
+* https://en.wikipedia.org/wiki/Icositetragon#Dissection
 * https://en.wikipedia.org/wiki/Platonic_solid
 
 ### Patterns

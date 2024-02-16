@@ -20,5 +20,6 @@ func _on_generate_circle_pressed(object : Polygon2D) -> void:
 	for i in point_count:
 		var theta : float = i * theta_increment
 		points.append(radius * Vector2.from_angle(theta))
+		# points.append(radius * Vector2.from_angle(theta - deg_to_rad(90))) # Useful for odd number of points.
 
 	object.polygon = points
