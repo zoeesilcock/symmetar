@@ -14,7 +14,7 @@ The top level which holds all state regarding the document and which is charge o
 An element represents a repeating shape and holds the settings for position, pivot, rotation and look. Elements are in charge of spawning slices based on the repeat settings. Currently the logic for generating symmetries lives here, but to support multiple symmetries we will likely break that out into it's own class.
 
 ### Slice
-A slice represents one repetition within an element. It holds no state of it's own, instead the state is calculated by its element. It's main purpose is to hold the visual representation and the UI widgets for moving, rotating and pivoting the slice.
+A slice represents one repetition within an element. It holds no state of it's own, instead the state is calculated by its element. It's main purpose is to hold the visual representation and the UI widgets for moving, rotating and pivoting the slice. A different name for this concept might be "permutation".
 
 ### Shape
 The visual representation of each individual slice. It is a separate scene so that we can implement multiple shapes or even use sprites in the future. Currently there is only one shape, a triangle.
@@ -36,13 +36,23 @@ Some general ideas that I hope to implement in the future.
 
 ## Reference
 
-### Art
-* https://en.wikipedia.org/wiki/Symmetry
-* https://en.wikipedia.org/wiki/Tessellation
-* https://en.wikipedia.org/wiki/Kaleidoscope
-* https://en.wikipedia.org/wiki/Fractal_art
-* https://en.wikipedia.org/wiki/Paisley_(design)
-
 ### Math
 * https://en.wikipedia.org/wiki/Trigonometry
 * https://en.wikipedia.org/wiki/Geometry
+* https://en.wikipedia.org/wiki/Platonic_solid
+
+### Patterns
+* https://en.wikipedia.org/wiki/Symmetry
+* https://en.wikipedia.org/wiki/Wallpaper_group
+* https://en.wikipedia.org/wiki/Dihedral_group
+* https://en.wikipedia.org/wiki/Tessellation
+* https://en.wikipedia.org/wiki/Aperiodic_tiling
+* https://en.wikipedia.org/wiki/Bravais_lattice
+* https://en.wikipedia.org/wiki/Overlapping_circles_grid
+
+### Art
+* https://en.wikipedia.org/wiki/Kaleidoscope
+* https://en.wikipedia.org/wiki/Fractal_art
+* https://en.wikipedia.org/wiki/Algorithmic_art
+* https://en.wikipedia.org/wiki/Paisley_(design)
+* https://en.wikipedia.org/wiki/Art_Nouveau
