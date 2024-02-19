@@ -4,6 +4,7 @@ extends Control
 # References
 @export var world : World
 @export var ui_state : UIState
+@export var shapes : Shapes
 @export var menu_bar : AppMenuBar
 @export var side_bar : Panel
 @export var file_dialog : FileDialog
@@ -12,6 +13,7 @@ extends Control
 @export var position_x_input : SpinBox
 @export var position_y_input : SpinBox
 @export var slice_count_input : SpinBox
+@export var slice_shape_input : OptionButton
 @export var slice_color_input : ColorPickerButton
 @export var slice_outline_width_input : SpinBox
 @export var slice_outline_color_input : ColorPickerButton
@@ -48,6 +50,7 @@ func _ready() -> void:
 
 	file_dialog.set_filters(PackedStringArray(["*.smtr ; Symmetar Files"]))
 
+	_build_shape_dropdown()
 	_update_window_title()
 
 	world.document.document_state_replaced.connect(_on_document_state_replaced)
@@ -71,6 +74,12 @@ func _update_edit_form() -> void:
 		slice_rotation_input.set_value_no_signal(rad_to_deg(current_slice.rotation))
 		slice_radius_input.set_value_no_signal(current_slice.get_radius())
 		slice_theta_input.set_value_no_signal(rad_to_deg(current_slice.get_theta()))
+
+func _build_shape_dropdown() -> void:
+	for shape_key : String in Shapes.ShapeIndex:
+		var shape_info : ShapeInfo = shapes.get_shape_info(Shapes.ShapeIndex[shape_key])
+		slice_shape_input.add_item(shape_info.name, shape_info.index)
+		slice_shape_input.set_item_icon(shape_info.index, shape_info.icon)
 
 func _update_window_title() -> void:
 	if ui_state.document_is_dirty:
@@ -168,8 +177,10 @@ func _on_load_button_pressed() -> void:
 	file_dialog.show()
 
 func _on_add_button_pressed() -> void:
+	var shape_info : ShapeInfo = shapes.get_shape_info(slice_shape_input.selected)
 	var element_state : ElementState = ElementState.new(
 		slice_count_input.value as int,
+		shape_info.index,
 		deg_to_rad(slice_rotation_input.value),
 		Vector2(200, 0),
 		slice_color_input.color,

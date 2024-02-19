@@ -10,6 +10,12 @@ extends Resource
 			slice_count = value
 			slice_count_changed.emit()
 
+@export var slice_shape : Shapes.ShapeIndex:
+	set(value):
+		if value != slice_shape:
+			slice_shape = value
+			slice_shape_changed.emit()
+
 @export var slice_rotation : float:
 	set(value):
 		if value != slice_rotation:
@@ -54,6 +60,7 @@ extends Resource
 
 # Signals
 signal slice_count_changed
+signal slice_shape_changed
 signal slice_rotation_changed
 signal slice_position_changed
 signal slice_scale_changed
@@ -65,6 +72,7 @@ signal slice_outline_color_changed
 static func empty() -> ElementState:
 	return ElementState.new(
 		1,
+		Shapes.ShapeIndex.TRIGON,
 		0.0,
 		Vector2(),
 		Color()
@@ -72,12 +80,14 @@ static func empty() -> ElementState:
 
 func _init(
 		p_slice_count : int = 8,
+		p_slice_shape : Shapes.ShapeIndex = Shapes.ShapeIndex.TRIGON,
 		p_slice_rotation : float = 0,
 		p_slice_position : Vector2 = Vector2(),
 		p_slice_color : Color = Color("#e85500"),
 		p_slice_outline_width : float = 2.0,
 		p_slice_outline_color : Color = ("#fff500")) -> void:
 	slice_count = p_slice_count
+	slice_shape = p_slice_shape
 	slice_rotation = p_slice_rotation
 	slice_position = p_slice_position
 	slice_color = p_slice_color
