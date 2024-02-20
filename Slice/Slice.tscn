@@ -3,23 +3,20 @@
 [ext_resource type="Script" path="res://Slice/Slice.gd" id="1_hloax"]
 [ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="2_gdm0n"]
 [ext_resource type="PackedScene" uid="uid://ct48hlkrr7nw6" path="res://Slice/SliceWidgets.tscn" id="3_703v2"]
+[ext_resource type="Resource" uid="uid://d10or7scc1hbo" path="res://Shapes/shapes.tres" id="3_dnku4"]
 [ext_resource type="Script" path="res://Slice/SliceOutline.gd" id="3_sfcn7"]
-[ext_resource type="PackedScene" uid="uid://dgxt5vjunaiov" path="res://Shapes/Trigon.tscn" id="3_xj2y7"]
 
-[node name="Slice" type="Node2D" node_paths=PackedStringArray("polygon", "outline", "slice_widgets", "debug_slice_index")]
+[node name="Slice" type="Node2D" node_paths=PackedStringArray("outline", "slice_widgets", "debug_slice_index")]
 script = ExtResource("1_hloax")
 ui_state = ExtResource("2_gdm0n")
-polygon = NodePath("Polygon2D")
+shapes = ExtResource("3_dnku4")
 outline = NodePath("SliceOutline")
 slice_widgets = NodePath("SliceWidgets")
 debug_slice_index = NodePath("Debug/SliceIndexLabel")
 highlight_brighten = 0.5
 
-[node name="Polygon2D" parent="." instance=ExtResource("3_xj2y7")]
-
-[node name="SliceOutline" type="Node2D" parent="." node_paths=PackedStringArray("polygon")]
+[node name="SliceOutline" type="Node2D" parent="."]
 script = ExtResource("3_sfcn7")
-polygon = NodePath("../Polygon2D")
 
 [node name="SliceWidgets" parent="." instance=ExtResource("3_703v2")]
 

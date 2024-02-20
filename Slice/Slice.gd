@@ -3,7 +3,7 @@ extends Node2D
 
 # References
 @export var ui_state : UIState
-@export var polygon : Polygon2D
+@export var shapes : Shapes
 @export var outline : SliceOutline
 @export var slice_widgets : SliceWidgets
 @export var debug_slice_index : Label
@@ -37,6 +37,7 @@ signal scaling_changed(index : int)
 signal scaling_ended(index : int)
 
 # Internal
+var polygon : Polygon2D # TODO: Rename to shape?
 var is_selected : bool
 var is_highlighted : bool
 var cursor_is_in_slice : bool
@@ -80,10 +81,12 @@ func init(
 		p_slice_position : Vector2,
 		p_slice_rotation : float,
 		p_slice_pivot : Vector2,
+		p_shape_index : Shapes.ShapeIndex,
 		p_slice_color : Color,
 		p_slice_outline_width : float,
 		p_slice_outline_color : Color) -> void:
 	name = "Slice" + str(p_slice_index)
+	set_shape(p_shape_index)
 	position = p_slice_position
 	rotation = p_slice_rotation
 	slice_pivot = p_slice_pivot
@@ -95,12 +98,12 @@ func init(
 	element_index = p_element_index
 	debug_slice_index.text = str(slice_index)
 
-func _ready() -> void:
-	viewport = get_viewport()
-
-	ui_state.selection_changed.connect(_on_selection_changed)
 	_connect_widget_signals()
 	_update_widget_positions()
+
+func _ready() -> void:
+	viewport = get_viewport()
+	ui_state.selection_changed.connect(_on_selection_changed)
 
 func _update_widget_positions() -> void:
 	slice_widgets.update_widget_positions(_get_rect())
@@ -119,6 +122,20 @@ func _connect_widget_signals() -> void:
 		scale_widget.drag_started.connect(Callable(_scaling_started).bind(scale_widget.direction))
 		scale_widget.drag_updated.connect(_scaling_updated)
 		scale_widget.drag_ended.connect(_scaling_ended)
+
+func set_shape(shape_index : Shapes.ShapeIndex) -> void:
+	if polygon != null:
+		remove_child(polygon)
+
+	var shape_info : ShapeInfo = shapes.get_shape_info(shape_index)
+	polygon = shape_info.scene.instantiate()
+	polygon.color = original_color
+
+	add_child(polygon)
+	move_child(polygon, 0)
+
+	outline.init(polygon)
+	_update_widget_positions()
 
 func set_color(color : Color) -> void:
 	original_color = color

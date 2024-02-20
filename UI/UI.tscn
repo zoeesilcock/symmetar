@@ -277,6 +277,7 @@ visible = false
 [connection signal="value_changed" from="SideBar/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/VBoxContainer/GridContainer/XContainer/XInput" to="." method="_on_position_x_changed"]
 [connection signal="value_changed" from="SideBar/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/VBoxContainer/GridContainer/YContainer/YInput" to="." method="_on_position_y_changed"]
 [connection signal="value_changed" from="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/CountInput" to="." method="_on_slice_count_changed"]
+[connection signal="item_selected" from="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/ShapeInput" to="." method="_on_slice_shape_changed"]
 [connection signal="value_changed" from="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/OutlineWidthInput" to="." method="_on_slice_outline_width_changed"]
 [connection signal="value_changed" from="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/RotationInput" to="." method="_on_slice_rotation_changed"]
 [connection signal="value_changed" from="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/RadiusInput" to="." method="_on_slice_radius_changed"]

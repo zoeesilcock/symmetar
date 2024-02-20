@@ -23,6 +23,7 @@ func init(p_state : ElementState) -> void:
 	state = p_state
 
 	state.slice_count_changed.connect(_on_slice_count_state_changed)
+	state.slice_shape_changed.connect(_on_slice_shape_state_changed)
 	state.slice_rotation_changed.connect(_on_slice_rotation_state_changed)
 	state.slice_position_changed.connect(_on_slice_position_state_changed)
 	state.slice_pivot_changed.connect(_on_slice_pivot_state_changed)
@@ -60,6 +61,10 @@ func _on_slice_count_state_changed() -> void:
 
 	_update_slice_positions()
 	_update_slice_rotations()
+
+func _on_slice_shape_state_changed() -> void:
+	for slice : Slice in slices:
+		slice.set_shape(state.slice_shape)
 
 func _on_slice_rotation_state_changed() -> void:
 	slices[0].rotation = state.slice_rotation
@@ -129,6 +134,7 @@ func _instantiate_slice(index : int) -> void:
 		state.slice_position,
 		state.slice_rotation,
 		state.slice_pivot,
+		state.slice_shape,
 		state.slice_color,
 		state.slice_outline_width,
 		state.slice_outline_color,

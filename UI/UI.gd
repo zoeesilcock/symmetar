@@ -68,6 +68,7 @@ func _input(event : InputEvent) -> void:
 func _update_edit_form() -> void:
 	if current_element_state != null:
 		slice_count_input.set_value_no_signal(current_element_state.slice_count)
+		slice_shape_input.select(current_element_state.slice_shape)
 		slice_color_input.color = current_element_state.slice_color
 		slice_outline_width_input.set_value_no_signal(current_element_state.slice_outline_width)
 		slice_outline_color_input.color = current_element_state.slice_outline_color
@@ -237,6 +238,14 @@ func _on_position_y_changed(value : float) -> void:
 func _on_reset_position_button_pressed() -> void:
 	world.document.state.pan_position = Vector2.ZERO
 	world.undo_manager.register_diff()
+
+func _on_slice_shape_changed(value : int) -> void:
+	if ui_state.selected_element_index >= 0:
+		var element_state : ElementState = world.document.get_element_state(ui_state.selected_element_index)
+		var slice_shape_changed : bool = element_state.slice_shape != value
+
+		if slice_shape_changed:
+			element_state.slice_shape = value as Shapes.ShapeIndex
 
 func _on_slice_color_changed(value : Color) -> void:
 	if ui_state.selected_element_index >= 0:
