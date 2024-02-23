@@ -57,6 +57,7 @@ func _spawn_lines() -> void:
 		line.end_cap_mode = Line2D.LINE_CAP_ROUND
 		line.width = width
 		line.default_color = color
+		line.antialiased = true
 
 		lines.push_back(line)
 		add_child(line)

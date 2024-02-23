@@ -24,6 +24,7 @@ metadata/_edit_use_anchors_ = true
 
 [node name="SubViewport" type="SubViewport" parent="."]
 handle_input_locally = false
+msaa_2d = 3
 size = Vector2i(1152, 648)
 render_target_update_mode = 4
 
