@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://b0xsay7lqoc07"]
+[gd_scene load_steps=9 format=3 uid="uid://b0xsay7lqoc07"]
 
 [ext_resource type="Script" path="res://World/World.gd" id="1_hfrd5"]
 [ext_resource type="Script" path="res://World/MainCamera.gd" id="2_af7f5"]
 [ext_resource type="Script" path="res://World/Background.gd" id="3_10f1g"]
 [ext_resource type="PackedScene" uid="uid://crwxcud4hr0rr" path="res://UndoManager/UndoManager.tscn" id="4_n6wyd"]
 [ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="4_r6cmr"]
+[ext_resource type="Script" path="res://World/CenterMarker.gd" id="5_fkgaj"]
 [ext_resource type="PackedScene" uid="uid://bkihrohu0hh6e" path="res://Document/Document.tscn" id="5_uwskq"]
 
 [sub_resource type="Environment" id="Environment_4ruug"]
@@ -52,6 +53,8 @@ main_camera = NodePath("..")
 [node name="Center" type="Polygon2D" parent="SubViewport"]
 color = Color(1, 1, 0, 1)
 polygon = PackedVector2Array(-2, -8, 2, -8, 2, -2, 8, -2, 8, 2, 2, 2, 2, 8, -2, 8, -2, 2, -8, 2, -8, -2, -2, -2)
+script = ExtResource("5_fkgaj")
+ui_state = ExtResource("4_r6cmr")
 
 [node name="UndoManager" parent="SubViewport" node_paths=PackedStringArray("document") instance=ExtResource("4_n6wyd")]
 document = NodePath("../Document")

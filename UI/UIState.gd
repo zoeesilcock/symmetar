@@ -3,7 +3,12 @@ extends Resource
 
 # Data
 @export var main_window_scale : float
-@export var ui_is_visible : bool
+@export var ui_is_visible : bool:
+	set(value):
+		if value != ui_is_visible:
+			ui_is_visible = value
+			ui_is_visible_changed.emit()
+
 @export var any_slice_is_dragging : bool
 @export var any_slice_is_rotating : bool
 @export var any_slice_is_pivoting : bool
@@ -34,6 +39,7 @@ extends Resource
 # Signals
 signal selection_changed
 signal document_is_dirty_changed
+signal ui_is_visible_changed
 
 func init() -> void:
 	ui_is_visible = true
