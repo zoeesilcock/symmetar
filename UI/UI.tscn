@@ -248,6 +248,7 @@ text = "Radius:"
 layout_mode = 2
 max_value = 10000.0
 step = 0.1
+value = 200.0
 alignment = 2
 update_on_text_changed = true
 select_all_on_focus = true
