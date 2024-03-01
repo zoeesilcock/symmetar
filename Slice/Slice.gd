@@ -155,6 +155,11 @@ func update_outline_position() -> void:
 func update_outline_scale() -> void:
 	outline.update_scale()
 
+func set_slice_scale(value : Vector2) -> void:
+	slice_scale = value
+	scaling_changed.emit(slice_index)
+	scaling_ended.emit(slice_index)
+
 func set_slice_rotation(value : float) -> void:
 	rotation = value
 	rotation_changed.emit(slice_index)

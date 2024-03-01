@@ -17,6 +17,8 @@ extends Control
 @export var slice_color_input : ColorPickerButton
 @export var slice_outline_width_input : SpinBox
 @export var slice_outline_color_input : ColorPickerButton
+@export var slice_scale_x_input : SpinBox
+@export var slice_scale_y_input : SpinBox
 @export var slice_rotation_input : SpinBox
 @export var slice_radius_input : SpinBox
 @export var slice_theta_input : SpinBox
@@ -72,6 +74,8 @@ func _update_edit_form() -> void:
 		slice_color_input.color = current_element_state.slice_color
 		slice_outline_width_input.set_value_no_signal(current_element_state.slice_outline_width)
 		slice_outline_color_input.color = current_element_state.slice_outline_color
+		slice_scale_x_input.set_value_no_signal(current_slice.slice_scale.x * 100.0)
+		slice_scale_y_input.set_value_no_signal(current_slice.slice_scale.y * 100.0)
 		slice_rotation_input.set_value_no_signal(rad_to_deg(current_slice.rotation))
 		slice_radius_input.set_value_no_signal(current_slice.get_radius())
 		slice_theta_input.set_value_no_signal(rad_to_deg(current_slice.get_theta()))
@@ -123,6 +127,9 @@ func _on_selection_changed() -> void:
 			current_slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
 			current_slice_index = ui_state.selected_slice_index
 
+			if !current_element_state.slice_scale_changed.is_connected(_on_slice_scale_state_changed):
+				current_element_state.slice_scale_changed.connect(_on_slice_scale_state_changed)
+
 			if !current_element_state.slice_rotation_changed.is_connected(_on_slice_rotation_state_changed):
 				current_element_state.slice_rotation_changed.connect(_on_slice_rotation_state_changed)
 
@@ -134,6 +141,7 @@ func _on_selection_changed() -> void:
 
 		menu_bar.set_remove_enabled(true)
 	elif current_element_state != null:
+		current_element_state.slice_scale_changed.disconnect(_on_slice_scale_state_changed)
 		current_element_state.slice_rotation_changed.disconnect(_on_slice_rotation_state_changed)
 		current_element_state = null
 		current_slice = null
@@ -147,6 +155,12 @@ func _on_slice_position_state_changed() -> void:
 		var slice : Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
 		slice_radius_input.set_value_no_signal(slice.get_radius())
 		slice_theta_input.set_value_no_signal(rad_to_deg(slice.get_theta()))
+
+func _on_slice_scale_state_changed() -> void:
+	if ui_state.selected_element_index >= 0:
+		var slice : Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+		slice_scale_x_input.set_value_no_signal(slice.slice_scale.x * 100.0)
+		slice_scale_y_input.set_value_no_signal(slice.slice_scale.y * 100.0)
 
 func _on_slice_rotation_state_changed() -> void:
 	if ui_state.selected_element_index >= 0:
@@ -182,6 +196,7 @@ func _on_add_button_pressed() -> void:
 	var element_state : ElementState = ElementState.new(
 		slice_count_input.value as int,
 		shape_info.index,
+		Vector2(slice_scale_x_input.value / 100.0, slice_scale_y_input.value / 100.0),
 		deg_to_rad(slice_rotation_input.value),
 		Vector2(slice_radius_input.value, 0),
 		slice_color_input.color,
@@ -283,6 +298,21 @@ func _on_slice_outline_color_picker_visibility_changed() -> void:
 
 	if ui_state.selected_element_index >= 0:
 		world.undo_manager.register_diff()
+
+func _on_slice_scale_x_changed(value : float) -> void:
+	if ui_state.selected_element_index >= 0:
+		var slice : Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+		slice.set_slice_scale(Vector2(value / 100.0, slice.slice_scale.y))
+
+func _on_slice_scale_y_changed(value : float) -> void:
+	if ui_state.selected_element_index >= 0:
+		var slice : Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+		slice.set_slice_scale(Vector2(slice.slice_scale.x, value / 100.0))
+
+func _on_reset_slice_scale_button_pressed() -> void:
+	if ui_state.selected_element_index >= 0:
+		var slice : Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+		slice.set_slice_scale(Vector2.ONE)
 
 func _on_slice_rotation_changed(value : float) -> void:
 	if ui_state.selected_element_index >= 0:

@@ -8,7 +8,7 @@
 
 [sub_resource type="Theme" id="Theme_uuqi3"]
 
-[node name="UI" type="Control" node_paths=PackedStringArray("side_bar", "file_dialog", "background_color_input", "zoom_input", "position_x_input", "position_y_input", "slice_count_input", "slice_shape_input", "slice_color_input", "slice_outline_width_input", "slice_outline_color_input", "slice_rotation_input", "slice_radius_input", "slice_theta_input", "about_dialog")]
+[node name="UI" type="Control" node_paths=PackedStringArray("side_bar", "file_dialog", "background_color_input", "zoom_input", "position_x_input", "position_y_input", "slice_count_input", "slice_shape_input", "slice_color_input", "slice_outline_width_input", "slice_outline_color_input", "slice_scale_x_input", "slice_scale_y_input", "slice_rotation_input", "slice_radius_input", "slice_theta_input", "about_dialog")]
 layout_mode = 3
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -28,6 +28,8 @@ slice_shape_input = NodePath("SideBar/MarginContainer/VBoxContainer/EditItemCont
 slice_color_input = NodePath("SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/ColorPickerButton")
 slice_outline_width_input = NodePath("SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/OutlineWidthInput")
 slice_outline_color_input = NodePath("SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/OutlineColorPickerButton")
+slice_scale_x_input = NodePath("SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/XContainer/XInput")
+slice_scale_y_input = NodePath("SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/YContainer/YInput")
 slice_rotation_input = NodePath("SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/RotationInput")
 slice_radius_input = NodePath("SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/RadiusInput")
 slice_theta_input = NodePath("SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/ThetaInput")
@@ -227,6 +229,56 @@ layout_mode = 2
 focus_mode = 0
 color = Color(1, 0.960784, 0, 1)
 
+[node name="ScaleLabel" type="Label" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+text = "Scale:"
+
+[node name="ScaleResetContainer" type="HBoxContainer" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+
+[node name="Space" type="Control" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/ScaleResetContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ResetScaleButton" type="Button" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/ScaleResetContainer"]
+layout_mode = 2
+text = "R"
+
+[node name="XContainer" type="HBoxContainer" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+
+[node name="XLabel" type="Label" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/XContainer"]
+layout_mode = 2
+text = "X:"
+
+[node name="XInput" type="SpinBox" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/XContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 10000.0
+value = 100.0
+alignment = 2
+update_on_text_changed = true
+select_all_on_focus = true
+
+[node name="YContainer" type="HBoxContainer" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="YLabel" type="Label" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/YContainer"]
+layout_mode = 2
+text = "Y:"
+
+[node name="YInput" type="SpinBox" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/YContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 10000.0
+value = 100.0
+alignment = 2
+update_on_text_changed = true
+select_all_on_focus = true
+
 [node name="RotationLabel" type="Label" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -281,6 +333,9 @@ visible = false
 [connection signal="value_changed" from="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/CountInput" to="." method="_on_slice_count_changed"]
 [connection signal="item_selected" from="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/ShapeInput" to="." method="_on_slice_shape_changed"]
 [connection signal="value_changed" from="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/OutlineWidthInput" to="." method="_on_slice_outline_width_changed"]
+[connection signal="pressed" from="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/ScaleResetContainer/ResetScaleButton" to="." method="_on_reset_slice_scale_button_pressed"]
+[connection signal="value_changed" from="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/XContainer/XInput" to="." method="_on_slice_scale_x_changed"]
+[connection signal="value_changed" from="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/YContainer/YInput" to="." method="_on_slice_scale_y_changed"]
 [connection signal="value_changed" from="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/RotationInput" to="." method="_on_slice_rotation_changed"]
 [connection signal="value_changed" from="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/RadiusInput" to="." method="_on_slice_radius_changed"]
 [connection signal="value_changed" from="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/ThetaInput" to="." method="_on_slice_theta_changed"]

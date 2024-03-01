@@ -73,6 +73,7 @@ static func empty() -> ElementState:
 	return ElementState.new(
 		1,
 		Shapes.ShapeIndex.TRIGON,
+		Vector2.ONE,
 		0.0,
 		Vector2(),
 		Color()
@@ -81,6 +82,7 @@ static func empty() -> ElementState:
 func _init(
 		p_slice_count : int = 8,
 		p_slice_shape : Shapes.ShapeIndex = Shapes.ShapeIndex.TRIGON,
+		p_slice_scale : Vector2 = Vector2.ONE,
 		p_slice_rotation : float = 0,
 		p_slice_position : Vector2 = Vector2(),
 		p_slice_color : Color = Color("#e85500"),
@@ -88,6 +90,7 @@ func _init(
 		p_slice_outline_color : Color = ("#fff500")) -> void:
 	slice_count = p_slice_count
 	slice_shape = p_slice_shape
+	slice_scale = p_slice_scale
 	slice_rotation = p_slice_rotation
 	slice_position = p_slice_position
 	slice_color = p_slice_color
