@@ -14,6 +14,7 @@ file_menu = NodePath("MenuBar/File")
 edit_menu = NodePath("MenuBar/Edit")
 view_menu = NodePath("MenuBar/View")
 help_menu = NodePath("MenuBar/Help")
+menu_height = 32
 
 [node name="MenuBar" type="MenuBar" parent="."]
 layout_mode = 0

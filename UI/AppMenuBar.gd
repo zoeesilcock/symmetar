@@ -9,6 +9,9 @@ extends Panel
 @export var view_menu : PopupMenu
 @export var help_menu : PopupMenu
 
+# Settings
+@export var menu_height : int
+
 enum FILE_MENU {
 	OPEN,
 	SAVE,
@@ -95,6 +98,6 @@ func _on_help_index_pressed(index : int) -> void:
 
 func _update_hidden_state() -> void:
 	if ui_state.ui_is_visible:
-		custom_minimum_size.y = 32
+		custom_minimum_size.y = menu_height
 	else:
 		custom_minimum_size.y = 0
