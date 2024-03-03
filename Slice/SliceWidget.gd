@@ -21,7 +21,7 @@ func _ready() -> void:
 	viewport = get_viewport()
 
 func update_position(rect : Rect2) -> void:
-	position = rect.position + relative_position * rect.size
+	position = rect.get_center() + relative_position * rect.size
 
 func _unhandled_input(event : InputEvent) -> void:
 	if event is InputEventMouse:

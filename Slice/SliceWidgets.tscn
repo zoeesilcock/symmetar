@@ -14,42 +14,43 @@ scale_widgets = [NodePath("ScaleLeft"), NodePath("ScaleTop"), NodePath("ScaleRig
 
 [node name="RotationTopLeft" parent="." instance=ExtResource("2_tcrgx")]
 position = Vector2(-50, -50)
+relative_position = Vector2(-0.5, -0.5)
 
 [node name="RotationTopRight" parent="." instance=ExtResource("2_tcrgx")]
 position = Vector2(50, -50)
 rotation = 1.5708
-relative_position = Vector2(1, 0)
+relative_position = Vector2(0.5, -0.5)
 
 [node name="RotationBottomLeft" parent="." instance=ExtResource("2_tcrgx")]
 position = Vector2(-50, 50)
 rotation = -1.5708
-relative_position = Vector2(0, 1)
+relative_position = Vector2(-0.5, 0.5)
 
 [node name="RotationBottomRight" parent="." instance=ExtResource("2_tcrgx")]
 position = Vector2(50, 50)
 rotation = 3.14159
-relative_position = Vector2(1, 1)
+relative_position = Vector2(0.5, 0.5)
 
 [node name="ScaleLeft" parent="." instance=ExtResource("3_usw6y")]
 position = Vector2(-50, 0)
-relative_position = Vector2(0, 0.5)
+relative_position = Vector2(-0.5, 0)
 direction = Vector2(-1, 0)
 
 [node name="ScaleTop" parent="." instance=ExtResource("3_usw6y")]
 position = Vector2(0, -50)
 rotation = 1.5708
-relative_position = Vector2(0.5, 0)
+relative_position = Vector2(0, -0.5)
 direction = Vector2(0, -1)
 
 [node name="ScaleRight" parent="." instance=ExtResource("3_usw6y")]
 position = Vector2(50, 0)
-relative_position = Vector2(1, 0.5)
+relative_position = Vector2(0.5, 0)
 direction = Vector2(1, 0)
 
 [node name="ScaleBottom" parent="." instance=ExtResource("3_usw6y")]
 position = Vector2(0, 50)
 rotation = 1.5708
-relative_position = Vector2(0.5, 1)
+relative_position = Vector2(0, 0.5)
 direction = Vector2(0, 1)
 
 [node name="Pivot" parent="." instance=ExtResource("2_ds0wl")]
