@@ -23,7 +23,7 @@ func _ready() -> void:
 func update_position(rect : Rect2) -> void:
 	position = rect.get_center() + relative_position * rect.size
 
-func _unhandled_input(event : InputEvent) -> void:
+func _input(event : InputEvent) -> void:
 	if event is InputEventMouse:
 		var world_position : Vector2 = _get_world_position(event.position)
 		var cursor_in_selection : bool = _is_in_selection(world_position - global_position)
@@ -33,6 +33,7 @@ func _unhandled_input(event : InputEvent) -> void:
 				viewport.set_input_as_handled()
 				_start_dragging(event, world_position)
 			elif not event.pressed and is_dragging:
+				viewport.set_input_as_handled()
 				_end_dragging(event, world_position)
 
 		if event is InputEventMouseMotion:

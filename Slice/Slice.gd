@@ -54,9 +54,16 @@ var this_slice_is_busy : bool:
 
 var is_dragging : bool
 var dragging_start_theta : float
+var dragging_start_position : Vector2
 var drag_offset : Vector2
+var dragging_changed_position : bool:
+	get:
+		return (
+			is_dragging and
+			position != dragging_start_position
+		)
 
-var is_pivoting	: bool
+var is_pivoting : bool
 var pivot_start : Vector2
 
 var is_rotating : bool
@@ -181,24 +188,23 @@ func set_theta(theta : float) -> void:
 	position = radius * Vector2.from_angle(theta)
 	position_changed.emit(slice_index)
 
-func _unhandled_input(event : InputEvent) -> void:
+func _get_world_position(event_position: Vector2) -> Vector2:
+	return get_canvas_transform().affine_inverse() * event_position
+
+func _input(event: InputEvent) -> void:
 	if event is InputEventMouse:
 		_handle_mouse_input(event)
 
 	if event is InputEventKey and event.keycode == KEY_SHIFT:
 		_handle_shift_key(event)
 
-func _get_world_position(event_position : Vector2) -> Vector2:
-	return get_canvas_transform().affine_inverse() * event_position
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouse:
+		_handle_low_priority_mouse_input(event)
 
-func _handle_mouse_input(event : InputEventMouse) -> void:
-	var world_position : Vector2 = _get_world_position(event.position)
+func _handle_mouse_input(event: InputEventMouse) -> void:
+	var world_position: Vector2 = _get_world_position(event.position)
 	cursor_is_in_slice = _is_point_in_slice(world_position - position)
-
-	if is_highlighted and not cursor_is_in_slice:
-		_hide_highlight()
-	elif not is_highlighted and cursor_is_in_slice:
-		_show_highlight()
 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		_handle_mouse_button(event, world_position)
@@ -206,15 +212,19 @@ func _handle_mouse_input(event : InputEventMouse) -> void:
 	if event is InputEventMouseMotion:
 		_handle_mouse_motion(event, world_position)
 
-func _handle_mouse_button(event : InputEventMouseButton, world_position : Vector2) -> void:
-	if event.pressed and not ui_state.any_slice_is_busy and cursor_is_in_slice:
+func _handle_mouse_button(event: InputEventMouseButton, world_position: Vector2) -> void:
+	if is_selected and event.pressed and not ui_state.any_slice_is_busy and cursor_is_in_slice:
 		viewport.set_input_as_handled()
 		_start_dragging(world_position)
 	elif not event.pressed and is_dragging:
-		viewport.set_input_as_handled()
+		if dragging_changed_position:
+			viewport.set_input_as_handled()
 		_end_dragging()
+	elif not event.pressed and is_highlighted and not is_selected and cursor_is_in_slice and not ui_state.any_slice_is_busy:
+		viewport.set_input_as_handled()
+		selected.emit(slice_index)
 
-func _handle_mouse_motion(event : InputEventMouseMotion, world_position : Vector2) -> void:
+func _handle_mouse_motion(event: InputEventMouseMotion, world_position: Vector2) -> void:
 	if is_selected and is_dragging:
 		viewport.set_input_as_handled()
 		_update_dragging(event, world_position)
@@ -222,7 +232,7 @@ func _handle_mouse_motion(event : InputEventMouseMotion, world_position : Vector
 		if not slice_widgets.visible:
 			_show_selection()
 
-func _handle_shift_key(event : InputEventKey) -> void:
+func _handle_shift_key(event: InputEventKey) -> void:
 	if not shift_is_held and event.pressed:
 		shift_is_held = true
 
@@ -234,11 +244,44 @@ func _handle_shift_key(event : InputEventKey) -> void:
 		if is_scaling:
 			_repeat_last_scaling()
 
+func _handle_low_priority_mouse_input(event: InputEventMouse) -> void:
+	var world_position: Vector2 = _get_world_position(event.position)
+	cursor_is_in_slice = _is_point_in_slice(world_position - position)
+
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		_handle_low_priority_mouse_button(event, world_position)
+
+	if event is InputEventMouseMotion:
+		_handle_low_priority_mouse_motion(event)
+
+func _handle_low_priority_mouse_button(event: InputEventMouseButton, world_position: Vector2) -> void:
+	if not ui_state.any_slice_is_busy and cursor_is_in_slice:
+		if event.pressed:
+			viewport.set_input_as_handled()
+			_start_dragging(world_position)
+		else:
+			if is_highlighted and not is_selected:
+				viewport.set_input_as_handled()
+				selected.emit(slice_index)
+			elif not is_selected:
+				viewport.set_input_as_handled()
+				selected.emit(slice_index)
+
+func _handle_low_priority_mouse_motion(_event: InputEventMouseMotion) -> void:
+	if is_highlighted and not cursor_is_in_slice:
+		_hide_highlight()
+	elif not is_highlighted and cursor_is_in_slice:
+		_show_highlight()
+
 func _show_selection() -> void:
 	slice_widgets.show_widgets()
+	polygon.z_index = 1
+	outline.z_index = 1
 
 func _hide_selection() -> void:
 	slice_widgets.hide_widgets()
+	polygon.z_index = 0
+	outline.z_index = 0
 
 func _show_highlight() -> void:
 	if this_slice_is_busy or not ui_state.any_slice_is_busy and not ui_state.any_slice_is_highlighted:
@@ -261,6 +304,7 @@ func _start_dragging(world_position : Vector2) -> void:
 	selected.emit(slice_index)
 
 	dragging_start_theta = atan2(position.y, position.x)
+	dragging_start_position = position
 
 	drag_offset = world_position - position
 	ui_state.any_slice_is_dragging = true

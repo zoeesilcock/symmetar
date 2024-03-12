@@ -27,10 +27,10 @@ func hide_widgets() -> void:
 	_set_process_input(false)
 
 func _set_process_input(enable : bool) -> void:
-	pivot_widget.set_process_unhandled_input(enable)
+	pivot_widget.set_process_input(enable)
 
 	for rotation_widget : SliceWidget in rotation_widgets:
-		rotation_widget.set_process_unhandled_input(enable)
+		rotation_widget.set_process_input(enable)
 
 	for scale_widget : SliceWidget in scale_widgets:
-		scale_widget.set_process_unhandled_input(enable)
+		scale_widget.set_process_input(enable)
