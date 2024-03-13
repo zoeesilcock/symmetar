@@ -324,7 +324,9 @@ func _end_dragging() -> void:
 	ui_state.any_slice_is_dragging = false
 	is_dragging = false
 	_hide_highlight()
-	dragging_ended.emit(slice_index)
+
+	if dragging_changed_position:
+		dragging_ended.emit(slice_index)
 
 func _rotation_started(_event: InputEvent, world_position: Vector2) -> void:
 	var relative_mouse_position: Vector2 = world_position - position
