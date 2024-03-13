@@ -2,20 +2,20 @@ class_name UIState
 extends Resource
 
 # Data
-@export var main_window_scale : float
-@export var ui_is_visible : bool:
+@export var main_window_scale: float
+@export var ui_is_visible: bool:
 	set(value):
 		if value != ui_is_visible:
 			ui_is_visible = value
 			ui_is_visible_changed.emit()
 
-@export var any_slice_is_dragging : bool
-@export var any_slice_is_rotating : bool
-@export var any_slice_is_pivoting : bool
-@export var any_slice_is_scaling : bool
-@export var any_slice_is_highlighted : bool
+@export var any_slice_is_dragging: bool
+@export var any_slice_is_rotating: bool
+@export var any_slice_is_pivoting: bool
+@export var any_slice_is_scaling: bool
+@export var any_slice_is_highlighted: bool
 
-@export var any_slice_is_busy : bool:
+@export var any_slice_is_busy: bool:
 	get:
 		return (
 			any_slice_is_dragging or
@@ -24,13 +24,13 @@ extends Resource
 			any_slice_is_scaling
 		)
 
-@export var selected_element_index : int
-@export var selected_slice_index : int
-@export var background_color_picker_visible : bool
-@export var slice_color_picker_visible : bool
-@export var slice_outline_color_picker_visible : bool
-@export var document_name : String
-@export var document_is_dirty : bool:
+@export var selected_element_index: int
+@export var selected_slice_index: int
+@export var background_color_picker_visible: bool
+@export var slice_color_picker_visible: bool
+@export var slice_outline_color_picker_visible: bool
+@export var document_name: String
+@export var document_is_dirty: bool:
 	set(value):
 		if value != document_is_dirty:
 			document_is_dirty = value
@@ -48,7 +48,7 @@ func init() -> void:
 	selected_slice_index = -1
 	document_name = "Untitled.smtr"
 
-func set_selection(element_index : int, slice_index : int) -> void:
+func set_selection(element_index: int, slice_index: int) -> void:
 	selected_element_index = element_index
 	selected_slice_index = slice_index
 	selection_changed.emit()

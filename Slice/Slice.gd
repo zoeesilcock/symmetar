@@ -2,23 +2,23 @@ class_name Slice
 extends Node2D
 
 # References
-@export var ui_state : UIState
-@export var shapes : Shapes
-@export var outline : SliceOutline
-@export var slice_widgets : SliceWidgets
-@export var debug_slice_index : Label
+@export var ui_state: UIState
+@export var shapes: Shapes
+@export var outline: SliceOutline
+@export var slice_widgets: SliceWidgets
+@export var debug_slice_index: Label
 
 # Settings
-@export var highlight_brighten : float
-@export var element_index : int
-@export var slice_index : int
-@export var slice_pivot : Vector2:
+@export var highlight_brighten: float
+@export var element_index: int
+@export var slice_index: int
+@export var slice_pivot: Vector2:
 	get:
 		return polygon.position
 	set(value):
 		polygon.position = value
 		_update_widget_positions()
-@export var slice_scale : Vector2:
+@export var slice_scale: Vector2:
 	get:
 		return polygon.scale
 	set(value):
@@ -26,24 +26,24 @@ extends Node2D
 		_update_widget_positions()
 
 # Signals
-signal selected(index : int)
-signal position_changed(index : int)
-signal dragging_ended(index : int)
-signal rotation_changed(index : int)
-signal rotating_ended(index : int)
-signal pivot_changed(index : int)
-signal pivot_ended(index : int)
-signal scaling_changed(index : int)
-signal scaling_ended(index : int)
+signal selected(index: int)
+signal position_changed(index: int)
+signal dragging_ended(index: int)
+signal rotation_changed(index: int)
+signal rotating_ended(index: int)
+signal pivot_changed(index: int)
+signal pivot_ended(index: int)
+signal scaling_changed(index: int)
+signal scaling_ended(index: int)
 
 # Internal
-var polygon : Polygon2D # TODO: Rename to shape?
-var is_selected : bool
-var is_highlighted : bool
-var cursor_is_in_slice : bool
-var shift_is_held : bool
+var polygon: Polygon2D # TODO: Rename to shape?
+var is_selected: bool
+var is_highlighted: bool
+var cursor_is_in_slice: bool
+var shift_is_held: bool
 
-var this_slice_is_busy : bool:
+var this_slice_is_busy: bool:
 	get:
 		return (
 			is_dragging or
@@ -52,46 +52,46 @@ var this_slice_is_busy : bool:
 			is_scaling
 		)
 
-var is_dragging : bool
-var dragging_start_theta : float
-var dragging_start_position : Vector2
-var drag_offset : Vector2
-var dragging_changed_position : bool:
+var is_dragging: bool
+var dragging_start_theta: float
+var dragging_start_position: Vector2
+var drag_offset: Vector2
+var dragging_changed_position: bool:
 	get:
 		return (
 			is_dragging and
 			position != dragging_start_position
 		)
 
-var is_pivoting : bool
-var pivot_start : Vector2
+var is_pivoting: bool
+var pivot_start: Vector2
 
-var is_rotating : bool
-var initial_theta : float
-var initial_rotation : float
+var is_rotating: bool
+var initial_theta: float
+var initial_rotation: float
 
-var is_scaling : bool
-var scaling_direction : Vector2
-var scaling_start_position : Vector2
-var initial_scale : Vector2
-var initial_posisition : Vector2
-var initial_size : Vector2
-var last_scaling_world_position : Vector2
+var is_scaling: bool
+var scaling_direction: Vector2
+var scaling_start_position: Vector2
+var initial_scale: Vector2
+var initial_posisition: Vector2
+var initial_size: Vector2
+var last_scaling_world_position: Vector2
 
-var original_color : Color
-var highlighted_color : Color
-var viewport : Viewport
+var original_color: Color
+var highlighted_color: Color
+var viewport: Viewport
 
 func init(
-		p_element_index : int,
-		p_slice_index : int,
-		p_slice_position : Vector2,
-		p_slice_rotation : float,
-		p_slice_pivot : Vector2,
-		p_shape_index : Shapes.ShapeIndex,
-		p_slice_color : Color,
-		p_slice_outline_width : float,
-		p_slice_outline_color : Color) -> void:
+		p_element_index: int,
+		p_slice_index: int,
+		p_slice_position: Vector2,
+		p_slice_rotation: float,
+		p_slice_pivot: Vector2,
+		p_shape_index: Shapes.ShapeIndex,
+		p_slice_color: Color,
+		p_slice_outline_width: float,
+		p_slice_outline_color: Color) -> void:
 	name = "Slice" + str(p_slice_index)
 	set_shape(p_shape_index)
 	position = p_slice_position
@@ -120,21 +120,21 @@ func _connect_widget_signals() -> void:
 	slice_widgets.pivot_widget.drag_updated.connect(_pivot_updated)
 	slice_widgets.pivot_widget.drag_ended.connect(_pivot_ended)
 
-	for rotation_widget : SliceWidget in slice_widgets.rotation_widgets:
+	for rotation_widget: SliceWidget in slice_widgets.rotation_widgets:
 		rotation_widget.drag_started.connect(_rotation_started)
 		rotation_widget.drag_updated.connect(_rotation_updated)
 		rotation_widget.drag_ended.connect(_rotation_ended)
 
-	for scale_widget : SliceWidget in slice_widgets.scale_widgets:
+	for scale_widget: SliceWidget in slice_widgets.scale_widgets:
 		scale_widget.drag_started.connect(Callable(_scaling_started).bind(scale_widget.direction))
 		scale_widget.drag_updated.connect(_scaling_updated)
 		scale_widget.drag_ended.connect(_scaling_ended)
 
-func set_shape(shape_index : Shapes.ShapeIndex) -> void:
+func set_shape(shape_index: Shapes.ShapeIndex) -> void:
 	if polygon != null:
 		remove_child(polygon)
 
-	var shape_info : ShapeInfo = shapes.get_shape_info(shape_index)
+	var shape_info: ShapeInfo = shapes.get_shape_info(shape_index)
 	polygon = shape_info.scene.instantiate()
 	polygon.color = original_color
 
@@ -144,16 +144,16 @@ func set_shape(shape_index : Shapes.ShapeIndex) -> void:
 	outline.init(polygon)
 	_update_widget_positions()
 
-func set_color(color : Color) -> void:
+func set_color(color: Color) -> void:
 	original_color = color
 	polygon.color = color
 	highlighted_color = color
 	highlighted_color.v += highlight_brighten
 
-func set_outline_width(width : float) -> void:
+func set_outline_width(width: float) -> void:
 	outline.set_width(width)
 
-func set_outline_color(color : Color) -> void:
+func set_outline_color(color: Color) -> void:
 	outline.set_color(color)
 
 func update_outline_position() -> void:
@@ -162,12 +162,12 @@ func update_outline_position() -> void:
 func update_outline_scale() -> void:
 	outline.update_scale()
 
-func set_slice_scale(value : Vector2) -> void:
+func set_slice_scale(value: Vector2) -> void:
 	slice_scale = value
 	scaling_changed.emit(slice_index)
 	scaling_ended.emit(slice_index)
 
-func set_slice_rotation(value : float) -> void:
+func set_slice_rotation(value: float) -> void:
 	rotation = value
 	rotation_changed.emit(slice_index)
 	rotating_ended.emit(slice_index)
@@ -175,16 +175,16 @@ func set_slice_rotation(value : float) -> void:
 func get_radius() -> float:
 	return position.distance_to(Vector2.ZERO)
 
-func set_radius(radius : float) -> void:
-	var theta : float = get_theta()
+func set_radius(radius: float) -> void:
+	var theta: float = get_theta()
 	position = radius * Vector2.from_angle(theta)
 	position_changed.emit(slice_index)
 
 func get_theta() -> float:
 	return wrapf(atan2(position.y, position.x), 0, PI * 2)
 
-func set_theta(theta : float) -> void:
-	var radius : float = get_radius()
+func set_theta(theta: float) -> void:
+	var radius: float = get_radius()
 	position = radius * Vector2.from_angle(theta)
 	position_changed.emit(slice_index)
 
@@ -300,7 +300,7 @@ func _hide_highlight() -> void:
 		polygon.z_index = 0
 		outline.z_index = 0
 
-func _start_dragging(world_position : Vector2) -> void:
+func _start_dragging(world_position: Vector2) -> void:
 	selected.emit(slice_index)
 
 	dragging_start_theta = atan2(position.y, position.x)
@@ -311,9 +311,9 @@ func _start_dragging(world_position : Vector2) -> void:
 	is_dragging = true
 	_show_highlight()
 
-func _update_dragging(event : InputEvent, world_position : Vector2) -> void:
+func _update_dragging(event: InputEvent, world_position: Vector2) -> void:
 	if shift_is_held:
-		var input_radius : float = sqrt(pow(world_position.x, 2) + pow(world_position.y, 2))
+		var input_radius: float = sqrt(pow(world_position.x, 2) + pow(world_position.y, 2))
 		position = input_radius * Vector2.from_angle(dragging_start_theta)
 	else:
 		position = _get_world_position(event.position) - drag_offset
@@ -326,45 +326,45 @@ func _end_dragging() -> void:
 	_hide_highlight()
 	dragging_ended.emit(slice_index)
 
-func _rotation_started(_event : InputEvent, world_position : Vector2) -> void:
-	var relative_mouse_position : Vector2 = world_position - position
+func _rotation_started(_event: InputEvent, world_position: Vector2) -> void:
+	var relative_mouse_position: Vector2 = world_position - position
 	initial_rotation = rotation
 	initial_theta = atan2(relative_mouse_position.y, relative_mouse_position.x)
 	ui_state.any_slice_is_rotating = true
 	is_rotating = true
 	_show_highlight()
 
-func _rotation_updated(_event : InputEvent, world_position : Vector2) -> void:
-	var relative_mouse_position : Vector2 = world_position - position
-	var theta : float = atan2(relative_mouse_position.y, relative_mouse_position.x)
+func _rotation_updated(_event: InputEvent, world_position: Vector2) -> void:
+	var relative_mouse_position: Vector2 = world_position - position
+	var theta: float = atan2(relative_mouse_position.y, relative_mouse_position.x)
 
 	rotation = wrapf((initial_rotation - initial_theta) + theta, 0, PI * 2)
 	rotation_changed.emit(slice_index)
 
-func _rotation_ended(_event : InputEvent, _world_position : Vector2) -> void:
+func _rotation_ended(_event: InputEvent, _world_position: Vector2) -> void:
 	ui_state.any_slice_is_rotating = false
 	is_rotating = false
 	_hide_highlight()
 	rotating_ended.emit(slice_index)
 
-func _pivot_started(_event : InputEvent, _world_position : Vector2) -> void:
+func _pivot_started(_event: InputEvent, _world_position: Vector2) -> void:
 	pivot_start = position + slice_pivot.rotated(rotation)
 	ui_state.any_slice_is_pivoting = true
 	is_pivoting = true
 	_show_highlight()
 
-func _pivot_updated(_event : InputEvent, world_position : Vector2) -> void:
+func _pivot_updated(_event: InputEvent, world_position: Vector2) -> void:
 	slice_pivot = Vector2(pivot_start - world_position).rotated(-rotation)
 	position = pivot_start - slice_pivot.rotated(rotation)
 	pivot_changed.emit(slice_index)
 
-func _pivot_ended(_event : InputEvent, _world_position : Vector2) -> void:
+func _pivot_ended(_event: InputEvent, _world_position: Vector2) -> void:
 	ui_state.any_slice_is_pivoting = false
 	is_pivoting = false
 	_hide_highlight()
 	pivot_ended.emit(slice_index)
 
-func _scaling_started(_event : InputEvent, world_position : Vector2, direction : Vector2) -> void:
+func _scaling_started(_event: InputEvent, world_position: Vector2, direction: Vector2) -> void:
 	scaling_direction = -direction
 	scaling_start_position = world_position
 	initial_scale = polygon.scale
@@ -375,9 +375,9 @@ func _scaling_started(_event : InputEvent, world_position : Vector2, direction :
 	is_scaling = true
 	_show_highlight()
 
-func _scaling_updated(_event : InputEvent, world_position : Vector2) -> void:
-	var pixel_distance : Vector2 = (scaling_start_position - world_position).rotated(-rotation) * scaling_direction
-	var distance : Vector2 = (pixel_distance / initial_size) * initial_scale
+func _scaling_updated(_event: InputEvent, world_position: Vector2) -> void:
+	var pixel_distance: Vector2 = (scaling_start_position - world_position).rotated(-rotation) * scaling_direction
+	var distance: Vector2 = (pixel_distance / initial_size) * initial_scale
 
 	if shift_is_held:
 		if scaling_direction == Vector2.LEFT or scaling_direction == Vector2.RIGHT:
@@ -395,13 +395,13 @@ func _scaling_updated(_event : InputEvent, world_position : Vector2) -> void:
 func _repeat_last_scaling() -> void:
 	_scaling_updated(null, last_scaling_world_position)
 
-func _scaling_ended(_event : InputEvent, _world_position : Vector2) -> void:
+func _scaling_ended(_event: InputEvent, _world_position: Vector2) -> void:
 	ui_state.any_slice_is_scaling = false
 	is_scaling = false
 	_hide_highlight()
 	scaling_ended.emit(slice_index)
 
-func _set_selection(enabled : bool) -> void:
+func _set_selection(enabled: bool) -> void:
 	is_selected = enabled
 
 	if enabled:
@@ -416,15 +416,15 @@ func _on_selection_changed() -> void:
 	)
 
 func _get_transformed_polygon() -> PackedVector2Array:
-	var transformed_polygon : PackedVector2Array = []
-	var translation : Transform2D = Transform2D(rotation, polygon.scale, 0, slice_pivot.rotated(rotation))
+	var transformed_polygon: PackedVector2Array = []
+	var translation: Transform2D = Transform2D(rotation, polygon.scale, 0, slice_pivot.rotated(rotation))
 
-	for point : Vector2 in polygon.polygon:
+	for point: Vector2 in polygon.polygon:
 		transformed_polygon.append(translation * point)
 
 	return transformed_polygon
 
-func _is_point_in_slice(point : Vector2) -> bool:
+func _is_point_in_slice(point: Vector2) -> bool:
 	return Geometry2D.is_point_in_polygon(
 		point,
 		_get_transformed_polygon()
@@ -432,8 +432,8 @@ func _is_point_in_slice(point : Vector2) -> bool:
 
 # Calculate the extents of the shape.
 func _get_rect() -> Rect2:
-	var rect : Rect2 = Rect2()
-	for vector : Vector2 in polygon.polygon:
+	var rect: Rect2 = Rect2()
+	for vector: Vector2 in polygon.polygon:
 		rect = rect.expand(vector)
 
 	return polygon.transform * rect
