@@ -80,6 +80,12 @@ func _update_edit_form() -> void:
 		slice_radius_input.set_value_no_signal(current_slice.get_radius())
 		slice_theta_input.set_value_no_signal(rad_to_deg(current_slice.get_theta()))
 
+func _update_current_selection() -> void:
+	if ui_state.selected_element_index >= len(world.document.elements):
+		ui_state.set_selection(-1, -1)
+	else:
+		ui_state.set_selection(ui_state.selected_element_index, ui_state.selected_slice_index)
+
 func _build_shape_dropdown() -> void:
 	for shape_key: String in Shapes.ShapeIndex:
 		var shape_info: ShapeInfo = shapes.get_shape_info(Shapes.ShapeIndex[shape_key])
@@ -335,10 +341,12 @@ func _on_slice_theta_changed(value: float) -> void:
 
 func _on_undo_button_pressed() -> void:
 	world.undo_manager.undo()
+	_update_current_selection()
 	_update_edit_form()
 
 func _on_redo_button_pressed() -> void:
 	world.undo_manager.redo()
+	_update_current_selection()
 	_update_edit_form()
 
 func _on_about_button_pressed() -> void:
