@@ -56,13 +56,29 @@ func set_selection(selection: UISelection) -> void:
 	selected_items = [selection]
 	selection_changed.emit()
 
+func toggle_selection(selection: UISelection) -> void:
+	if is_selected(selection):
+		remove_selection(selection)
+	else:
+		if is_element_selected(selection):
+			remove_element_selection(selection)
+
+		add_selection(selection)
+
 func add_selection(selection: UISelection) -> void:
-	selected_items.append(selection)
-	selection_changed.emit()
+	if !is_selected(selection) and !is_element_selected(selection):
+		selected_items.append(selection)
+		selection_changed.emit()
 
 func remove_selection(selection: UISelection) -> void:
 	selected_items = selected_items.filter(func(item: UISelection) -> bool:
 		return !item.equals(selection)
+	)
+	selection_changed.emit()
+
+func remove_element_selection(selection: UISelection) -> void:
+	selected_items = selected_items.filter(func(item: UISelection) -> bool:
+		return item.element_index != selection.element_index
 	)
 	selection_changed.emit()
 
@@ -75,6 +91,15 @@ func is_selected(selection: UISelection) -> bool:
 
 	for item: UISelection in selected_items:
 		if item.equals(selection):
+			selected = true
+
+	return selected
+
+func is_element_selected(selection: UISelection) -> bool:
+	var selected: bool
+
+	for item: UISelection in selected_items:
+		if item.element_index == selection.element_index:
 			selected = true
 
 	return selected

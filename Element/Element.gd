@@ -114,8 +114,11 @@ func _on_slice_scale_ended(slice_index: int) -> void:
 func _on_slice_dragging_ended(slice_index: int) -> void:
 	state_changed.emit(slice_index)
 
-func _on_slice_selected(slice_index: int) -> void:
-	ui_state.set_selection(UISelection.new(state.index, slice_index))
+func _on_slice_selected(slice_index: int, shift_held: bool) -> void:
+	if shift_held:
+		ui_state.toggle_selection(UISelection.new(state.index, slice_index))
+	else:
+		ui_state.set_selection(UISelection.new(state.index, slice_index))
 
 func _instantiate_slices() -> void:
 	slices = []

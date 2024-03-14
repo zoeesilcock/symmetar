@@ -26,7 +26,7 @@ extends Node2D
 		_update_widget_positions()
 
 # Signals
-signal selected(index: int)
+signal selected(index: int, shift_held: bool)
 signal position_changed(index: int)
 signal dragging_ended(index: int)
 signal rotation_changed(index: int)
@@ -222,7 +222,7 @@ func _handle_mouse_button(event: InputEventMouseButton, world_position: Vector2)
 		_end_dragging()
 	elif not event.pressed and is_highlighted and not is_selected and cursor_is_in_slice and not ui_state.any_slice_is_busy:
 		viewport.set_input_as_handled()
-		selected.emit(slice_index)
+		selected.emit(slice_index, shift_is_held)
 
 func _handle_mouse_motion(event: InputEventMouseMotion, world_position: Vector2) -> void:
 	if is_selected and is_dragging:
@@ -262,10 +262,10 @@ func _handle_low_priority_mouse_button(event: InputEventMouseButton, world_posit
 		else:
 			if is_highlighted and not is_selected:
 				viewport.set_input_as_handled()
-				selected.emit(slice_index)
+				selected.emit(slice_index, shift_is_held)
 			elif not is_selected:
 				viewport.set_input_as_handled()
-				selected.emit(slice_index)
+				selected.emit(slice_index, shift_is_held)
 
 func _handle_low_priority_mouse_motion(_event: InputEventMouseMotion) -> void:
 	if is_highlighted and not cursor_is_in_slice:
@@ -301,7 +301,7 @@ func _hide_highlight() -> void:
 		outline.z_index = 0
 
 func _start_dragging(world_position: Vector2) -> void:
-	selected.emit(slice_index)
+	selected.emit(slice_index, shift_is_held)
 
 	dragging_start_theta = atan2(position.y, position.x)
 	dragging_start_position = position
