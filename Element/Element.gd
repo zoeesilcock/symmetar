@@ -115,7 +115,7 @@ func _on_slice_dragging_ended(slice_index: int) -> void:
 	state_changed.emit(slice_index)
 
 func _on_slice_selected(slice_index: int) -> void:
-	ui_state.set_selection(state.index, slice_index)
+	ui_state.set_selection(UISelection.new(state.index, slice_index))
 
 func _instantiate_slices() -> void:
 	slices = []

@@ -24,8 +24,14 @@ extends Resource
 			any_slice_is_scaling
 		)
 
-@export var selected_element_index: int
-@export var selected_slice_index: int
+@export var selected_items: Array[UISelection]
+@export var main_selected_item: UISelection:
+	get:
+		if len(selected_items) > 0:
+			return selected_items[0]
+		else:
+			return null
+
 @export var background_color_picker_visible: bool
 @export var slice_color_picker_visible: bool
 @export var slice_outline_color_picker_visible: bool
@@ -44,11 +50,37 @@ signal ui_is_visible_changed
 func init() -> void:
 	ui_is_visible = true
 	any_slice_is_dragging = false
-	selected_element_index = -1
-	selected_slice_index = -1
 	document_name = "Untitled.smtr"
 
-func set_selection(element_index: int, slice_index: int) -> void:
-	selected_element_index = element_index
-	selected_slice_index = slice_index
+func set_selection(selection: UISelection) -> void:
+	selected_items = [selection]
+	selection_changed.emit()
+
+func add_selection(selection: UISelection) -> void:
+	selected_items.append(selection)
+	selection_changed.emit()
+
+func remove_selection(selection: UISelection) -> void:
+	selected_items = selected_items.filter(func(item: UISelection) -> bool:
+		return !item.equals(selection)
+	)
+	selection_changed.emit()
+
+func clear_selection() -> void:
+	selected_items = []
+	selection_changed.emit()
+
+func is_selected(selection: UISelection) -> bool:
+	var selected: bool
+
+	for item: UISelection in selected_items:
+		if item.equals(selection):
+			selected = true
+
+	return selected
+
+func fix_missing_selections(max_element_index: int) -> void:
+	selected_items = selected_items.filter(func(item: UISelection) -> bool:
+		return item.element_index < max_element_index
+	)
 	selection_changed.emit()

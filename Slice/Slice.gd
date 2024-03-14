@@ -412,10 +412,7 @@ func _set_selection(enabled: bool) -> void:
 		_hide_selection()
 
 func _on_selection_changed() -> void:
-	_set_selection(
-		ui_state.selected_element_index == element_index and
-		ui_state.selected_slice_index == slice_index
-	)
+	_set_selection(ui_state.is_selected(UISelection.new(element_index, slice_index)))
 
 func _get_transformed_polygon() -> PackedVector2Array:
 	var transformed_polygon: PackedVector2Array = []

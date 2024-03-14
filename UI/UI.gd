@@ -81,10 +81,7 @@ func _update_edit_form() -> void:
 		slice_theta_input.set_value_no_signal(rad_to_deg(current_slice.get_theta()))
 
 func _update_current_selection() -> void:
-	if ui_state.selected_element_index >= len(world.document.elements):
-		ui_state.set_selection(-1, -1)
-	else:
-		ui_state.set_selection(ui_state.selected_element_index, ui_state.selected_slice_index)
+	ui_state.fix_missing_selections(len(world.document.elements))
 
 func _build_shape_dropdown() -> void:
 	for shape_key: String in Shapes.ShapeIndex:
@@ -126,12 +123,14 @@ func _on_pan_position_state_changed() -> void:
 	position_y_input.set_value_no_signal(world.document.state.pan_position.y)
 
 func _on_selection_changed() -> void:
-	if ui_state.selected_element_index >= 0:
-		if current_element_state == null or current_element_index != ui_state.selected_element_index:
-			current_element_state = world.document.get_element_state(ui_state.selected_element_index)
-			current_element_index = ui_state.selected_element_index
-			current_slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
-			current_slice_index = ui_state.selected_slice_index
+	var main_selection: UISelection = ui_state.main_selected_item
+
+	if main_selection != null:
+		if current_element_state == null or current_element_index != main_selection.element_index:
+			current_element_state = world.document.get_element_state(main_selection.element_index)
+			current_element_index = main_selection.element_index
+			current_slice = world.document.get_slice(main_selection.element_index, main_selection.slice_index)
+			current_slice_index = main_selection.slice_index
 
 			if !current_element_state.slice_scale_changed.is_connected(_on_slice_scale_state_changed):
 				current_element_state.slice_scale_changed.connect(_on_slice_scale_state_changed)
@@ -141,9 +140,9 @@ func _on_selection_changed() -> void:
 
 			if !current_element_state.slice_position_changed.is_connected(_on_slice_position_state_changed):
 				current_element_state.slice_position_changed.connect(_on_slice_position_state_changed)
-		elif current_slice == null or current_slice_index != ui_state.selected_slice_index:
-			current_slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
-			current_slice_index = ui_state.selected_slice_index
+		elif current_slice == null or current_slice_index != main_selection.slice_index:
+			current_slice = world.document.get_slice(main_selection.element_index, main_selection.slice_index)
+			current_slice_index = main_selection.slice_index
 
 		menu_bar.set_remove_enabled(true)
 	elif current_element_state != null:
@@ -156,22 +155,32 @@ func _on_selection_changed() -> void:
 
 	_update_edit_form()
 
+func _for_all_selected_slices(lambda: Callable) -> void:
+	for selection: UISelection in ui_state.selected_items:
+		var slice: Slice = world.document.get_slice(selection.element_index, selection.slice_index)
+		lambda.call(slice)
+
+func _for_all_selected_elements(lambda: Callable) -> void:
+	for selection: UISelection in ui_state.selected_items:
+		var element_state: ElementState = world.document.get_element_state(selection.element_index)
+		lambda.call(element_state)
+
 func _on_slice_position_state_changed() -> void:
-	if ui_state.selected_element_index >= 0:
-		var slice: Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+	_for_all_selected_slices(func(slice: Slice) -> void:
 		slice_radius_input.set_value_no_signal(slice.get_radius())
 		slice_theta_input.set_value_no_signal(rad_to_deg(slice.get_theta()))
+	)
 
 func _on_slice_scale_state_changed() -> void:
-	if ui_state.selected_element_index >= 0:
-		var slice: Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+	_for_all_selected_slices(func(slice: Slice) -> void:
 		slice_scale_x_input.set_value_no_signal(slice.slice_scale.x * 100.0)
 		slice_scale_y_input.set_value_no_signal(slice.slice_scale.y * 100.0)
+	)
 
 func _on_slice_rotation_state_changed() -> void:
-	if ui_state.selected_element_index >= 0:
-		var slice: Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+	_for_all_selected_slices(func(slice: Slice) -> void:
 		slice_rotation_input.set_value_no_signal(rad_to_deg(slice.rotation))
+	)
 
 func _on_background_color_state_changed() -> void:
 	background_color_input.color = world.document.state.background_color
@@ -214,21 +223,22 @@ func _on_add_button_pressed() -> void:
 	world.undo_manager.register_diff()
 
 func _on_remove_button_pressed() -> void:
-	if ui_state.selected_element_index >= 0:
-		world.document.remove_element(ui_state.selected_element_index)
+	_for_all_selected_elements(func(element_state: ElementState) -> void:
+		world.document.remove_element(element_state.index)
+	)
 
 func _on_clear_button_pressed() -> void:
 	world.document.clear_elements()
 	world.undo_manager.register_diff()
 
 func _on_slice_count_changed(value: float) -> void:
-	if ui_state.selected_element_index >= 0:
-		var element_state: ElementState = world.document.get_element_state(ui_state.selected_element_index)
+	_for_all_selected_elements(func(element_state: ElementState) -> void:
 		var slice_count_changed: bool = element_state.slice_count != value
 
 		if slice_count_changed:
 			element_state.slice_count = value as int
 			world.undo_manager.register_diff()
+	)
 
 func _on_background_color_changed(value: Color) -> void:
 	var background_color_changed: bool = world.document.state.background_color != value
@@ -261,83 +271,83 @@ func _on_reset_position_button_pressed() -> void:
 	world.undo_manager.register_diff()
 
 func _on_slice_shape_changed(value: int) -> void:
-	if ui_state.selected_element_index >= 0:
-		var element_state: ElementState = world.document.get_element_state(ui_state.selected_element_index)
+	_for_all_selected_elements(func(element_state: ElementState) -> void:
 		var slice_shape_changed: bool = element_state.slice_shape != value
 
 		if slice_shape_changed:
 			element_state.slice_shape = value as Shapes.ShapeIndex
+	)
 
 func _on_slice_color_changed(value: Color) -> void:
-	if ui_state.selected_element_index >= 0:
-		var element_state: ElementState = world.document.get_element_state(ui_state.selected_element_index)
+	_for_all_selected_elements(func(element_state: ElementState) -> void:
 		var slice_color_changed: bool = element_state.slice_color != value
 
 		if slice_color_changed:
 			element_state.slice_color = value
+	)
 
 func _on_slice_color_picker_visibility_changed() -> void:
 	ui_state.slice_color_picker_visible = slice_color_input.get_popup().visible
 
-	if ui_state.selected_element_index >= 0:
+	if len(ui_state.selected_items) > 0:
 		world.undo_manager.register_diff()
 
 func _on_slice_outline_width_changed(value: float) -> void:
-	if ui_state.selected_element_index >= 0:
-		var element_state: ElementState = world.document.get_element_state(ui_state.selected_element_index)
+	_for_all_selected_elements(func(element_state: ElementState) -> void:
 		var outline_width_changed: bool = element_state.slice_outline_width != value
 
 		if outline_width_changed:
 			element_state.slice_outline_width = value as int
 			world.undo_manager.register_diff()
+	)
 
 func _on_slice_outline_color_changed(value: Color) -> void:
-	if ui_state.selected_element_index >= 0:
-		var element_state: ElementState = world.document.get_element_state(ui_state.selected_element_index)
+	_for_all_selected_elements(func(element_state: ElementState) -> void:
 		var outline_color_changed: bool = element_state.slice_outline_color != value
 
 		if outline_color_changed:
 			element_state.slice_outline_color = value
+	)
 
 func _on_slice_outline_color_picker_visibility_changed() -> void:
 	ui_state.slice_outline_color_picker_visible = slice_outline_color_input.get_popup().visible
 
-	if ui_state.selected_element_index >= 0:
+	if len(ui_state.selected_items) > 0:
 		world.undo_manager.register_diff()
 
 func _on_slice_scale_x_changed(value: float) -> void:
-	if ui_state.selected_element_index >= 0:
-		var slice: Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+	_for_all_selected_slices(func(slice: Slice) -> void:
 		slice.set_slice_scale(Vector2(value / 100.0, slice.slice_scale.y))
+	)
 
 func _on_slice_scale_y_changed(value: float) -> void:
-	if ui_state.selected_element_index >= 0:
-		var slice: Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+	_for_all_selected_slices(func(slice: Slice) -> void:
 		slice.set_slice_scale(Vector2(slice.slice_scale.x, value / 100.0))
+	)
 
 func _on_reset_slice_scale_button_pressed() -> void:
-	if ui_state.selected_element_index >= 0:
-		var slice: Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+	_for_all_selected_slices(func(slice: Slice) -> void:
 		slice.set_slice_scale(Vector2.ONE)
+	)
 
 func _on_slice_rotation_changed(value: float) -> void:
-	if ui_state.selected_element_index >= 0:
-		var slice: Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+	_for_all_selected_slices(func(slice: Slice) -> void:
 		slice.set_slice_rotation(deg_to_rad(value))
+	)
 
 func _on_slice_radius_changed(value: float) -> void:
-	if ui_state.selected_element_index >= 0:
-		var slice: Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+	_for_all_selected_slices(func(slice: Slice) -> void:
 		slice.set_radius(value)
 		world.undo_manager.register_diff()
 		ui_state.document_is_dirty = true
+	)
 
 func _on_slice_theta_changed(value: float) -> void:
-	if ui_state.selected_element_index >= 0:
-		var slice: Slice = world.document.get_slice(ui_state.selected_element_index, ui_state.selected_slice_index)
+	_for_all_selected_slices(func(slice: Slice) -> void:
 		slice.set_theta(deg_to_rad(value))
 		world.undo_manager.register_diff()
 		ui_state.document_is_dirty = true
+	)
 
 func _on_undo_button_pressed() -> void:
 	world.undo_manager.undo()

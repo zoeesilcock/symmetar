@@ -25,7 +25,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		not ui_state.slice_color_picker_visible and \
 		not ui_state.slice_outline_color_picker_visible and \
 		event.pressed:
-			ui_state.set_selection(-1, -1)
+			ui_state.clear_selection()
 
 func _draw() -> void:
 	var scaled_viewport_size: Vector2 = get_viewport_rect().size / main_camera.zoom
