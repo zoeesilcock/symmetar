@@ -232,13 +232,18 @@ func _on_clear_button_pressed() -> void:
 	world.undo_manager.register_diff()
 
 func _on_slice_count_changed(value: float) -> void:
+	var any_change: bool
+
 	_for_all_selected_elements(func(element_state: ElementState) -> void:
 		var slice_count_changed: bool = element_state.slice_count != value
 
 		if slice_count_changed:
 			element_state.slice_count = value as int
-			world.undo_manager.register_diff()
+			any_change = true
 	)
+
+	if any_change:
+		world.undo_manager.register_diff()
 
 func _on_background_color_changed(value: Color) -> void:
 	var background_color_changed: bool = world.document.state.background_color != value
@@ -293,13 +298,19 @@ func _on_slice_color_picker_visibility_changed() -> void:
 		world.undo_manager.register_diff()
 
 func _on_slice_outline_width_changed(value: float) -> void:
+	var any_change: bool
+
 	_for_all_selected_elements(func(element_state: ElementState) -> void:
 		var outline_width_changed: bool = element_state.slice_outline_width != value
 
 		if outline_width_changed:
 			element_state.slice_outline_width = value as int
-			world.undo_manager.register_diff()
+			any_change = true
 	)
+
+	if any_change:
+		world.undo_manager.register_diff()
+
 
 func _on_slice_outline_color_changed(value: Color) -> void:
 	_for_all_selected_elements(func(element_state: ElementState) -> void:
@@ -338,16 +349,18 @@ func _on_slice_rotation_changed(value: float) -> void:
 func _on_slice_radius_changed(value: float) -> void:
 	_for_all_selected_slices(func(slice: Slice) -> void:
 		slice.set_radius(value)
-		world.undo_manager.register_diff()
-		ui_state.document_is_dirty = true
 	)
+
+	world.undo_manager.register_diff()
+	ui_state.document_is_dirty = true
 
 func _on_slice_theta_changed(value: float) -> void:
 	_for_all_selected_slices(func(slice: Slice) -> void:
 		slice.set_theta(deg_to_rad(value))
-		world.undo_manager.register_diff()
-		ui_state.document_is_dirty = true
 	)
+
+	world.undo_manager.register_diff()
+	ui_state.document_is_dirty = true
 
 func _on_undo_button_pressed() -> void:
 	world.undo_manager.undo()
