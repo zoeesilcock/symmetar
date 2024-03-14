@@ -26,6 +26,7 @@ enum EDIT_MENU {
 	ADD,
 	REMOVE,
 	CLEAR,
+	SELECT_ALL,
 }
 
 enum VIEW_MENU {
@@ -52,6 +53,7 @@ func _ready() -> void:
 	edit_menu.set_item_accelerator(EDIT_MENU.ADD, modifier|KEY_N)
 	edit_menu.set_item_accelerator(EDIT_MENU.REMOVE, modifier|KEY_BACKSPACE)
 	edit_menu.set_item_accelerator(EDIT_MENU.CLEAR, modifier|KEY_X)
+	edit_menu.set_item_accelerator(EDIT_MENU.SELECT_ALL, modifier|KEY_A)
 
 	view_menu.set_item_accelerator(VIEW_MENU.HIDE_UI, modifier|KEY_U)
 	view_menu.set_item_accelerator(VIEW_MENU.FULL_SCREEN, modifier|KEY_F)
@@ -80,6 +82,8 @@ func _on_edit_index_pressed(index: int) -> void:
 			ui._on_remove_button_pressed()
 		EDIT_MENU.CLEAR:
 			ui._on_clear_button_pressed()
+		EDIT_MENU.SELECT_ALL:
+			ui._on_select_all_button_pressed()
 
 func _on_view_index_pressed(index: int) -> void:
 	match index:

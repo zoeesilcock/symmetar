@@ -231,6 +231,15 @@ func _on_clear_button_pressed() -> void:
 	world.document.clear_elements()
 	world.undo_manager.register_diff()
 
+func _on_select_all_button_pressed() -> void:
+	var slice_index: int = 0
+
+	if ui_state.main_selected_item != null:
+		slice_index = ui_state.main_selected_item.slice_index
+
+	for element: ElementState in world.document.state.elements:
+		ui_state.add_selection(UISelection.new(element.index, slice_index))
+
 func _on_slice_count_changed(value: float) -> void:
 	var any_change: bool
 
