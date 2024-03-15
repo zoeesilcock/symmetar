@@ -231,10 +231,10 @@ func _on_select_all_button_pressed() -> void:
 		ui_state.add_selection(UISelection.new(element.index, slice_index))
 
 func _on_increase_slice_count_button_pressed() -> void:
-	slice_count_input.value += 1
+	slice_count_input.value += slice_count_input.custom_arrow_step
 
 func _on_decrease_slice_count_button_pressed() -> void:
-	slice_count_input.value -= 1
+	slice_count_input.value -= slice_count_input.custom_arrow_step
 
 func _on_zoom_in_button_pressed() -> void:
 	zoom_input.value += zoom_input.custom_arrow_step

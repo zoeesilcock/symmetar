@@ -187,6 +187,7 @@ min_value = 1.0
 value = 8.0
 rounded = true
 alignment = 2
+custom_arrow_step = 1.0
 select_all_on_focus = true
 
 [node name="ShapeLabel" type="Label" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
