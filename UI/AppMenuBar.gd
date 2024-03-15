@@ -27,6 +27,9 @@ enum EDIT_MENU {
 	REMOVE,
 	CLEAR,
 	SELECT_ALL,
+	SEPARATOR2,
+	INCREASE_SLICE_COUNT,
+	DECREASE_SLICE_COUNT,
 }
 
 enum VIEW_MENU {
@@ -54,6 +57,8 @@ func _ready() -> void:
 	edit_menu.set_item_accelerator(EDIT_MENU.REMOVE, modifier|KEY_BACKSPACE)
 	edit_menu.set_item_accelerator(EDIT_MENU.CLEAR, modifier|KEY_X)
 	edit_menu.set_item_accelerator(EDIT_MENU.SELECT_ALL, modifier|KEY_A)
+	edit_menu.set_item_accelerator(EDIT_MENU.INCREASE_SLICE_COUNT, modifier|KEY_UP)
+	edit_menu.set_item_accelerator(EDIT_MENU.DECREASE_SLICE_COUNT, modifier|KEY_DOWN)
 
 	view_menu.set_item_accelerator(VIEW_MENU.HIDE_UI, modifier|KEY_U)
 	view_menu.set_item_accelerator(VIEW_MENU.FULL_SCREEN, modifier|KEY_F)
@@ -84,6 +89,10 @@ func _on_edit_index_pressed(index: int) -> void:
 			ui._on_clear_button_pressed()
 		EDIT_MENU.SELECT_ALL:
 			ui._on_select_all_button_pressed()
+		EDIT_MENU.INCREASE_SLICE_COUNT:
+			ui._on_increase_slice_count_button_pressed()
+		EDIT_MENU.DECREASE_SLICE_COUNT:
+			ui._on_decrease_slice_count_button_pressed()
 
 func _on_view_index_pressed(index: int) -> void:
 	match index:

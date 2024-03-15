@@ -57,16 +57,6 @@ func _ready() -> void:
 
 	world.document.document_state_replaced.connect(_on_document_state_replaced)
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed:
-		event.command_or_control_autoremap = true
-
-		if event.ctrl_pressed:
-			if event.keycode == KEY_UP:
-				slice_count_input.value += 1
-			elif event.keycode == KEY_DOWN:
-				slice_count_input.value -= 1
-
 func _update_edit_form() -> void:
 	if current_element_state != null:
 		slice_count_input.set_value_no_signal(current_element_state.slice_count)
@@ -239,6 +229,12 @@ func _on_select_all_button_pressed() -> void:
 
 	for element: ElementState in world.document.state.elements:
 		ui_state.add_selection(UISelection.new(element.index, slice_index))
+
+func _on_increase_slice_count_button_pressed() -> void:
+	slice_count_input.value += 1
+
+func _on_decrease_slice_count_button_pressed() -> void:
+	slice_count_input.value -= 1
 
 func _on_slice_count_changed(value: float) -> void:
 	var any_change: bool
