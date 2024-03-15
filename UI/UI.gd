@@ -71,7 +71,7 @@ func _update_edit_form() -> void:
 		slice_theta_input.set_value_no_signal(rad_to_deg(current_slice.get_theta()))
 
 func _update_current_selection() -> void:
-	ui_state.fix_missing_selections(len(world.document.elements))
+	ui_state.fix_missing_element_in_selection(len(world.document.elements))
 
 func _build_shape_dropdown() -> void:
 	for shape_key: String in Shapes.ShapeIndex:
