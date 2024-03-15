@@ -89,6 +89,7 @@ func init(
 		p_slice_position: Vector2,
 		p_slice_rotation: float,
 		p_slice_pivot: Vector2,
+		p_slice_scale: Vector2,
 		p_shape_index: Shapes.ShapeIndex,
 		p_slice_color: Color,
 		p_slice_outline_width: float,
@@ -98,6 +99,7 @@ func init(
 	position = p_slice_position
 	rotation = p_slice_rotation
 	slice_pivot = p_slice_pivot
+	slice_scale = p_slice_scale
 	set_color(p_slice_color)
 	set_outline_width(p_slice_outline_width)
 	set_outline_color(p_slice_outline_color)
@@ -108,6 +110,9 @@ func init(
 
 	_connect_widget_signals()
 	_update_widget_positions()
+
+	update_outline_position()
+	update_outline_scale()
 
 func _ready() -> void:
 	viewport = get_viewport()

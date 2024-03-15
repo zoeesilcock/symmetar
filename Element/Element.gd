@@ -137,6 +137,7 @@ func _instantiate_slice(index: int) -> void:
 		state.slice_position,
 		state.slice_rotation,
 		state.slice_pivot,
+		state.slice_scale,
 		state.slice_shape,
 		state.slice_color,
 		state.slice_outline_width,
