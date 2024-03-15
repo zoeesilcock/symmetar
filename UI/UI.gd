@@ -213,7 +213,7 @@ func _on_add_button_pressed() -> void:
 		shape_info.index,
 		Vector2(slice_scale_x_input.value / 100.0, slice_scale_y_input.value / 100.0),
 		deg_to_rad(slice_rotation_input.value),
-		Vector2(slice_radius_input.value, 0),
+		(slice_radius_input.value * Vector2.from_angle(deg_to_rad(slice_theta_input.value))),
 		slice_color_input.color,
 		slice_outline_width_input.value,
 		slice_outline_color_input.color,
