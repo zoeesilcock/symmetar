@@ -328,11 +328,13 @@ func _update_dragging(event: InputEvent, world_position: Vector2) -> void:
 	position_changed.emit(slice_index)
 
 func _end_dragging() -> void:
+	var position_was_changed: bool = dragging_changed_position
+
 	ui_state.any_slice_is_dragging = false
 	is_dragging = false
 	_hide_highlight()
 
-	if dragging_changed_position:
+	if position_was_changed:
 		dragging_ended.emit(slice_index)
 
 func _rotation_started(_event: InputEvent, world_position: Vector2) -> void:
