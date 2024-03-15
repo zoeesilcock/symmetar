@@ -39,6 +39,7 @@ signal scaling_ended(index: int)
 # Internal
 var polygon: Polygon2D # TODO: Rename to shape?
 var is_selected: bool
+var was_just_selected: bool
 var is_highlighted: bool
 var cursor_is_in_slice: bool
 var shift_is_held: bool
@@ -217,12 +218,13 @@ func _handle_mouse_button(event: InputEventMouseButton, world_position: Vector2)
 		viewport.set_input_as_handled()
 		_start_dragging(world_position)
 	elif not event.pressed and is_dragging:
-		if dragging_changed_position:
+		if dragging_changed_position or was_just_selected:
+			was_just_selected = false
 			viewport.set_input_as_handled()
 		_end_dragging()
 	elif not event.pressed and is_highlighted and not is_selected and cursor_is_in_slice and not ui_state.any_slice_is_busy:
 		viewport.set_input_as_handled()
-		selected.emit(slice_index, shift_is_held)
+		_trigger_selected()
 
 func _handle_mouse_motion(event: InputEventMouseMotion, world_position: Vector2) -> void:
 	if is_selected and is_dragging:
@@ -259,13 +261,13 @@ func _handle_low_priority_mouse_button(event: InputEventMouseButton, world_posit
 		if event.pressed:
 			viewport.set_input_as_handled()
 			_start_dragging(world_position)
-		else:
+		elif not shift_is_held:
 			if is_highlighted and not is_selected:
 				viewport.set_input_as_handled()
-				selected.emit(slice_index, shift_is_held)
+				_trigger_selected()
 			elif not is_selected:
 				viewport.set_input_as_handled()
-				selected.emit(slice_index, shift_is_held)
+				_trigger_selected()
 
 func _handle_low_priority_mouse_motion(_event: InputEventMouseMotion) -> void:
 	if is_highlighted and not cursor_is_in_slice:
@@ -301,7 +303,7 @@ func _hide_highlight() -> void:
 		outline.z_index = 0
 
 func _start_dragging(world_position: Vector2) -> void:
-	selected.emit(slice_index, shift_is_held)
+	_trigger_selected()
 
 	dragging_start_theta = atan2(position.y, position.x)
 	dragging_start_position = position
@@ -402,6 +404,14 @@ func _scaling_ended(_event: InputEvent, _world_position: Vector2) -> void:
 	is_scaling = false
 	_hide_highlight()
 	scaling_ended.emit(slice_index)
+
+func _trigger_selected() -> void:
+	if !is_selected:
+		was_just_selected = true
+	else:
+		was_just_selected = false
+
+	selected.emit(slice_index, shift_is_held)
 
 func _set_selection(enabled: bool) -> void:
 	is_selected = enabled
