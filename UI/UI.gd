@@ -236,6 +236,12 @@ func _on_increase_slice_count_button_pressed() -> void:
 func _on_decrease_slice_count_button_pressed() -> void:
 	slice_count_input.value -= 1
 
+func _on_zoom_in_button_pressed() -> void:
+	zoom_input.value += zoom_input.custom_arrow_step
+
+func _on_zoom_out_button_pressed() -> void:
+	zoom_input.value -= zoom_input.custom_arrow_step
+
 func _on_slice_count_changed(value: float) -> void:
 	var any_change: bool
 

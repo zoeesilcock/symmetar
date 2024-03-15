@@ -35,6 +35,9 @@ enum EDIT_MENU {
 enum VIEW_MENU {
 	HIDE_UI,
 	FULL_SCREEN,
+	SEPARATOR,
+	ZOOM_IN,
+	ZOOM_OUT,
 }
 
 enum HELP_MENU {
@@ -62,6 +65,8 @@ func _ready() -> void:
 
 	view_menu.set_item_accelerator(VIEW_MENU.HIDE_UI, modifier|KEY_U)
 	view_menu.set_item_accelerator(VIEW_MENU.FULL_SCREEN, modifier|KEY_F)
+	view_menu.set_item_accelerator(VIEW_MENU.ZOOM_IN, modifier|KEY_PLUS)
+	view_menu.set_item_accelerator(VIEW_MENU.ZOOM_OUT, modifier|KEY_MINUS)
 
 func set_remove_enabled(enabled: bool) -> void:
 	edit_menu.set_item_disabled(EDIT_MENU.REMOVE, !enabled)
@@ -103,6 +108,10 @@ func _on_view_index_pressed(index: int) -> void:
 		VIEW_MENU.FULL_SCREEN:
 			ui._toggle_full_screen()
 			view_menu.set_item_checked(VIEW_MENU.FULL_SCREEN, DisplayServer.window_get_mode() == DisplayServer.WindowMode.WINDOW_MODE_FULLSCREEN)
+		VIEW_MENU.ZOOM_IN:
+			ui._on_zoom_in_button_pressed()
+		VIEW_MENU.ZOOM_OUT:
+			ui._on_zoom_out_button_pressed()
 
 func _on_help_index_pressed(index: int) -> void:
 	match index:
