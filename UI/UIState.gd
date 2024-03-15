@@ -14,7 +14,6 @@ extends Resource
 @export var any_slice_is_pivoting: bool
 @export var any_slice_is_scaling: bool
 @export var any_slice_is_highlighted: bool
-
 @export var any_slice_is_busy: bool:
 	get:
 		return (
@@ -88,22 +87,18 @@ func clear_selection() -> void:
 	selection_changed.emit()
 
 func is_selected(selection: UISelection) -> bool:
-	var selected: bool
-
 	for item: UISelection in selected_items:
 		if item.equals(selection):
-			selected = true
+			return true
 
-	return selected
+	return false
 
 func is_element_selected(selection: UISelection) -> bool:
-	var selected: bool
-
 	for item: UISelection in selected_items:
 		if item.element_index == selection.element_index:
-			selected = true
+			return true
 
-	return selected
+	return false
 
 func fix_missing_element_in_selection(max_element_index: int) -> void:
 	selected_items = selected_items.filter(func(item: UISelection) -> bool:
