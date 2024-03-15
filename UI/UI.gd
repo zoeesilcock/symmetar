@@ -249,6 +249,8 @@ func _on_slice_count_changed(value: float) -> void:
 		if slice_count_changed:
 			element_state.slice_count = value as int
 			any_change = true
+
+			ui_state.fix_missing_slice_in_selection(element_state.index, value as int - 1)
 	)
 
 	if any_change:

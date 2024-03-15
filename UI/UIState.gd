@@ -52,6 +52,7 @@ func init() -> void:
 	any_slice_is_dragging = false
 	document_name = "Untitled.smtr"
 
+#region Selection
 func set_selection(selection: UISelection) -> void:
 	selected_items = [selection]
 	selection_changed.emit()
@@ -104,8 +105,16 @@ func is_element_selected(selection: UISelection) -> bool:
 
 	return selected
 
-func fix_missing_selections(max_element_index: int) -> void:
+func fix_missing_element_in_selection(max_element_index: int) -> void:
 	selected_items = selected_items.filter(func(item: UISelection) -> bool:
 		return item.element_index < max_element_index
 	)
 	selection_changed.emit()
+
+func fix_missing_slice_in_selection(element_index: int, max_slice_index: int) -> void:
+	for selected_item: UISelection in selected_items:
+		if selected_item.element_index == element_index and selected_item.slice_index > max_slice_index:
+			selected_item.slice_index = max_slice_index
+			selection_changed.emit()
+			return
+#endregion
