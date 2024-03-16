@@ -56,6 +56,7 @@ func _ready() -> void:
 	_update_window_title()
 
 	world.document.document_state_replaced.connect(_on_document_state_replaced)
+	slice_count_input.grab_focus()
 
 func _update_edit_form() -> void:
 	if current_element_state != null:

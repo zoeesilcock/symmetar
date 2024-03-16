@@ -80,7 +80,6 @@ text = "Background:"
 [node name="BackgroundColorPickerButton" type="ColorPickerButton" parent="SideBar/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(82, 0)
 layout_mode = 2
-focus_mode = 0
 color = Color(0.627451, 0.141176, 0.141176, 1)
 
 [node name="ZoomLabel" type="Label" parent="SideBar/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/VBoxContainer/GridContainer"]
@@ -93,6 +92,7 @@ layout_mode = 2
 
 [node name="ZoomInput" type="SpinBox" parent="SideBar/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/VBoxContainer/GridContainer/ZoomInputContainer"]
 layout_mode = 2
+focus_mode = 2
 min_value = 15.0
 max_value = 1000.0
 step = 0.1
@@ -132,6 +132,7 @@ text = "X:"
 
 [node name="XInput" type="SpinBox" parent="SideBar/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/VBoxContainer/GridContainer/XContainer"]
 layout_mode = 2
+focus_mode = 2
 min_value = -10000.0
 max_value = 10000.0
 alignment = 2
@@ -148,6 +149,7 @@ text = "Y:"
 
 [node name="YInput" type="SpinBox" parent="SideBar/MarginContainer/VBoxContainer/EditDocumentContainer/MarginContainer/VBoxContainer/GridContainer/YContainer"]
 layout_mode = 2
+focus_mode = 2
 min_value = -10000.0
 max_value = 10000.0
 alignment = 2
@@ -183,6 +185,7 @@ text = "Slice count:"
 
 [node name="CountInput" type="SpinBox" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
+focus_mode = 2
 min_value = 1.0
 value = 8.0
 rounded = true
@@ -206,7 +209,6 @@ text = "Color:"
 
 [node name="ColorPickerButton" type="ColorPickerButton" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
-focus_mode = 0
 color = Color(0.909804, 0.333333, 0, 1)
 
 [node name="OutlineWidthLabel" type="Label" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
@@ -216,6 +218,7 @@ text = "Outline width:"
 
 [node name="OutlineWidthInput" type="SpinBox" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
+focus_mode = 2
 value = 2.0
 alignment = 2
 select_all_on_focus = true
@@ -227,7 +230,6 @@ text = "Outline color:"
 
 [node name="OutlineColorPickerButton" type="ColorPickerButton" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
-focus_mode = 0
 color = Color(1, 0.960784, 0, 1)
 
 [node name="ScaleLabel" type="Label" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
@@ -256,6 +258,7 @@ text = "X:"
 
 [node name="XInput" type="SpinBox" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/XContainer"]
 layout_mode = 2
+focus_mode = 2
 min_value = -10000.0
 max_value = 10000.0
 value = 100.0
@@ -273,6 +276,7 @@ text = "Y:"
 
 [node name="YInput" type="SpinBox" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer/YContainer"]
 layout_mode = 2
+focus_mode = 2
 min_value = -10000.0
 max_value = 10000.0
 value = 100.0
@@ -287,6 +291,7 @@ text = "Rotation:"
 
 [node name="RotationInput" type="SpinBox" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
+focus_mode = 2
 max_value = 360.0
 alignment = 2
 update_on_text_changed = true
@@ -299,6 +304,7 @@ text = "Radius:"
 
 [node name="RadiusInput" type="SpinBox" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
+focus_mode = 2
 max_value = 10000.0
 step = 0.1
 value = 200.0
@@ -313,6 +319,7 @@ text = "Theta:"
 
 [node name="ThetaInput" type="SpinBox" parent="SideBar/MarginContainer/VBoxContainer/EditItemContainer/MarginContainer/GridContainer"]
 layout_mode = 2
+focus_mode = 2
 max_value = 360.0
 alignment = 2
 update_on_text_changed = true
