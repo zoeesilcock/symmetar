@@ -150,10 +150,17 @@ func _for_all_selected_slices(lambda: Callable) -> void:
 		var slice: Slice = world.document.get_slice(selection.element_index, selection.slice_index)
 		lambda.call(slice)
 
-func _for_all_selected_elements(lambda: Callable) -> void:
+func _for_all_selected_elements(lambda: Callable) -> bool:
+	var any_changes_applied: bool
+
 	for selection: UISelection in ui_state.selected_items:
 		var element_state: ElementState = world.document.get_element_state(selection.element_index)
-		lambda.call(element_state)
+		var changed: bool = lambda.call(element_state)
+
+		if changed:
+			any_changes_applied = true
+
+	return any_changes_applied
 
 func _on_slice_position_state_changed() -> void:
 	_for_all_selected_slices(func(slice: Slice) -> void:
@@ -243,19 +250,18 @@ func _on_zoom_out_button_pressed() -> void:
 	zoom_input.value -= zoom_input.custom_arrow_step
 
 func _on_slice_count_changed(value: float) -> void:
-	var any_change: bool
-
-	_for_all_selected_elements(func(element_state: ElementState) -> void:
+	var any_changes_applied: bool = _for_all_selected_elements(func(element_state: ElementState) -> bool:
 		var slice_count_changed: bool = element_state.slice_count != value
 
 		if slice_count_changed:
 			element_state.slice_count = value as int
-			any_change = true
-
 			ui_state.fix_missing_slice_in_selection(element_state.index, value as int - 1)
+			return true
+
+		return false
 	)
 
-	if any_change:
+	if any_changes_applied:
 		world.undo_manager.register_diff()
 
 func _on_background_color_changed(value: Color) -> void:
@@ -311,17 +317,17 @@ func _on_slice_color_picker_visibility_changed() -> void:
 		world.undo_manager.register_diff()
 
 func _on_slice_outline_width_changed(value: float) -> void:
-	var any_change: bool
-
-	_for_all_selected_elements(func(element_state: ElementState) -> void:
+	var any_changes_applied: bool = _for_all_selected_elements(func(element_state: ElementState) -> bool:
 		var outline_width_changed: bool = element_state.slice_outline_width != value
 
 		if outline_width_changed:
 			element_state.slice_outline_width = value as int
-			any_change = true
+			return true
+
+		return false
 	)
 
-	if any_change:
+	if any_changes_applied:
 		world.undo_manager.register_diff()
 
 
