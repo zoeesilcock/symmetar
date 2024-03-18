@@ -65,7 +65,7 @@ func _ready() -> void:
 
 	view_menu.set_item_accelerator(VIEW_MENU.HIDE_UI, modifier|KEY_U)
 	view_menu.set_item_accelerator(VIEW_MENU.FULL_SCREEN, modifier|KEY_F)
-	view_menu.set_item_accelerator(VIEW_MENU.ZOOM_IN, modifier|KEY_PLUS)
+	view_menu.set_item_accelerator(VIEW_MENU.ZOOM_IN, modifier|KEY_EQUAL)
 	view_menu.set_item_accelerator(VIEW_MENU.ZOOM_OUT, modifier|KEY_MINUS)
 
 func set_remove_enabled(enabled: bool) -> void:
