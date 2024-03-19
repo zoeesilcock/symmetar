@@ -3,6 +3,7 @@ extends Camera2D
 
 # Settings
 @export var scroll_wheel_zoom_amount: float
+@export var scroll_wheel_extra_amount: float
 @export var min_zoom: float
 @export var max_zoom: float
 
@@ -60,5 +61,14 @@ func _end_panning() -> void:
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 
 func _change_zoom(amount: float) -> void:
+	if zoom.x <= 1.0:
+		amount *= ease(zoom.x, 1.2)
+	elif zoom.x >= 2.0:
+		var progress: float = zoom.x / (max_zoom / 100.0)
+		var extra: float = scroll_wheel_extra_amount
+		if amount < 0:
+			extra = -scroll_wheel_extra_amount
+		amount += extra * ease(progress, 2.0)
+
 	var new_zoom: float = clamp(zoom.x + amount, min_zoom / 100.0, max_zoom / 100.0)
 	document.state.zoom = new_zoom
