@@ -60,5 +60,5 @@ func _end_panning() -> void:
 	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
 
 func _change_zoom(amount: float) -> void:
-	var new_zoom: float = clamp(zoom.x + amount, min_zoom, max_zoom)
+	var new_zoom: float = clamp(zoom.x + amount, min_zoom / 100.0, max_zoom / 100.0)
 	document.state.zoom = new_zoom

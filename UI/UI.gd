@@ -24,6 +24,10 @@ extends Control
 @export var slice_theta_input: SpinBox
 @export var about_dialog: AcceptDialog
 
+# Constants
+const MIN_ZOOM: int = 15
+const MAX_ZOOM: int = 1000
+
 # Internal
 var background_color_picker_popup: PopupPanel
 var slice_color_picker_popup: PopupPanel
@@ -54,9 +58,16 @@ func _ready() -> void:
 
 	_build_shape_dropdown()
 	_update_window_title()
+	_apply_zoom_limits()
 
 	world.document.document_state_replaced.connect(_on_document_state_replaced)
 	slice_count_input.grab_focus()
+
+func _apply_zoom_limits() -> void:
+	zoom_input.min_value = MIN_ZOOM
+	zoom_input.max_value = MAX_ZOOM
+	world.main_camera.min_zoom = MIN_ZOOM
+	world.main_camera.max_zoom = MAX_ZOOM
 
 func _update_edit_form() -> void:
 	if current_element_state != null:
