@@ -418,6 +418,10 @@ func _trigger_selected() -> void:
 	else:
 		was_just_selected = false
 
+	# Workaround for issues with inputs triggering value_changed when they lose focus.
+	# This forces the value_changed signal to be processed before we select the next item.
+	await get_tree().process_frame
+
 	selected.emit(slice_index, shift_is_held)
 
 func _set_selection(enabled: bool) -> void:
