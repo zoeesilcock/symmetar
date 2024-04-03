@@ -232,8 +232,9 @@ func _on_add_button_pressed() -> void:
 	world.undo_manager.register_diff()
 
 func _on_remove_button_pressed() -> void:
-	_for_all_selected_elements(func(element_state: ElementState) -> void:
+	_for_all_selected_elements(func(element_state: ElementState) -> bool:
 		world.document.remove_element(element_state.index)
+		return true
 	)
 
 func _on_clear_button_pressed() -> void:
@@ -268,9 +269,8 @@ func _on_slice_count_changed(value: float) -> void:
 		if slice_count_changed:
 			element_state.slice_count = value as int
 			ui_state.fix_missing_slice_in_selection(element_state.index, value as int - 1)
-			return true
 
-		return false
+		return slice_count_changed
 	)
 
 	if any_changes_applied:
@@ -307,19 +307,23 @@ func _on_reset_position_button_pressed() -> void:
 	world.undo_manager.register_diff()
 
 func _on_slice_shape_changed(value: int) -> void:
-	_for_all_selected_elements(func(element_state: ElementState) -> void:
+	_for_all_selected_elements(func(element_state: ElementState) -> bool:
 		var slice_shape_changed: bool = element_state.slice_shape != value
 
 		if slice_shape_changed:
 			element_state.slice_shape = value as Shapes.ShapeIndex
+
+		return slice_shape_changed
 	)
 
 func _on_slice_color_changed(value: Color) -> void:
-	_for_all_selected_elements(func(element_state: ElementState) -> void:
+	_for_all_selected_elements(func(element_state: ElementState) -> bool:
 		var slice_color_changed: bool = element_state.slice_color != value
 
 		if slice_color_changed:
 			element_state.slice_color = value
+
+		return slice_color_changed
 	)
 
 func _on_slice_color_picker_visibility_changed() -> void:
@@ -334,9 +338,8 @@ func _on_slice_outline_width_changed(value: float) -> void:
 
 		if outline_width_changed:
 			element_state.slice_outline_width = value as int
-			return true
 
-		return false
+		return outline_width_changed
 	)
 
 	if any_changes_applied:
@@ -344,11 +347,13 @@ func _on_slice_outline_width_changed(value: float) -> void:
 
 
 func _on_slice_outline_color_changed(value: Color) -> void:
-	_for_all_selected_elements(func(element_state: ElementState) -> void:
+	_for_all_selected_elements(func(element_state: ElementState) -> bool:
 		var outline_color_changed: bool = element_state.slice_outline_color != value
 
 		if outline_color_changed:
 			element_state.slice_outline_color = value
+
+		return outline_color_changed
 	)
 
 func _on_slice_outline_color_picker_visibility_changed() -> void:
