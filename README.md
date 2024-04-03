@@ -1,8 +1,8 @@
 # Symmetar
 
-![Symmetar logo](/icon.svg)
-
 A tool for exploring symmetry by creating and editing shapes that are repeated according to some specific type of symmetry. The name aims to be a verb form of the word symmetry and I pronounce it the same as the word scimitar.
+
+![Symmetar screenshot](/screenshot.png)
 
 
 ## Concepts
