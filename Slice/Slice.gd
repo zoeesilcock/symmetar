@@ -137,7 +137,10 @@ func _connect_widget_signals() -> void:
 		scale_widget.drag_ended.connect(_scaling_ended)
 
 func set_shape(shape_index: Shapes.ShapeIndex) -> void:
+	var previous_scale: Vector2 = Vector2.ONE
+
 	if polygon != null:
+		previous_scale = slice_scale
 		remove_child(polygon)
 
 	var shape_info: ShapeInfo = shapes.get_shape_info(shape_index)
@@ -146,6 +149,7 @@ func set_shape(shape_index: Shapes.ShapeIndex) -> void:
 
 	add_child(polygon)
 	move_child(polygon, 0)
+	slice_scale = previous_scale
 
 	outline.init(polygon)
 	_update_widget_positions()
