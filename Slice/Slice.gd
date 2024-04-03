@@ -138,9 +138,12 @@ func _connect_widget_signals() -> void:
 
 func set_shape(shape_index: Shapes.ShapeIndex) -> void:
 	var previous_scale: Vector2 = Vector2.ONE
+	var previous_pivot: Vector2 = Vector2.ZERO
 
 	if polygon != null:
 		previous_scale = slice_scale
+		previous_pivot = slice_pivot
+
 		remove_child(polygon)
 
 	var shape_info: ShapeInfo = shapes.get_shape_info(shape_index)
@@ -149,7 +152,9 @@ func set_shape(shape_index: Shapes.ShapeIndex) -> void:
 
 	add_child(polygon)
 	move_child(polygon, 0)
+
 	slice_scale = previous_scale
+	slice_pivot = previous_pivot
 
 	outline.init(polygon)
 	_update_widget_positions()
