@@ -58,3 +58,5 @@ Some general ideas that I hope to implement in the future.
 * https://en.wikipedia.org/wiki/Algorithmic_art
 * https://en.wikipedia.org/wiki/Paisley_(design)
 * https://en.wikipedia.org/wiki/Art_Nouveau
+* https://en.wikipedia.org/wiki/Mandala
+* https://en.wikipedia.org/wiki/Yantra
