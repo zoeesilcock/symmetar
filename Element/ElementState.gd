@@ -100,7 +100,8 @@ func _init(
 static func get_exported_properties() -> Array[String]:
 	var exported_properties: Array[String] = []
 	for property: Dictionary in ElementState.new().get_property_list():
-		if property["usage"] == PROPERTY_USAGE_DEFAULT + PROPERTY_USAGE_SCRIPT_VARIABLE:
+		if (property["usage"] == PROPERTY_USAGE_DEFAULT + PROPERTY_USAGE_SCRIPT_VARIABLE or
+			property["usage"] == PROPERTY_USAGE_DEFAULT + PROPERTY_USAGE_SCRIPT_VARIABLE + PROPERTY_USAGE_CLASS_IS_ENUM):
 			exported_properties.push_back(property["name"])
 
 	return exported_properties

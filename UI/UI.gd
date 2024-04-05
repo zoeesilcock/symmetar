@@ -307,7 +307,7 @@ func _on_reset_position_button_pressed() -> void:
 	world.undo_manager.register_diff()
 
 func _on_slice_shape_changed(value: int) -> void:
-	_for_all_selected_elements(func(element_state: ElementState) -> bool:
+	var any_changes_applied: bool = _for_all_selected_elements(func(element_state: ElementState) -> bool:
 		var slice_shape_changed: bool = element_state.slice_shape != value
 
 		if slice_shape_changed:
@@ -315,6 +315,9 @@ func _on_slice_shape_changed(value: int) -> void:
 
 		return slice_shape_changed
 	)
+
+	if any_changes_applied:
+		world.undo_manager.register_diff()
 
 func _on_slice_color_changed(value: Color) -> void:
 	_for_all_selected_elements(func(element_state: ElementState) -> bool:
