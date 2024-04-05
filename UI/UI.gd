@@ -237,6 +237,8 @@ func _on_remove_button_pressed() -> void:
 		return true
 	)
 
+	ui_state.clear_selection()
+
 func _on_clear_button_pressed() -> void:
 	world.document.clear_elements()
 	world.undo_manager.register_diff()
