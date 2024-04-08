@@ -15,6 +15,7 @@ anchor_bottom = 1.0
 offset_right = 256.0
 grow_vertical = 2
 script = ExtResource("1_nhcn2")
+dirty_debounce_time = 0.3
 ui_state = ExtResource("2_ot8s7")
 shapes = ExtResource("3_ljrg6")
 side_bar = NodePath("SideBar")

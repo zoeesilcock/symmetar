@@ -63,7 +63,6 @@ func add_new_element(element_state: ElementState) -> void:
 	new_element.state_changed.connect(_on_element_state_changed)
 
 	ui_state.set_selection(UISelection.new(element_index, 0))
-	ui_state.document_is_dirty = true
 
 func remove_element(index: int) -> void:
 	elements_node.remove_child(elements[index])
@@ -71,15 +70,12 @@ func remove_element(index: int) -> void:
 	state.elements.remove_at(index)
 
 	_update_element_indexes()
-	undo_manager.register_diff()
 
 	ui_state.remove_selection(UISelection.new(index, -1))
-	ui_state.document_is_dirty = true
 
 func clear_elements() -> void:
 	_remove_all_elements()
 	state.elements = []
-	ui_state.document_is_dirty = true
 
 func _on_element_count_changed() -> void:
 	_remove_all_elements()

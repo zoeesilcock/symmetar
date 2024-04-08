@@ -180,12 +180,10 @@ func update_outline_scale() -> void:
 func set_slice_scale(value: Vector2) -> void:
 	slice_scale = value
 	scaling_changed.emit(slice_index)
-	scaling_ended.emit(slice_index)
 
 func set_slice_rotation(value: float) -> void:
 	rotation = value
 	rotation_changed.emit(slice_index)
-	rotating_ended.emit(slice_index)
 
 func get_radius() -> float:
 	return position.distance_to(Vector2.ZERO)

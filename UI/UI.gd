@@ -1,6 +1,9 @@
 class_name UI
 extends Control
 
+# Settings
+@export var dirty_debounce_time: float
+
 # References
 @export var world: World
 @export var ui_state: UIState
@@ -36,6 +39,7 @@ var current_element_state: ElementState
 var current_element_index: int
 var current_slice_index: int
 var current_slice: Slice
+var debounce_timer: Timer
 
 func _ready() -> void:
 	ui_state.init()
@@ -62,6 +66,19 @@ func _ready() -> void:
 
 	world.document.document_state_replaced.connect(_on_document_state_replaced)
 	slice_count_input.grab_focus()
+
+	debounce_timer = Timer.new()
+	debounce_timer.set_one_shot(true)
+	debounce_timer.timeout.connect(_set_dirty)
+	add_child(debounce_timer)
+
+func _debounce_set_dirty() -> void:
+	debounce_timer.stop()
+	debounce_timer.start(dirty_debounce_time)
+
+func _set_dirty() -> void:
+	world.undo_manager.register_diff()
+	ui_state.document_is_dirty = true
 
 func _apply_zoom_limits() -> void:
 	zoom_input.min_value = MIN_ZOOM
@@ -157,10 +174,12 @@ func _on_selection_changed() -> void:
 
 	_update_edit_form()
 
-func _for_all_selected_slices(lambda: Callable) -> void:
+func _for_all_selected_slices(lambda: Callable) -> bool:
 	for selection: UISelection in ui_state.selected_items:
 		var slice: Slice = world.document.get_slice(selection.element_index, selection.slice_index)
 		lambda.call(slice)
+
+	return len(ui_state.selected_items) > 0
 
 func _for_all_selected_elements(lambda: Callable) -> bool:
 	var any_changes_applied: bool
@@ -229,19 +248,21 @@ func _on_add_button_pressed() -> void:
 	)
 
 	world.document.add_new_element(element_state)
-	world.undo_manager.register_diff()
+	_set_dirty()
 
 func _on_remove_button_pressed() -> void:
-	_for_all_selected_elements(func(element_state: ElementState) -> bool:
+	var any_changes_applied: bool = _for_all_selected_elements(func(element_state: ElementState) -> bool:
 		world.document.remove_element(element_state.index)
 		return true
 	)
 
-	ui_state.clear_selection()
+	if any_changes_applied:
+		ui_state.clear_selection()
+		_set_dirty()
 
 func _on_clear_button_pressed() -> void:
 	world.document.clear_elements()
-	world.undo_manager.register_diff()
+	_set_dirty()
 
 func _on_select_all_button_pressed() -> void:
 	var slice_index: int = 0
@@ -276,7 +297,7 @@ func _on_slice_count_changed(value: float) -> void:
 	)
 
 	if any_changes_applied:
-		world.undo_manager.register_diff()
+		_set_dirty()
 
 func _on_background_color_changed(value: Color) -> void:
 	var background_color_changed: bool = world.document.state.background_color != value
@@ -286,27 +307,27 @@ func _on_background_color_changed(value: Color) -> void:
 
 func _on_background_color_picker_visibility_changed() -> void:
 	ui_state.background_color_picker_visible = background_color_input.get_popup().visible
-	world.undo_manager.register_diff()
+	_set_dirty()
 
 func _on_zoom_changed(value: float) -> void:
 	world.document.state.zoom = value / 100.0
-	world.undo_manager.register_diff()
+	_set_dirty()
 
 func _on_reset_zoom_button_pressed() -> void:
 	world.document.state.zoom = 1
-	world.undo_manager.register_diff()
+	_set_dirty()
 
 func _on_position_x_changed(value: float) -> void:
 	world.document.state.pan_position.x = value
-	world.undo_manager.register_diff()
+	_debounce_set_dirty()
 
 func _on_position_y_changed(value: float) -> void:
 	world.document.state.pan_position.y = value
-	world.undo_manager.register_diff()
+	_debounce_set_dirty()
 
 func _on_reset_position_button_pressed() -> void:
 	world.document.state.pan_position = Vector2.ZERO
-	world.undo_manager.register_diff()
+	_set_dirty()
 
 func _on_slice_shape_changed(value: int) -> void:
 	var any_changes_applied: bool = _for_all_selected_elements(func(element_state: ElementState) -> bool:
@@ -319,7 +340,7 @@ func _on_slice_shape_changed(value: int) -> void:
 	)
 
 	if any_changes_applied:
-		world.undo_manager.register_diff()
+		_set_dirty()
 
 func _on_slice_color_changed(value: Color) -> void:
 	_for_all_selected_elements(func(element_state: ElementState) -> bool:
@@ -335,7 +356,7 @@ func _on_slice_color_picker_visibility_changed() -> void:
 	ui_state.slice_color_picker_visible = slice_color_input.get_popup().visible
 
 	if len(ui_state.selected_items) > 0:
-		world.undo_manager.register_diff()
+		_set_dirty()
 
 func _on_slice_outline_width_changed(value: float) -> void:
 	var any_changes_applied: bool = _for_all_selected_elements(func(element_state: ElementState) -> bool:
@@ -348,7 +369,7 @@ func _on_slice_outline_width_changed(value: float) -> void:
 	)
 
 	if any_changes_applied:
-		world.undo_manager.register_diff()
+		_set_dirty()
 
 
 func _on_slice_outline_color_changed(value: Color) -> void:
@@ -365,53 +386,67 @@ func _on_slice_outline_color_picker_visibility_changed() -> void:
 	ui_state.slice_outline_color_picker_visible = slice_outline_color_input.get_popup().visible
 
 	if len(ui_state.selected_items) > 0:
-		world.undo_manager.register_diff()
+		_set_dirty()
 
 func _on_slice_scale_x_changed(value: float) -> void:
-	_for_all_selected_slices(func(slice: Slice) -> void:
+	var any_changes_applied: bool = _for_all_selected_slices(func(slice: Slice) -> void:
 		slice.set_slice_scale(Vector2(value / 100.0, slice.slice_scale.y))
 	)
 
+	if any_changes_applied:
+		_debounce_set_dirty()
+
 func _on_slice_scale_y_changed(value: float) -> void:
-	_for_all_selected_slices(func(slice: Slice) -> void:
+	var any_changes_applied: bool = _for_all_selected_slices(func(slice: Slice) -> void:
 		slice.set_slice_scale(Vector2(slice.slice_scale.x, value / 100.0))
 	)
 
+	if any_changes_applied:
+		_debounce_set_dirty()
+
 func _on_reset_slice_scale_button_pressed() -> void:
-	_for_all_selected_slices(func(slice: Slice) -> void:
+	var any_changes_applied: bool = _for_all_selected_slices(func(slice: Slice) -> void:
 		slice.set_slice_scale(Vector2.ONE)
 	)
 
+	if any_changes_applied:
+		_debounce_set_dirty()
+
 func _on_slice_rotation_changed(value: float) -> void:
-	_for_all_selected_slices(func(slice: Slice) -> void:
+	var any_changes_applied: bool = _for_all_selected_slices(func(slice: Slice) -> void:
 		slice.set_slice_rotation(deg_to_rad(value))
 	)
 
+	if any_changes_applied:
+		_debounce_set_dirty()
+
 func _on_slice_radius_changed(value: float) -> void:
-	_for_all_selected_slices(func(slice: Slice) -> void:
+	var any_changes_applied: bool = _for_all_selected_slices(func(slice: Slice) -> void:
 		slice.set_radius(value)
 	)
 
-	world.undo_manager.register_diff()
-	ui_state.document_is_dirty = true
+	if any_changes_applied:
+		_debounce_set_dirty()
 
 func _on_slice_theta_changed(value: float) -> void:
-	_for_all_selected_slices(func(slice: Slice) -> void:
+	var any_changes_applied: bool = _for_all_selected_slices(func(slice: Slice) -> void:
 		slice.set_theta(deg_to_rad(value))
 	)
 
-	world.undo_manager.register_diff()
-	ui_state.document_is_dirty = true
+	if any_changes_applied:
+		_debounce_set_dirty()
 
 func _on_undo_button_pressed() -> void:
 	world.undo_manager.undo()
 	_update_current_selection()
 	_update_edit_form()
+	ui_state.document_is_dirty = true
 
 func _on_redo_button_pressed() -> void:
 	world.undo_manager.redo()
 	_update_current_selection()
 	_update_edit_form()
+	ui_state.document_is_dirty = true
 
 func _on_about_button_pressed() -> void:
 	about_dialog.show()
