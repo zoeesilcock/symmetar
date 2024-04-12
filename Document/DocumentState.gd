@@ -48,7 +48,7 @@ func _init(
 	previous_pan_position = pan_position
 
 func calculate_diff() -> DocumentStateDiff:
-	var diff: Array[ElementState] = []
+	var diffs: Array[ElementStateDiff] = []
 	var count_change: int = len(elements) - len(previous_elements)
 	var element_count: int = max(len(elements), len(previous_elements))
 	var background_color_change: Color = Color.BLACK
@@ -63,13 +63,15 @@ func calculate_diff() -> DocumentStateDiff:
 		if index < len(previous_elements):
 			previous_element = previous_elements[index]
 
-		diff.push_back(element.get_diff(previous_element))
+		var element_diff: ElementStateDiff = element.get_diff(previous_element)
+		if element_diff != null:
+			diffs.push_back(element_diff)
 
 	background_color_change.r = background_color.r - previous_background_color.r
 	background_color_change.g = background_color.g - previous_background_color.g
 	background_color_change.b = background_color.b - previous_background_color.b
 
-	return DocumentStateDiff.new(count_change, diff, background_color_change)
+	return DocumentStateDiff.new(count_change, diffs, background_color_change)
 
 func apply_diff(diff: DocumentStateDiff, reverse: bool) -> void:
 	var current_count: int = len(elements)
@@ -80,9 +82,9 @@ func apply_diff(diff: DocumentStateDiff, reverse: bool) -> void:
 		elements.resize(current_count + diff.element_count_change * direction)
 		_fill_empty_slots()
 
-	for index: int in len(diff.element_changes):
-		if index < len(elements):
-			elements[index].apply_diff(diff.element_changes[index], direction)
+	for element_diff: ElementStateDiff in diff.element_diffs:
+		if element_diff.index < len(elements):
+			elements[element_diff.index].apply_diff(element_diff, direction)
 
 	if diff.element_count_change != 0:
 		element_count_changed.emit()

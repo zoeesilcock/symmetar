@@ -106,14 +106,18 @@ static func get_exported_properties() -> Array[String]:
 
 	return exported_properties
 
-func get_diff(other_element: ElementState) -> ElementState:
-	var element_diff: ElementState = ElementState.new()
+func get_diff(other_element: ElementState) -> ElementStateDiff:
+	var element_diff: ElementStateDiff = ElementStateDiff.new(index)
 
 	for property: String in ElementState.get_exported_properties():
-		element_diff[property] = self[property] - other_element[property]
+		element_diff.try_add_diff(property, self[property] - other_element[property])
 
-	return element_diff
 
-func apply_diff(element_diff: ElementState, direction: int) -> void:
-	for property: String in ElementState.get_exported_properties():
-		self[property] += element_diff[property] * direction
+	if len(element_diff.changes) > 0:
+		return element_diff
+	else:
+		return null
+
+func apply_diff(element_diff: ElementStateDiff, direction: int) -> void:
+	for diff: ElementPropertyDiff in element_diff.changes:
+		self[diff.property] += diff.change * direction
