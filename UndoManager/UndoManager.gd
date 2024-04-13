@@ -21,6 +21,7 @@ func redo() -> void:
 func register_diff() -> void:
 	var diff: DocumentStateDiff = document.state.calculate_diff()
 	document.state.diffs_applied.push_back(diff)
+	document.state.diffs_undone = []
 	_sync_previous_state()
 
 func _sync_previous_state() -> void:
