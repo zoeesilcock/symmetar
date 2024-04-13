@@ -437,16 +437,16 @@ func _on_slice_theta_changed(value: float) -> void:
 		_debounce_set_dirty()
 
 func _on_undo_button_pressed() -> void:
-	world.undo_manager.undo()
-	_update_current_selection()
-	_update_edit_form()
-	ui_state.document_is_dirty = true
+	if world.undo_manager.undo():
+		_update_current_selection()
+		_update_edit_form()
+		ui_state.document_is_dirty = true
 
 func _on_redo_button_pressed() -> void:
-	world.undo_manager.redo()
-	_update_current_selection()
-	_update_edit_form()
-	ui_state.document_is_dirty = true
+	if world.undo_manager.redo():
+		_update_current_selection()
+		_update_edit_form()
+		ui_state.document_is_dirty = true
 
 func _on_about_button_pressed() -> void:
 	about_dialog.show()

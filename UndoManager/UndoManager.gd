@@ -4,19 +4,25 @@ extends Node2D
 # References
 @export var document: Document
 
-func undo() -> void:
+func undo() -> bool:
 	if len(document.state.diffs_applied) > 0:
 		var latest_diff: DocumentStateDiff = document.state.diffs_applied.pop_back()
 		document.state.apply_diff(latest_diff, true)
 		document.state.diffs_undone.push_back(latest_diff)
 		_sync_previous_state()
+		return true
 
-func redo() -> void:
+	return false
+
+func redo() -> bool:
 	if len(document.state.diffs_undone) > 0:
 		var latest_undone_diff: DocumentStateDiff = document.state.diffs_undone.pop_back()
 		document.state.apply_diff(latest_undone_diff, false)
 		document.state.diffs_applied.push_back(latest_undone_diff)
 		_sync_previous_state()
+		return true
+
+	return false
 
 func register_diff() -> void:
 	var diff: DocumentStateDiff = document.state.calculate_diff()
