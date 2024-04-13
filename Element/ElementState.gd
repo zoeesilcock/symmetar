@@ -112,7 +112,6 @@ func get_diff(other_element: ElementState) -> ElementStateDiff:
 	for property: String in ElementState.get_exported_properties():
 		element_diff.try_add_diff(property, self[property] - other_element[property])
 
-
 	if len(element_diff.changes) > 0:
 		return element_diff
 	else:
