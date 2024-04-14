@@ -4,7 +4,7 @@ extends Resource
 var index: int
 var changes: Array[ElementPropertyDiff]
 
-func _init(p_element_index: int) -> void:
+func _init(p_element_index: int=0) -> void:
 	index = p_element_index
 	changes = []
 
