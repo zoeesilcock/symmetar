@@ -40,11 +40,17 @@ extends Resource
 		if value != document_is_dirty:
 			document_is_dirty = value
 			document_is_dirty_changed.emit()
+@export var zoom: float:
+	set(value):
+		if value != zoom:
+			zoom = value
+			zoom_changed.emit()
 
 # Signals
 signal selection_changed
 signal document_is_dirty_changed
 signal ui_is_visible_changed
+signal zoom_changed
 
 func init() -> void:
 	ui_is_visible = true

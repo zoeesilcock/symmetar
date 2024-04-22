@@ -22,6 +22,7 @@ func _ready() -> void:
 
 	state = DocumentState.new()
 	state.element_count_changed.connect(_on_element_count_changed)
+	state.zoom_changed.connect(_on_zoom_changed)
 	document_state_replaced.emit()
 
 func load_document(path: String) -> void:
@@ -81,6 +82,9 @@ func _on_element_count_changed() -> void:
 	_remove_all_elements()
 	_instantiate_elements()
 	ui_state.document_is_dirty = true
+
+func _on_zoom_changed() -> void:
+	ui_state.zoom = state.zoom
 
 func _on_element_state_changed(_element_index: int) -> void:
 	undo_manager.register_diff()

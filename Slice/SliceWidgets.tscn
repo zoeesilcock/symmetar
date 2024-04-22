@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://ct48hlkrr7nw6"]
+[gd_scene load_steps=6 format=3 uid="uid://ct48hlkrr7nw6"]
 
 [ext_resource type="Script" path="res://Slice/SliceWidgets.gd" id="1_h7o1w"]
+[ext_resource type="Resource" uid="uid://chkr4prm0pu47" path="res://UI/UIState.tres" id="2_5sgdx"]
 [ext_resource type="PackedScene" uid="uid://cwmw561kowolw" path="res://Slice/SliceWidgetPivot.tscn" id="2_ds0wl"]
 [ext_resource type="PackedScene" uid="uid://b01x7n7o6sci1" path="res://Slice/SliceWidgetRotation.tscn" id="2_tcrgx"]
 [ext_resource type="PackedScene" uid="uid://dfim22owbj20a" path="res://Slice/SliceWidgetScale.tscn" id="3_usw6y"]
@@ -8,6 +9,7 @@
 [node name="SliceWidgets" type="Node2D" node_paths=PackedStringArray("pivot_widget", "rotation_widgets", "scale_widgets")]
 z_index = 2
 script = ExtResource("1_h7o1w")
+ui_state = ExtResource("2_5sgdx")
 pivot_widget = NodePath("Pivot")
 rotation_widgets = [NodePath("RotationTopLeft"), NodePath("RotationTopRight"), NodePath("RotationBottomLeft"), NodePath("RotationBottomRight")]
 scale_widgets = [NodePath("ScaleLeft"), NodePath("ScaleTop"), NodePath("ScaleRight"), NodePath("ScaleBottom")]
