@@ -97,7 +97,7 @@ func _update_edit_form() -> void:
 		slice_scale_y_input.set_value_no_signal(current_slice.slice_scale.y * 100.0)
 		slice_rotation_input.set_value_no_signal(rad_to_deg(current_slice.rotation))
 		slice_radius_input.set_value_no_signal(current_slice.get_radius())
-		slice_theta_input.set_value_no_signal(rad_to_deg(current_slice.get_theta()))
+		slice_theta_input.set_value_no_signal(current_slice.slice_theta)
 
 func _update_current_selection() -> void:
 	ui_state.fix_missing_element_in_selection(len(world.document.elements))
@@ -196,7 +196,7 @@ func _for_all_selected_elements(lambda: Callable) -> bool:
 func _on_slice_position_state_changed() -> void:
 	_for_all_selected_slices(func(slice: Slice) -> void:
 		slice_radius_input.set_value_no_signal(slice.get_radius())
-		slice_theta_input.set_value_no_signal(rad_to_deg(slice.get_theta()))
+		slice_theta_input.set_value_no_signal(slice.slice_theta)
 	)
 
 func _on_slice_scale_state_changed() -> void:
@@ -242,6 +242,7 @@ func _on_add_button_pressed() -> void:
 		Vector2(slice_scale_x_input.value / 100.0, slice_scale_y_input.value / 100.0),
 		deg_to_rad(slice_rotation_input.value),
 		(slice_radius_input.value * Vector2.from_angle(deg_to_rad(slice_theta_input.value))),
+		slice_theta_input.value,
 		slice_color_input.color,
 		slice_outline_width_input.value,
 		slice_outline_color_input.color,
@@ -430,7 +431,8 @@ func _on_slice_radius_changed(value: float) -> void:
 
 func _on_slice_theta_changed(value: float) -> void:
 	var any_changes_applied: bool = _for_all_selected_slices(func(slice: Slice) -> void:
-		slice.set_theta(deg_to_rad(value))
+		slice.slice_theta = value
+		slice.update_position()
 	)
 
 	if any_changes_applied:

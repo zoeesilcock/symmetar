@@ -24,6 +24,7 @@ extends Node2D
 	set(value):
 		polygon.scale = value
 		_update_widget_positions()
+@export var slice_theta: float
 
 # Signals
 signal selected(index: int, shift_held: bool)
@@ -189,16 +190,12 @@ func get_radius() -> float:
 	return position.distance_to(Vector2.ZERO)
 
 func set_radius(radius: float) -> void:
-	var theta: float = get_theta()
-	position = radius * Vector2.from_angle(theta)
+	position = radius * Vector2.from_angle(deg_to_rad(slice_theta))
 	position_changed.emit(slice_index)
 
-func get_theta() -> float:
-	return wrapf(atan2(position.y, position.x), 0, PI * 2)
-
-func set_theta(theta: float) -> void:
+func update_position() -> void:
 	var radius: float = get_radius()
-	position = radius * Vector2.from_angle(theta)
+	position = radius * Vector2.from_angle(deg_to_rad(slice_theta))
 	position_changed.emit(slice_index)
 
 func _get_world_position(event_position: Vector2) -> Vector2:

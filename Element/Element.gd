@@ -186,11 +186,15 @@ func _update_slice_positions(slice_index: int=0) -> void:
 			slices[index].position = slice_position - position
 			slices[index].slice_pivot = slice.slice_pivot
 
+		if origin_radius > 0.0:
+			slices[index].slice_theta = rad_to_deg(origin_theta + theta)
+
 		slices[index].update_outline_position()
 
 	# Update the state
 	state.slice_rotation = slices[0].rotation
 	state.slice_position = slices[0].position
+	state.slice_theta = slices[0].slice_theta
 	state.slice_pivot = slices[0].slice_pivot
 
 func _update_slice_rotations(slice_index: int=0) -> void:

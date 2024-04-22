@@ -28,6 +28,12 @@ extends Resource
 			slice_position = value
 			slice_position_changed.emit()
 
+@export var slice_theta: float:
+	set(value):
+		if value != slice_theta:
+			slice_theta = value
+			slice_theta_changed.emit()
+
 @export var slice_scale: Vector2:
 	set(value):
 		if value != slice_scale:
@@ -63,6 +69,7 @@ signal slice_count_changed
 signal slice_shape_changed
 signal slice_rotation_changed
 signal slice_position_changed
+signal slice_theta_changed
 signal slice_scale_changed
 signal slice_pivot_changed
 signal slice_color_changed
@@ -76,6 +83,7 @@ static func empty() -> ElementState:
 		Vector2.ONE,
 		0.0,
 		Vector2(),
+		0.0,
 		Color()
 	)
 
@@ -85,6 +93,7 @@ func _init(
 		p_slice_scale: Vector2=Vector2.ONE,
 		p_slice_rotation: float=0,
 		p_slice_position: Vector2=Vector2(),
+		p_slice_theta: float=0,
 		p_slice_color: Color=Color("#e85500"),
 		p_slice_outline_width: float=2.0,
 		p_slice_outline_color: Color=("#fff500")) -> void:
@@ -93,6 +102,7 @@ func _init(
 	slice_scale = p_slice_scale
 	slice_rotation = p_slice_rotation
 	slice_position = p_slice_position
+	slice_theta = p_slice_theta
 	slice_color = p_slice_color
 	slice_outline_width = p_slice_outline_width
 	slice_outline_color = p_slice_outline_color
