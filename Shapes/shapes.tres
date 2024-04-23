@@ -1,22 +1,41 @@
-[gd_resource type="Resource" script_class="Shapes" load_steps=21 format=3 uid="uid://d10or7scc1hbo"]
+[gd_resource type="Resource" script_class="Shapes" load_steps=35 format=3 uid="uid://d10or7scc1hbo"]
 
 [ext_resource type="PackedScene" uid="uid://bjahkk30oolv1" path="res://Shapes/Circle.tscn" id="1_5n18v"]
 [ext_resource type="Script" path="res://Shapes/Shapes.gd" id="1_onxqp"]
 [ext_resource type="PackedScene" uid="uid://dgxt5vjunaiov" path="res://Shapes/Trigon.tscn" id="2_inrfe"]
+[ext_resource type="PackedScene" uid="uid://b7phggab1ssyj" path="res://Shapes/Diamond.tscn" id="3_2dxii"]
 [ext_resource type="PackedScene" uid="uid://dswhvhu3foakl" path="res://Shapes/Dodecagon.tscn" id="3_5v3io"]
+[ext_resource type="PackedScene" uid="uid://dy48skkbgaswm" path="res://Shapes/Crescent.tscn" id="3_cqhax"]
 [ext_resource type="Script" path="res://Shapes/ShapeInfo.gd" id="3_kqhn4"]
 [ext_resource type="PackedScene" uid="uid://bvwferd128snq" path="res://Shapes/Enneagon.tscn" id="4_xvrng"]
 [ext_resource type="PackedScene" uid="uid://cijr6sc281nen" path="res://Shapes/Heptagon.tscn" id="5_fcaml"]
+[ext_resource type="PackedScene" uid="uid://cdhm6l1wtaema" path="res://Shapes/HalfCircle.tscn" id="6_auj76"]
 [ext_resource type="PackedScene" uid="uid://qnjfthsikxjm" path="res://Shapes/Hexagon.tscn" id="6_rajis"]
 [ext_resource type="PackedScene" uid="uid://pi8pjjautdv3" path="res://Shapes/Octagon.tscn" id="7_1iyid"]
 [ext_resource type="PackedScene" uid="uid://dfbeyornt7umx" path="res://Shapes/Pentagon.tscn" id="8_3ltkq"]
+[ext_resource type="PackedScene" uid="uid://jcmtke4wpop" path="res://Shapes/Parallelogram.tscn" id="9_nk2s8"]
 [ext_resource type="PackedScene" uid="uid://stbwaylwmap4" path="res://Shapes/Tetragon.tscn" id="10_mgcgf"]
+[ext_resource type="PackedScene" uid="uid://cxh2c6o2bcfr4" path="res://Shapes/Lens.tscn" id="10_pixxr"]
+[ext_resource type="PackedScene" uid="uid://kl4s4byud06v" path="res://Shapes/QuarterCircle.tscn" id="12_pou6x"]
+[ext_resource type="PackedScene" uid="uid://cmm8nax83abrr" path="res://Shapes/TearDrop.tscn" id="16_0ptn8"]
 
 [sub_resource type="Resource" id="Resource_4vehf"]
 script = ExtResource("3_kqhn4")
-index = 8
+index = 0
 name = "Circle"
 scene = ExtResource("1_5n18v")
+
+[sub_resource type="Resource" id="Resource_7vsa2"]
+script = ExtResource("3_kqhn4")
+index = 12
+name = "Crescent"
+scene = ExtResource("3_cqhax")
+
+[sub_resource type="Resource" id="Resource_rra6t"]
+script = ExtResource("3_kqhn4")
+index = 13
+name = "Diamond"
+scene = ExtResource("3_2dxii")
 
 [sub_resource type="Resource" id="Resource_bfar8"]
 script = ExtResource("3_kqhn4")
@@ -30,6 +49,12 @@ index = 6
 name = "Enneagon"
 scene = ExtResource("4_xvrng")
 
+[sub_resource type="Resource" id="Resource_cjbe1"]
+script = ExtResource("3_kqhn4")
+index = 9
+name = "Half circle"
+scene = ExtResource("6_auj76")
+
 [sub_resource type="Resource" id="Resource_kyrth"]
 script = ExtResource("3_kqhn4")
 index = 4
@@ -42,17 +67,41 @@ index = 3
 name = "Hexagon"
 scene = ExtResource("6_rajis")
 
+[sub_resource type="Resource" id="Resource_gjbdx"]
+script = ExtResource("3_kqhn4")
+index = 11
+name = "Lens"
+scene = ExtResource("10_pixxr")
+
 [sub_resource type="Resource" id="Resource_g136h"]
 script = ExtResource("3_kqhn4")
 index = 5
 name = "Octagon"
 scene = ExtResource("7_1iyid")
 
+[sub_resource type="Resource" id="Resource_iy3sw"]
+script = ExtResource("3_kqhn4")
+index = 12
+name = "Parallelogram"
+scene = ExtResource("9_nk2s8")
+
 [sub_resource type="Resource" id="Resource_v870t"]
 script = ExtResource("3_kqhn4")
 index = 2
 name = "Pentagon"
 scene = ExtResource("8_3ltkq")
+
+[sub_resource type="Resource" id="Resource_qpbqj"]
+script = ExtResource("3_kqhn4")
+index = 10
+name = "Quarter circle"
+scene = ExtResource("12_pou6x")
+
+[sub_resource type="Resource" id="Resource_ab7dd"]
+script = ExtResource("3_kqhn4")
+index = 15
+name = "Tear drop"
+scene = ExtResource("16_0ptn8")
 
 [sub_resource type="Resource" id="Resource_lvmus"]
 script = ExtResource("3_kqhn4")
@@ -77,3 +126,10 @@ octagon = SubResource("Resource_g136h")
 enneagon = SubResource("Resource_g4ywy")
 dodecagon = SubResource("Resource_bfar8")
 circle = SubResource("Resource_4vehf")
+half_circle = SubResource("Resource_cjbe1")
+quarter_circle = SubResource("Resource_qpbqj")
+lens = SubResource("Resource_gjbdx")
+crescent = SubResource("Resource_7vsa2")
+diamond = SubResource("Resource_rra6t")
+parallelogram = SubResource("Resource_iy3sw")
+tear_drop = SubResource("Resource_ab7dd")

@@ -11,6 +11,13 @@ enum ShapeIndex {
 	ENNEAGON,
 	DODECAGON,
 	CIRCLE,
+	HALF_CIRCLE,
+	QUARTER_CIRCLE,
+	LENS,
+	CRESCENT,
+	DIAMOND,
+	PARALLELOGRAM,
+	TEAR_DROP,
 }
 
 # Data
@@ -23,6 +30,13 @@ enum ShapeIndex {
 @export var enneagon: ShapeInfo
 @export var dodecagon: ShapeInfo
 @export var circle: ShapeInfo
+@export var half_circle: ShapeInfo
+@export var quarter_circle: ShapeInfo
+@export var lens: ShapeInfo
+@export var crescent: ShapeInfo
+@export var diamond: ShapeInfo
+@export var parallelogram: ShapeInfo
+@export var tear_drop: ShapeInfo
 
 func get_shape_info(shape_index: ShapeIndex) -> ShapeInfo:
 	match (shape_index):
@@ -35,4 +49,12 @@ func get_shape_info(shape_index: ShapeIndex) -> ShapeInfo:
 		ShapeIndex.ENNEAGON: return enneagon
 		ShapeIndex.DODECAGON: return dodecagon
 		ShapeIndex.CIRCLE: return circle
+		ShapeIndex.HALF_CIRCLE: return half_circle
+		ShapeIndex.QUARTER_CIRCLE: return quarter_circle
+		ShapeIndex.LENS: return lens
+		ShapeIndex.CRESCENT: return crescent
+		ShapeIndex.DIAMOND: return diamond
+		ShapeIndex.PARALLELOGRAM: return parallelogram
+		ShapeIndex.TEAR_DROP: return tear_drop
 		_: return trigon
+
