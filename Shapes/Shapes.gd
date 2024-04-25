@@ -18,6 +18,7 @@ enum ShapeIndex {
 	DIAMOND,
 	PARALLELOGRAM,
 	TEAR_DROP,
+	LOTUS_PETAL,
 }
 
 # Data
@@ -37,6 +38,7 @@ enum ShapeIndex {
 @export var diamond: ShapeInfo
 @export var parallelogram: ShapeInfo
 @export var tear_drop: ShapeInfo
+@export var lotus_petal: ShapeInfo
 
 func get_shape_info(shape_index: ShapeIndex) -> ShapeInfo:
 	match (shape_index):
@@ -56,5 +58,6 @@ func get_shape_info(shape_index: ShapeIndex) -> ShapeInfo:
 		ShapeIndex.DIAMOND: return diamond
 		ShapeIndex.PARALLELOGRAM: return parallelogram
 		ShapeIndex.TEAR_DROP: return tear_drop
+		ShapeIndex.LOTUS_PETAL: return lotus_petal
 		_: return trigon
 

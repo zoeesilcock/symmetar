@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Shapes" load_steps=35 format=3 uid="uid://d10or7scc1hbo"]
+[gd_resource type="Resource" script_class="Shapes" load_steps=37 format=3 uid="uid://d10or7scc1hbo"]
 
 [ext_resource type="PackedScene" uid="uid://bjahkk30oolv1" path="res://Shapes/Circle.tscn" id="1_5n18v"]
 [ext_resource type="Script" path="res://Shapes/Shapes.gd" id="1_onxqp"]
@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://jcmtke4wpop" path="res://Shapes/Parallelogram.tscn" id="9_nk2s8"]
 [ext_resource type="PackedScene" uid="uid://stbwaylwmap4" path="res://Shapes/Tetragon.tscn" id="10_mgcgf"]
 [ext_resource type="PackedScene" uid="uid://cxh2c6o2bcfr4" path="res://Shapes/Lens.tscn" id="10_pixxr"]
+[ext_resource type="PackedScene" uid="uid://dgppcnup0ckqy" path="res://Shapes/LotusPetal.tscn" id="11_auclf"]
 [ext_resource type="PackedScene" uid="uid://kl4s4byud06v" path="res://Shapes/QuarterCircle.tscn" id="12_pou6x"]
 [ext_resource type="PackedScene" uid="uid://cmm8nax83abrr" path="res://Shapes/TearDrop.tscn" id="16_0ptn8"]
 
@@ -72,6 +73,12 @@ script = ExtResource("3_kqhn4")
 index = 11
 name = "Lens"
 scene = ExtResource("10_pixxr")
+
+[sub_resource type="Resource" id="Resource_lj8ga"]
+script = ExtResource("3_kqhn4")
+index = 16
+name = "Lotus petal"
+scene = ExtResource("11_auclf")
 
 [sub_resource type="Resource" id="Resource_g136h"]
 script = ExtResource("3_kqhn4")
@@ -133,3 +140,4 @@ crescent = SubResource("Resource_7vsa2")
 diamond = SubResource("Resource_rra6t")
 parallelogram = SubResource("Resource_iy3sw")
 tear_drop = SubResource("Resource_ab7dd")
+lotus_petal = SubResource("Resource_lj8ga")
