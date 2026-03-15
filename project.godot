@@ -25,6 +25,10 @@ config/icon="res://icon.svg"
 
 driver/driver="Dummy"
 
+[autoload]
+
+ThemePatcher="*res://UI/ThemePatcher.gd"
+
 [debug]
 
 gdscript/warnings/untyped_declaration=1
