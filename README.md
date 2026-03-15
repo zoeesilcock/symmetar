@@ -51,6 +51,10 @@ Some general ideas that I hope to implement in the future.
 * https://en.wikipedia.org/wiki/Aperiodic_tiling
 * https://en.wikipedia.org/wiki/Bravais_lattice
 * https://en.wikipedia.org/wiki/Overlapping_circles_grid
+* https://en.wikipedia.org/wiki/Phyllotaxis
+* https://en.wikipedia.org/wiki/Archimedean_spiral
+* https://en.wikipedia.org/wiki/Fermat's_spiral
+* https://en.wikipedia.org/wiki/Logarithmic_spiral
 
 ### Art
 * https://en.wikipedia.org/wiki/Kaleidoscope
